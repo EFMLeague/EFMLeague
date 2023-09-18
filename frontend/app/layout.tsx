@@ -1,10 +1,32 @@
 import "./globals.css";
 import "bootstrap/dist/css/bootstrap.css";
-
+import localFont from "next/font/local";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 
-const inter = Inter({ subsets: ["latin"] });
+const decaloType = localFont({
+  src: [
+    {
+      path: "./utils/font/decalotype.regular.ttf",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "./utils/font/decalotype.bold.ttf",
+      weight: "600",
+      style: "normal",
+    },
+    {
+      path: "./utils/font/decalotype.bold-italic.ttf",
+      weight: "600",
+      style: "italic",
+    },
+    {
+      path: "./utils/font/decalotype.italic.ttf",
+      weight: "400",
+      style: "italic",
+    },
+  ],
+});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -18,7 +40,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={decaloType.className}>{children}</body>
     </html>
   );
 }
