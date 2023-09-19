@@ -43,11 +43,12 @@ p {
 }
 .team-name {
   color: black;
-  font-size: 2.4rem;
+  font-size: 3rem;
   font-weight: bold;
   padding-top: 12px;
   padding-bottom: 12px;
 }
+
 .side {
   width: 100%;
   padding-top: 100px;
