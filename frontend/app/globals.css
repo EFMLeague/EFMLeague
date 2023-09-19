@@ -41,3 +41,86 @@ p {
   max-height: 700px;
   padding: 8px;
 }
+.team-name {
+  color: black;
+  font-size: 2.4rem;
+  font-weight: bold;
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+.side {
+  width: 100%;
+  padding-top: 100px;
+  border-right: #181818;
+  border: solid 3px;
+}
+@media (min-width: 580px) {
+  .side {
+    width: 50%;
+  }
+}
+.ruoli-blue {
+  color: black;
+  font-weight: bolder;
+  font-style: italic;
+  font-size: 2rem;
+  text-align: left;
+  width: 20%;
+}
+.ruoli-red {
+  color: black;
+  font-weight: bolder;
+  font-style: italic;
+  font-size: 2rem;
+  text-align: left;
+  width: 20%;
+}
+
+.line-role-name {
+  display: flex;
+  flex-wrap: wrap;
+  flex-basis: 50%;
+  padding: 40px;
+}
+
+.select-player {
+  height: 50px;
+  width: 70%;
+  min-width: 300px;
+}
+.label-match {
+  font-size: 2rem;
+  font-weight: bold;
+  padding-right: 10px;
+}
+.match-title {
+  color: white;
+  font-size: 3rem;
+  font-weight: bold;
+  padding-left: 10%;
+  padding-right: 10%;
+  text-align: center;
+  margin-top: -10px;
+}
+.input-match {
+  width: 100%;
+  text-align: center;
+  padding: 20px;
+}
+@media (min-width: 580px) {
+  .input-match {
+    width: 50%;
+    text-align: center;
+  }
+}
+.submit-match {
+  font-size: 4rem;
+  font-weight: bold;
+  font-style: italic;
+  background-color: black;
+  color: white;
+  text-transform: uppercase;
+  padding: 14px;
+  margin: 20px;
+  border-radius: 10px;
+}
