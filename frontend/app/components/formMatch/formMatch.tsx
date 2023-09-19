@@ -1,8 +1,9 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import FormSelectUsers from "./formSelectUsers";
 
-export default function FormMatch({ fetchedUsers }: { fetchedUsers: any }) {
+export default function FormMatch({ users }: { users: any }) {
   const supabase = createClientComponentClient<any>();
 
   // STATI MATCH
@@ -26,10 +27,8 @@ export default function FormMatch({ fetchedUsers }: { fetchedUsers: any }) {
     sup: "",
   });
 
-  const [winner, setWinner] = useState<"blue" | "red">("red");
+  const [winner, setWinner] = useState<"blue" | "red">("blue");
   const [MVP, setMVP] = useState("");
-  const [users, setUsers] = useState(fetchedUsers);
-  const [allowedMVP, setAllowedMVP] = useState<any[]>([]);
 
   const handleChangeWinner = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setWinner(
@@ -38,35 +37,6 @@ export default function FormMatch({ fetchedUsers }: { fetchedUsers: any }) {
         : "red"
     );
   };
-
-  useEffect(() => {
-    if (winner === "red") {
-      setAllowedMVP(
-        users.filter(
-          (user: any) =>
-            user.id === red.top ||
-            user.id === red.jng ||
-            user.id === red.mid ||
-            user.id === red.adc ||
-            user.id === red.sup
-        )
-      );
-      console.log(users);
-    }
-    if (winner === "blue") {
-      setAllowedMVP(
-        users.filter(
-          (user: any) =>
-            user.id === blue.top ||
-            user.id === blue.jng ||
-            user.id === blue.mid ||
-            user.id === blue.adc ||
-            user.id === blue.sup
-        )
-      );
-      console.log(users);
-    }
-  }, [winner, blue, red]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -138,12 +108,7 @@ export default function FormMatch({ fetchedUsers }: { fetchedUsers: any }) {
                 setBlue((blue) => ({ ...blue, top: e.target.value }))
               }
             >
-              <option value="">Select player</option>
-              {users?.map((user: any) => (
-                <option value={user.id} key={user.id}>
-                  {user.name}
-                </option>
-              ))}
+              <FormSelectUsers users={users} red={red} blue={blue} mode="exclude"  />
             </select>
           </div>
 
@@ -163,12 +128,7 @@ export default function FormMatch({ fetchedUsers }: { fetchedUsers: any }) {
                 setBlue((blue) => ({ ...blue, jng: e.target.value }))
               }
             >
-              <option value="">Select player</option>
-              {users?.map((user: any) => (
-                <option value={user.id} key={user.id}>
-                  {user.name}
-                </option>
-              ))}
+              <FormSelectUsers users={users} red={red} blue={blue} mode="exclude" />
             </select>
           </div>
           <div className="line-role-name">
@@ -182,12 +142,7 @@ export default function FormMatch({ fetchedUsers }: { fetchedUsers: any }) {
                 setBlue((blue) => ({ ...blue, mid: e.target.value }))
               }
             >
-              <option value="">Select player</option>
-              {users?.map((user: any) => (
-                <option value={user.id} key={user.id}>
-                  {user.name}
-                </option>
-              ))}
+              <FormSelectUsers users={users} red={red} blue={blue} mode="exclude" />
             </select>
           </div>
           <div className="line-role-name">
@@ -201,12 +156,7 @@ export default function FormMatch({ fetchedUsers }: { fetchedUsers: any }) {
                 setBlue((blue) => ({ ...blue, adc: e.target.value }))
               }
             >
-              <option value="">Select player</option>
-              {users?.map((user: any) => (
-                <option value={user.id} key={user.id}>
-                  {user.name}
-                </option>
-              ))}
+              <FormSelectUsers users={users} red={red} blue={blue} mode="exclude" />
             </select>
           </div>
           <div className="line-role-name">
@@ -225,12 +175,7 @@ export default function FormMatch({ fetchedUsers }: { fetchedUsers: any }) {
                 setBlue((blue) => ({ ...blue, sup: e.target.value }))
               }
             >
-              <option value="">Select player</option>
-              {users?.map((user: any) => (
-                <option value={user.id} key={user.id}>
-                  {user.name}
-                </option>
-              ))}
+              <FormSelectUsers users={users} red={red} blue={blue} mode="exclude" />
             </select>
           </div>
         </div>
@@ -247,12 +192,7 @@ export default function FormMatch({ fetchedUsers }: { fetchedUsers: any }) {
                 setRed((red) => ({ ...red, top: e.target.value }))
               }
             >
-              <option value="">Select player</option>
-              {users?.map((user: any) => (
-                <option value={user.id} key={user.id}>
-                  {user.name}
-                </option>
-              ))}
+              <FormSelectUsers users={users} red={red} blue={blue} mode="exclude" />
             </select>
           </div>
           <div className="line-role-name">
@@ -271,12 +211,7 @@ export default function FormMatch({ fetchedUsers }: { fetchedUsers: any }) {
                 setRed((red) => ({ ...red, jng: e.target.value }))
               }
             >
-              <option value="">Select player</option>
-              {users?.map((user: any) => (
-                <option value={user.id} key={user.id}>
-                  {user.name}
-                </option>
-              ))}
+              <FormSelectUsers users={users} red={red} blue={blue} mode="exclude" />
             </select>
           </div>
           <div className="line-role-name">
@@ -290,12 +225,7 @@ export default function FormMatch({ fetchedUsers }: { fetchedUsers: any }) {
                 setRed((red) => ({ ...red, mid: e.target.value }))
               }
             >
-              <option value="">Select player</option>
-              {users?.map((user: any) => (
-                <option value={user.id} key={user.id}>
-                  {user.name}
-                </option>
-              ))}
+              <FormSelectUsers users={users} red={red} blue={blue} mode="exclude" />
             </select>
           </div>
           <div className="line-role-name">
@@ -309,12 +239,7 @@ export default function FormMatch({ fetchedUsers }: { fetchedUsers: any }) {
                 setRed((red) => ({ ...red, adc: e.target.value }))
               }
             >
-              <option value="">Select player</option>
-              {users?.map((user: any) => (
-                <option value={user.id} key={user.id}>
-                  {user.name}
-                </option>
-              ))}
+              <FormSelectUsers users={users} red={red} blue={blue} mode="exclude" />
             </select>
           </div>
           <div className="line-role-name">
@@ -333,12 +258,7 @@ export default function FormMatch({ fetchedUsers }: { fetchedUsers: any }) {
                 setRed((red) => ({ ...red, sup: e.target.value }))
               }
             >
-              <option value="">Select player</option>
-              {users?.map((user: any) => (
-                <option value={user.id} key={user.id}>
-                  {user.name}
-                </option>
-              ))}
+              <FormSelectUsers users={users} red={red} blue={blue} mode="exclude" />
             </select>
           </div>
         </div>
@@ -351,14 +271,17 @@ export default function FormMatch({ fetchedUsers }: { fetchedUsers: any }) {
             onChange={(e) => setMVP(e.target.value)}
           >
             <option value="">Select player</option>
-            {allowedMVP?.map((user: any) => (
-              <option value={user.id} key={user.id}>
-                {user.name}
-              </option>
-            ))}
+            {users?.map((user: any) =>
+              (winner === "blue" &&
+                Object.values(blue).includes(String(user.id))) ||
+              (winner === "red" &&
+                Object.values(red).includes(String(user.id))) ? (
+                <option value={user.id} key={user.id}>
+                  {user.name}
+                </option>
+              ) : null
+            )}
           </select>
-          {allowedMVP.toString()}
-          {winner}
           <img src="./img/crown1.png" width={150} alt="" />
         </div>
         <div className="text-center w-100">

@@ -1,5 +1,5 @@
 import React from "react";
-import FormMatch from "../components/formMatch";
+import FormMatch from "../components/formMatch/formMatch";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 
@@ -9,7 +9,7 @@ export default async function addMatch() {
 
   return (
     <div>
-      <FormMatch fetchedUsers={users} />
+      <FormMatch users={users} />
     </div>
   );
 }
