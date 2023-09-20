@@ -1,6 +1,6 @@
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
-import UserForm from "../components/userForm";
+import UserForm from "../components/formUser";
 
 export default async function Index() {
   const supabase = createServerComponentClient({ cookies });

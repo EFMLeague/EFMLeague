@@ -13,21 +13,27 @@ export default function formSelectUsers({
 }) {
   var sel = (
     <>
-      <option value="">Select player</option>
+      <option>Select player</option>
       {users?.map((user: any) => {
-        // if (mode === "exclude")
-        //   if (red && blue)
-        //     if (
-        //       !(
-        //         Object.values(blue).includes(String(user.id)) ||
-        //         Object.values(red).includes(String(user.id))
-        //       )
-        //     )
-        return (
-          <option value={user.id} key={user.id}>
-            {user.name}
-          </option>
-        );
+        if (mode === "exclude")
+          if (red && blue)
+            if (
+              !(
+                Object.values(blue).includes(String(user.id)) ||
+                Object.values(red).includes(String(user.id))
+              )
+            )
+              return (
+                <option value={user.id} key={user.id}>
+                  {user.name}
+                </option>
+              );
+            else
+              return (
+                <option hidden value={user.id} key={user.id}>
+                  {user.name}
+                </option>
+              );
       })}
     </>
   );
