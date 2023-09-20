@@ -11,6 +11,29 @@ export default async function Page({
 }) {
   const supabase = createServerComponentClient({ cookies });
   const { data: users } = await supabase.from("User").select().eq("name", name);
+  if (!users) {
+    return;
+  }
+  const { data: playedMatch } = await supabase
+    .from("hasPlayed")
+    .select("")
+    .eq("rUser", users[0].id);
+
+  const { data: mvpMatch } = await supabase
+    .from("hasPlayed")
+    .select("")
+    .eq("rUser", users[0].id)
+    .eq("mvp", "true");
+
+  const { data: winnedMatch } = await supabase
+    .from("hasPlayed")
+    .select("")
+    .eq("rUser", users[0].id)
+    .eq("hasWon", true);
+
+  if (!winnedMatch || !playedMatch || !mvpMatch) {
+    return;
+  }
 
   return (
     <div className="background-user">
@@ -46,19 +69,35 @@ export default async function Page({
               </div>
               <div className="d-flex flex-wrap p-2">
                 <p className="counters">&nbsp;GAMES PLAYED :&nbsp;</p>
-                <p className="counters">&nbsp;13&nbsp;</p>
+                <p className="counters">&nbsp;{playedMatch?.length}&nbsp;</p>
               </div>
               <div className="d-flex flex-wrap p-2">
                 <p className="counters">&nbsp;POINTS :&nbsp;</p>
-                <p className="counters">&nbsp;5&nbsp;</p>
+                <p className="counters">
+                  &nbsp;
+                  {winnedMatch
+                    ? winnedMatch.length - Math.round(users[0].warnings / 2)
+                    : "errore"}
+                  &nbsp;
+                </p>
               </div>
               <div className="d-flex flex-wrap p-2">
                 <p className="counters">&nbsp;AMMONIZIONI :&nbsp;</p>
-                <p className="counters">&nbsp;0&nbsp;</p>
+                <p className="counters">&nbsp;{users[0].warnings}&nbsp;</p>
               </div>
               <div className="d-flex flex-wrap p-2">
-                <p className="counters">&nbsp;%WR SIDE :&nbsp;</p>
-                <p className="counters">&nbsp;BLUE&nbsp;</p>
+                <p className="counters">&nbsp;WR :&nbsp;</p>
+                <p className="counters">
+                  &nbsp;
+                  {((winnedMatch?.length * 100) / playedMatch?.length).toFixed(
+                    2
+                  )}
+                  % &nbsp;
+                </p>
+              </div>
+              <div className="d-flex flex-wrap p-2">
+                <p className="counters">&nbsp;MVP :&nbsp;</p>
+                <p className="counters">&nbsp;{mvpMatch.length}&nbsp;</p>
               </div>
             </div>
           </div>

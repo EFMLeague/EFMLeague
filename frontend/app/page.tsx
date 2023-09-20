@@ -35,8 +35,8 @@ export default function Home() {
           <div className="py-5"></div>
           <div className="text-center">
             <p className="d-block text-hero ">
-              <span className="bg-danger p-1">OUR</span>{" "}
-              <span className="text-danger bg-white p-1">NUMBERS</span>
+              <span className=" p-1">OUR</span>{" "}
+              <span className="text-danger p-1">NUMBERS</span>
             </p>
             <div className="d-flex flex-wrap justify-content-center mx-auto">
               <div className="p-4 text-center mx-auto">
