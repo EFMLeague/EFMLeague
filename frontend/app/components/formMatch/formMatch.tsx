@@ -339,9 +339,9 @@ export default function FormMatch({ users }: { users: any }) {
             </select>
           </div>
         </div>
-        <div className="d-flex justify-content-center align-items-center w-100 p-4">
+        <div className="d-flex justify-content-center align-items-center w-100 p-4 bg-white">
           <img src="./img/crown1.png" width={150} alt="" />
-          <label className="label-match text-white">MVP</label>
+          <label className="label-match text-black">MVP</label>
           <select
             className="label-match"
             required
@@ -361,7 +361,7 @@ export default function FormMatch({ users }: { users: any }) {
           </select>
           <img src="./img/crown1.png" width={150} alt="" />
         </div>
-        <div className="text-center w-100">
+        <div className="text-center w-100 bg-white">
           <input type="submit" className="submit-match" value="Submit" />
         </div>
       </form>

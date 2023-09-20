@@ -31,12 +31,18 @@ export default async function Page({
     .eq("rUser", users[0].id)
     .eq("hasWon", true);
 
-  if (!winnedMatch || !playedMatch || !mvpMatch) {
+  const { data: matchHistory } = await supabase
+    .from("hasPlayed")
+    .select("*,Match (*)")
+    .eq("rUser", users[0].id)
+    .order("name", { foreignTable: "Match", ascending: false });
+
+  if (!winnedMatch || !playedMatch || !mvpMatch || !matchHistory) {
     return;
   }
 
   return (
-    <div className="background-user">
+    <div className="index">
       {users?.map((user) => (
         <div>
           <p className="fw-bold text-white text-center title-users bg-black text-nowrap overflow-hidden traslate">
@@ -100,6 +106,22 @@ export default async function Page({
                 <p className="counters">&nbsp;{mvpMatch.length}&nbsp;</p>
               </div>
             </div>
+          </div>
+          <div className="container bg-white">
+            <div className="row">
+              <div className="col">Date</div>
+              <div className="col">Game&nbsp;Name</div>
+              <div className="col">Role</div>
+              <div className="col">Win</div>
+            </div>
+            {matchHistory.reverse().map((game) => (
+              <div className="row" key={game.id}>
+                <div className="col">{game.Match.date.split("T")[0]}</div>
+                <div className="col">{game.Match.name}</div>
+                <div className="col">{game.role}</div>
+                <div className="col">{game.hasWon ? "Victory" : "Lose"}</div>
+              </div>
+            ))}
           </div>
           <p className="fw-bold text-white text-center title-users bg-black text-nowrap overflow-hidden traslate1">
             PLAYER PLAYER PLAYER PLAYER PLAYER PLAYER PLAYER PLAYER PLAYER

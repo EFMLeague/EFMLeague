@@ -5,7 +5,10 @@ import { cookies } from "next/headers";
 
 export default async function addMatch() {
   const supabase = createServerComponentClient({ cookies });
-  const { data: users } = await supabase.from("User").select();
+  const { data: users } = await supabase
+    .from("User")
+    .select()
+    .order("name", { ascending: true });
 
   return (
     <div>
