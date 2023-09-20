@@ -42,9 +42,37 @@ export default function FormMatch({ users }: { users: any }) {
     e.preventDefault();
     const res = await supabase
       .from("Match")
-      .insert({ name: matchName, date: matchDate });
-    if (res.status != 201) {
-      return;
+      .insert({ name: matchName, date: matchDate })
+      .select();
+    if (res.status === 201 && res.data) {
+      var results: any[];
+      Object.entries(blue).forEach(async ([role, id], index) =>
+        supabase
+          .from("hasPlayed")
+          .insert({
+            rUser: id,
+            rMatch: res.data[0].id,
+            team: "blue",
+            role: role,
+            mvp: id === MVP,
+            hasWon: winner === "blue",
+          })
+          .select()
+      );
+      Object.entries(red).forEach(
+        async ([role, id], index) =>
+          await supabase
+            .from("hasPlayed")
+            .insert({
+              rUser: id,
+              rMatch: res.data[0].id,
+              team: "red",
+              role: role,
+              mvp: id === MVP,
+              hasWon: winner === "red",
+            })
+            .select()
+      );
     }
 
     console.log(res);
@@ -208,8 +236,7 @@ export default function FormMatch({ users }: { users: any }) {
           <p className="team-name text-center">TEAM RED</p>
           <div className="line-role-name">
             <img src="./img/roles/top.png" className="p-1" height={50} alt="" />
-            <p className="ruoli-red">TOP:</p>
-
+            <label className="ruoli-red">TOP:</label>
             <select
               className="select-player"
               required
@@ -232,7 +259,7 @@ export default function FormMatch({ users }: { users: any }) {
               height={50}
               alt=""
             />
-            <p className="ruoli-red">JUNGLE:</p>
+            <label className="ruoli-red">JUNGLE:</label>
 
             <select
               className="select-player"
@@ -251,7 +278,7 @@ export default function FormMatch({ users }: { users: any }) {
           </div>
           <div className="line-role-name">
             <img src="./img/roles/mid.png" className="p-1" height={50} alt="" />
-            <p className="ruoli-red">MID:</p>
+            <label className="ruoli-red">MID:</label>
 
             <select
               className="select-player"
@@ -270,7 +297,7 @@ export default function FormMatch({ users }: { users: any }) {
           </div>
           <div className="line-role-name">
             <img src="./img/roles/bot.png" className="p-1" height={50} alt="" />
-            <p className="ruoli-red">ADC:</p>
+            <label className="ruoli-red">ADC:</label>
 
             <select
               className="select-player"
@@ -294,7 +321,7 @@ export default function FormMatch({ users }: { users: any }) {
               height={50}
               alt=""
             />
-            <p className="ruoli-red">SUPP:</p>
+            <label className="ruoli-red">SUPP:</label>
 
             <select
               className="select-player"
