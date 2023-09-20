@@ -10,10 +10,7 @@ export default async function Page({
   };
 }) {
   const supabase = createServerComponentClient({ cookies });
-  const { data: users } = await supabase
-    .from("User")
-    .select()
-    .eq("name", "Pino");
+  const { data: users } = await supabase.from("User").select().eq("name", name);
 
   return (
     <div className="background-user">

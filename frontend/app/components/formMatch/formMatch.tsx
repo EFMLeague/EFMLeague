@@ -108,7 +108,12 @@ export default function FormMatch({ users }: { users: any }) {
                 setBlue((blue) => ({ ...blue, top: e.target.value }))
               }
             >
-              <FormSelectUsers users={users} red={red} blue={blue} mode="exclude"  />
+              <FormSelectUsers
+                users={users}
+                red={red}
+                blue={blue}
+                mode="exclude"
+              />
             </select>
           </div>
 
@@ -128,7 +133,12 @@ export default function FormMatch({ users }: { users: any }) {
                 setBlue((blue) => ({ ...blue, jng: e.target.value }))
               }
             >
-              <FormSelectUsers users={users} red={red} blue={blue} mode="exclude" />
+              <FormSelectUsers
+                users={users}
+                red={red}
+                blue={blue}
+                mode="exclude"
+              />
             </select>
           </div>
           <div className="line-role-name">
@@ -142,7 +152,12 @@ export default function FormMatch({ users }: { users: any }) {
                 setBlue((blue) => ({ ...blue, mid: e.target.value }))
               }
             >
-              <FormSelectUsers users={users} red={red} blue={blue} mode="exclude" />
+              <FormSelectUsers
+                users={users}
+                red={red}
+                blue={blue}
+                mode="exclude"
+              />
             </select>
           </div>
           <div className="line-role-name">
@@ -156,7 +171,12 @@ export default function FormMatch({ users }: { users: any }) {
                 setBlue((blue) => ({ ...blue, adc: e.target.value }))
               }
             >
-              <FormSelectUsers users={users} red={red} blue={blue} mode="exclude" />
+              <FormSelectUsers
+                users={users}
+                red={red}
+                blue={blue}
+                mode="exclude"
+              />
             </select>
           </div>
           <div className="line-role-name">
@@ -175,7 +195,12 @@ export default function FormMatch({ users }: { users: any }) {
                 setBlue((blue) => ({ ...blue, sup: e.target.value }))
               }
             >
-              <FormSelectUsers users={users} red={red} blue={blue} mode="exclude" />
+              <FormSelectUsers
+                users={users}
+                red={red}
+                blue={blue}
+                mode="exclude"
+              />
             </select>
           </div>
         </div>
@@ -192,7 +217,12 @@ export default function FormMatch({ users }: { users: any }) {
                 setRed((red) => ({ ...red, top: e.target.value }))
               }
             >
-              <FormSelectUsers users={users} red={red} blue={blue} mode="exclude" />
+              <FormSelectUsers
+                users={users}
+                red={red}
+                blue={blue}
+                mode="exclude"
+              />
             </select>
           </div>
           <div className="line-role-name">
@@ -211,7 +241,12 @@ export default function FormMatch({ users }: { users: any }) {
                 setRed((red) => ({ ...red, jng: e.target.value }))
               }
             >
-              <FormSelectUsers users={users} red={red} blue={blue} mode="exclude" />
+              <FormSelectUsers
+                users={users}
+                red={red}
+                blue={blue}
+                mode="exclude"
+              />
             </select>
           </div>
           <div className="line-role-name">
@@ -225,7 +260,12 @@ export default function FormMatch({ users }: { users: any }) {
                 setRed((red) => ({ ...red, mid: e.target.value }))
               }
             >
-              <FormSelectUsers users={users} red={red} blue={blue} mode="exclude" />
+              <FormSelectUsers
+                users={users}
+                red={red}
+                blue={blue}
+                mode="exclude"
+              />
             </select>
           </div>
           <div className="line-role-name">
@@ -239,7 +279,12 @@ export default function FormMatch({ users }: { users: any }) {
                 setRed((red) => ({ ...red, adc: e.target.value }))
               }
             >
-              <FormSelectUsers users={users} red={red} blue={blue} mode="exclude" />
+              <FormSelectUsers
+                users={users}
+                red={red}
+                blue={blue}
+                mode="exclude"
+              />
             </select>
           </div>
           <div className="line-role-name">
@@ -258,13 +303,18 @@ export default function FormMatch({ users }: { users: any }) {
                 setRed((red) => ({ ...red, sup: e.target.value }))
               }
             >
-              <FormSelectUsers users={users} red={red} blue={blue} mode="exclude" />
+              <FormSelectUsers
+                users={users}
+                red={red}
+                blue={blue}
+                mode="exclude"
+              />
             </select>
           </div>
         </div>
         <div className="d-flex justify-content-center align-items-center w-100 p-4">
           <img src="./img/crown1.png" width={150} alt="" />
-          <label className="label-match">MVP</label>
+          <label className="label-match text-white">MVP</label>
           <select
             className="label-match"
             required
