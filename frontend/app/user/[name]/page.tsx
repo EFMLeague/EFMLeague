@@ -43,6 +43,11 @@ export default async function Page({
 
   return (
     <div className="index">
+      <button className="floating-button">
+        <a className="text-decoration-none text-white" href="/">
+          HOME
+        </a>
+      </button>
       {users?.map((user) => (
         <div>
           <p className="fw-bold text-white text-center title-users bg-black text-nowrap overflow-hidden traslate">

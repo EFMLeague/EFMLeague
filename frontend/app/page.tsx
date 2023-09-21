@@ -62,6 +62,82 @@ export default function Home() {
             </div>
           </div>
         </div>
+        <div className="py-5"></div>
+        <div className="container p-4">
+          <div className="row">
+            <div className="col">
+              <p className="d-block text-hero text-center">
+                <span className="p-1">OUR</span>{" "}
+                <span className="text-primary p-1">ROSTER</span>
+              </p>
+            </div>
+          </div>
+          <div className="row">
+            <div
+              id="carouselExampleInterval"
+              className="carousel slide"
+              data-bs-ride="carousel"
+            >
+              <div className="carousel-inner">
+                <div className="carousel-item active" data-bs-interval="3000">
+                  <img
+                    src="https://fastly.picsum.photos/id/778/200/300.jpg?hmac=if-R94hzGN6KBh6JULJgfcPjBM5dqOSgwQqaBNTtFR4"
+                    className="img-carousel"
+                    alt="..."
+                  />
+                </div>
+                <div className="carousel-item" data-bs-interval="2000">
+                  <img
+                    src="./video/PresentazioneNico.mp4"
+                    className="img-carousel"
+                    alt="..."
+                  />
+                </div>
+                <div className="carousel-item" data-bs-interval="2000">
+                  <img
+                    src="https://fastly.picsum.photos/id/1025/200/300.jpg?hmac=IOMIDjfOXbZ-vD59diaXLcQcq5g6Xo3Zg_gRF9UmwL0"
+                    className="img-carousel"
+                    alt="..."
+                  />
+                </div>
+              </div>
+              <button
+                className="carousel-control-prev"
+                type="button"
+                data-bs-target="#carouselExampleInterval"
+                data-bs-slide="prev"
+              >
+                <span
+                  className="carousel-control-prev-icon"
+                  aria-hidden="true"
+                ></span>
+                <span className="visually-hidden">Previous</span>
+              </button>
+              <button
+                className="carousel-control-next"
+                type="button"
+                data-bs-target="#carouselExampleInterval"
+                data-bs-slide="next"
+              >
+                <span
+                  className="carousel-control-next-icon"
+                  aria-hidden="true"
+                ></span>
+                <span className="visually-hidden">Next</span>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div className="container p-4">
+          <div className="row">
+            <div className="col">
+              <p className="d-block text-hero text-center">
+                <span className="p-1">OUR</span>{" "}
+                <span className="text-danger p-1">RANKINGS</span>
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
