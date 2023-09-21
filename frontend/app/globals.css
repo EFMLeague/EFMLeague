@@ -146,6 +146,7 @@ body {
   text-align: center;
   margin-top: -10px;
 }
+
 .input-match {
   width: 100%;
   text-align: center;
@@ -192,4 +193,13 @@ body {
 }
 .img-carousel {
   height: 100%;
+}
+.bg-bronze {
+  background-color: #e07f1f;
+}
+.bg-silver {
+  background-color: #c0c0c0;
+}
+a {
+  text-decoration: none !important;
 }

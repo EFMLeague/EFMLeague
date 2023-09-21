@@ -5,9 +5,9 @@ import { SessionProvider } from "next-auth/react";
 export default function navbar() {
   return (
     <div>
-      <nav className="navbar navbar-expand-lg bg-black fixed-top">
+      <nav className="navbar navbar-expand-lg navbar-dark bg-black fixed-top">
         <div className="container">
-          <a className="navbar-brand" href="#">
+          <a className="navbar-title" href="#">
             EFM League
           </a>
           <button
@@ -26,7 +26,7 @@ export default function navbar() {
               <a className="nav-link active" aria-current="page" href="/">
                 Home
               </a>
-              <a className="nav-link" href="/users">
+              <a className="nav-link" href="/user">
                 Users
               </a>
               <a className="nav-link" href="/addMatch">

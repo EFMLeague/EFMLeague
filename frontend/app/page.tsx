@@ -11,16 +11,24 @@ export default async function Home() {
   const { data: match } = await supabase.from("Match").select();
 
   const { data: mostWinningPlayers } = await supabase
-    .from("hasPlayed")
-    .select()
-    .eq("hasWon", true);
+    .from("most_winning_players")
+    .select();
 
-  console.log(match?.length);
-  console.log(users?.length);
+  const { data: mostLosingPlayers } = await supabase
+    .from("most_losing_players")
+    .select();
+
+  const { data: mostActivePlayer } = await supabase
+    .from("most_playing_players")
+    .select();
+  const { data: mostMvpPlayer } = await supabase
+    .from("most_mvp_players")
+    .select();
+
   return (
     <div>
-      <div className="index">
-        <div className="container">
+      <div className="index pb-5">
+        <div className="container pt-5">
           <div className=" row hero-area" id="hero-area">
             <div className="col">
               <div className="d-flex flex-column justify-content-center h-100 ">
@@ -74,8 +82,10 @@ export default async function Home() {
             </div>
           </div>
         </div>
-        <div className="py-5" id="roster"></div>
-        <div className="container p-4">
+
+        <div className="py-5"></div>
+
+        <div className="container">
           <div className="row">
             <div className="col">
               <p className="d-block text-hero text-center">
@@ -84,15 +94,94 @@ export default async function Home() {
               </p>
             </div>
           </div>
-          <div className="row">
-            <div className="col col-md-4">
+          <div className="row gap-4">
+            <div className="col-12 col-md-5 mx-auto">
               <div className="row bg-white">
-                <div className="col text-center">Most winning player</div>
+                <div className="col text-center fs-3 fw-bold text-uppercase">
+                  Most winning player
+                </div>
               </div>
+              {mostWinningPlayers?.map((player, index) => (
+                <div
+                  className={
+                    "p-1 row border " +
+                    (index === 0 ? "bg-warning " : " ") +
+                    (index === 1 ? "bg-silver " : " ") +
+                    (index === 2 ? "bg-bronze " : " ") +
+                    (index > 2 ? " bg-white " : "bg- white")
+                  }
+                >
+                  <div className="col-2 border-end">{index + 1}</div>
+                  <div className="col">{player.name}</div>
+                  <div className="col-2 fw-bold">{player.win}</div>
+                </div>
+              ))}
+            </div>
+            <div className="col-12 col-md-5 mx-auto">
               <div className="row bg-white">
-                <div className="col-2">1</div>
-                <div className="col">Francesco</div>
+                <div className="col text-center fs-3 fw-bold text-uppercase">
+                  Most losing player
+                </div>
               </div>
+              {mostLosingPlayers?.map((player, index) => (
+                <div
+                  className={
+                    "p-1 row border " +
+                    (index === 0 ? "bg-warning " : " ") +
+                    (index === 1 ? "bg-silver " : " ") +
+                    (index === 2 ? "bg-bronze " : " ") +
+                    (index > 2 ? " bg-white " : "bg- white")
+                  }
+                >
+                  <div className="col-2 border-end">{index + 1}</div>
+                  <div className="col">{player.name}</div>
+                  <div className="col-2 fw-bold">{player.lose}</div>
+                </div>
+              ))}
+            </div>
+            <div className="col-12 col-md-5 mx-auto">
+              <div className="row bg-white">
+                <div className="col text-center fs-3 fw-bold text-uppercase">
+                  Most active player
+                </div>
+              </div>
+              {mostActivePlayer?.map((player, index) => (
+                <div
+                  className={
+                    "p-1 row border " +
+                    (index === 0 ? "bg-warning " : " ") +
+                    (index === 1 ? "bg-silver " : " ") +
+                    (index === 2 ? "bg-bronze " : " ") +
+                    (index > 2 ? " bg-white " : "bg- white")
+                  }
+                >
+                  <div className="col-2 border-end">{index + 1}</div>
+                  <div className="col">{player.name}</div>
+                  <div className="col-2 fw-bold">{player.played}</div>
+                </div>
+              ))}
+            </div>
+            <div className="col-12 col-md-5 mx-auto">
+              <div className="row bg-white">
+                <div className="col text-center fs-3 fw-bold text-uppercase">
+                  Most performer player
+                </div>
+              </div>
+              {mostMvpPlayer?.map((player, index) => (
+                <div
+                  className={
+                    " p-1 row border " +
+                    (index === 0 ? "bg-warning " : " ") +
+                    (index === 1 ? "bg-silver " : " ") +
+                    (index === 2 ? "bg-bronze " : " ") +
+                    (index > 2 ? " bg-white " : "bg- white")
+                  }
+                >
+                  <div className="col-2 border-end">{index + 1}</div>
+                  <div className="col">{player.name}</div>
+                  <div className="col-2 fw-bold">{player.played}</div>
+                </div>
+              ))}
             </div>
           </div>
         </div>

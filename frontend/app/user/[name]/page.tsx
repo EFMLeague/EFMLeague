@@ -42,7 +42,7 @@ export default async function Page({
   }
 
   return (
-    <div className="index">
+    <div className="index pt-5">
       <button className="floating-button">
         <a className="text-decoration-none text-white" href="/">
           HOME
