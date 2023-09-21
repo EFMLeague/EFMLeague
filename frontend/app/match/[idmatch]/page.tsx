@@ -2,12 +2,19 @@ import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import React from "react";
 
-export default async function match() {
+export default async function Page({
+  params: { idmatch },
+}: {
+  params: {
+    idmatch: string;
+  };
+}) {
   const supabase = createServerComponentClient({ cookies });
   const { data: match } = await supabase
     .from("hasPlayed")
     .select()
-    .eq("rMatch", "21");
+    .eq("rMatch", idmatch);
+
   if (match === null) {
     return;
   }
@@ -21,7 +28,7 @@ export default async function match() {
 
       <div className="d-flex flex-wrap w-100 bg-white justify-content-center">
         <div className="w-100 d-flex justify-content-center">
-          <p className="bg-dark match-title ">MATCH</p>
+          <p className="bg-dark match-title">MATCH</p>
         </div>
 
         <div className="input-match">
@@ -33,7 +40,6 @@ export default async function match() {
         <div className="d-flex justify-content-center align-items-center w-100 p-4">
           <img src="./../img/trofeo.png" width={150} alt="" />
           <label className="label-match">WINNERS</label>
-
           <img src="./../img/trofeo.png" width={150} alt="" />
         </div>
 
