@@ -1,6 +1,22 @@
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import Navbar from "./components/navbar/navbar";
+import { cookies } from "next/headers";
 
-export default function Home() {
+export default async function Home() {
+  const supabase = createServerComponentClient({ cookies });
+  const { data: users } = await supabase
+    .from("User")
+    .select()
+    .order("name", { ascending: true });
+  const { data: match } = await supabase.from("Match").select();
+
+  const { data: mostWinningPlayers } = await supabase
+    .from("hasPlayed")
+    .select()
+    .eq("hasWon", true);
+
+  console.log(match?.length);
+  console.log(users?.length);
   return (
     <div>
       <div className="index">
@@ -36,11 +52,11 @@ export default function Home() {
             </p>
             <div className="d-flex flex-wrap justify-content-center mx-auto">
               <div className="p-4 text-center mx-auto">
-                <p className="text-hero">19</p>
+                <p className="text-hero">{users?.length}</p>
                 <p className="text-base">Subscriber</p>
               </div>
               <div className="p-4 text-center mx-auto">
-                <p className="text-hero">30</p>
+                <p className="text-hero">{match?.length}</p>
                 <p className="text-base">games played</p>
               </div>
               <div className="p-4 text-center mx-auto">
@@ -48,89 +64,35 @@ export default function Home() {
                 <p className="text-base">New friends</p>
               </div>
               <div className="p-4 text-center mx-auto">
-                <p className="text-hero">00</p>
-                <p className="text-base">Kicked</p>
-              </div>
-              <div className="p-4 text-center mx-auto">
                 <p className="text-hero">12</p>
                 <p className="text-base">Match for week</p>
               </div>
-            </div>
-          </div>
-        </div>
-        <div className="py-5"></div>
-        <div className="container p-4">
-          <div className="row">
-            <div className="col">
-              <p className="d-block text-hero text-center">
-                <span className="p-1">OUR</span>{" "}
-                <span className="text-primary p-1">ROSTER</span>
-              </p>
-            </div>
-          </div>
-          <div className="row">
-            <div
-              id="carouselExampleInterval"
-              className="carousel slide"
-              data-bs-ride="carousel"
-            >
-              <div className="carousel-inner">
-                <div className="carousel-item active" data-bs-interval="3000">
-                  <img
-                    src="https://fastly.picsum.photos/id/778/200/300.jpg?hmac=if-R94hzGN6KBh6JULJgfcPjBM5dqOSgwQqaBNTtFR4"
-                    className="img-carousel"
-                    alt="..."
-                  />
-                </div>
-                <div className="carousel-item" data-bs-interval="2000">
-                  <img
-                    src="https://fastly.picsum.photos/id/1025/200/300.jpg?hmac=IOMIDjfOXbZ-vD59diaXLcQcq5g6Xo3Zg_gRF9UmwL0"
-                    className="img-carousel"
-                    alt="..."
-                  />
-                </div>
-                <div className="carousel-item" data-bs-interval="2000">
-                  <img
-                    src="https://fastly.picsum.photos/id/1025/200/300.jpg?hmac=IOMIDjfOXbZ-vD59diaXLcQcq5g6Xo3Zg_gRF9UmwL0"
-                    className="img-carousel"
-                    alt="..."
-                  />
-                </div>
+              <div className="p-4 text-center mx-auto">
+                <p className="text-hero">00</p>
+                <p className="text-base">Kicked</p>
               </div>
-              <button
-                className="carousel-control-prev"
-                type="button"
-                data-bs-target="#carouselExampleInterval"
-                data-bs-slide="prev"
-              >
-                <span
-                  className="carousel-control-prev-icon"
-                  aria-hidden="true"
-                ></span>
-                <span className="visually-hidden">Previous</span>
-              </button>
-              <button
-                className="carousel-control-next"
-                type="button"
-                data-bs-target="#carouselExampleInterval"
-                data-bs-slide="next"
-              >
-                <span
-                  className="carousel-control-next-icon"
-                  aria-hidden="true"
-                ></span>
-                <span className="visually-hidden">Next</span>
-              </button>
             </div>
           </div>
         </div>
+        <div className="py-5" id="roster"></div>
         <div className="container p-4">
           <div className="row">
             <div className="col">
               <p className="d-block text-hero text-center">
                 <span className="p-1">OUR</span>{" "}
-                <span className="text-danger p-1">RANKINGS</span>
+                <span className="text-primary p-1">RANKINGS</span>
               </p>
+            </div>
+          </div>
+          <div className="row">
+            <div className="col col-md-4">
+              <div className="row bg-white">
+                <div className="col text-center">Most winning player</div>
+              </div>
+              <div className="row bg-white">
+                <div className="col-2">1</div>
+                <div className="col">Francesco</div>
+              </div>
             </div>
           </div>
         </div>
