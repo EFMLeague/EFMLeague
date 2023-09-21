@@ -6,7 +6,7 @@ export default function navbar() {
     <div>
       <nav className="navbar navbar-expand-lg bg-black">
         <div className="container">
-          <a className="navbar-brand" href="#">
+          <a className="navbar-title" href="#">
             EFM League
           </a>
           <button
@@ -22,7 +22,7 @@ export default function navbar() {
           </button>
           <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div className="navbar-nav">
-              <a className="nav-link active" aria-current="page" href="#">
+              <a className="nav-link" href="#">
                 Home
               </a>
               <a className="nav-link" href="#">

@@ -88,7 +88,7 @@ export default function Home() {
                 </div>
                 <div className="carousel-item" data-bs-interval="2000">
                   <img
-                    src="./video/PresentazioneNico.mp4"
+                    src="https://fastly.picsum.photos/id/1025/200/300.jpg?hmac=IOMIDjfOXbZ-vD59diaXLcQcq5g6Xo3Zg_gRF9UmwL0"
                     className="img-carousel"
                     alt="..."
                   />
