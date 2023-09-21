@@ -43,6 +43,11 @@ export default async function Page({
 
   return (
     <div className="index">
+      <button className="floating-button">
+        <a className="text-decoration-none text-white" href="/">
+          HOME
+        </a>
+      </button>
       {users?.map((user) => (
         <div>
           <p className="fw-bold text-white text-center title-users bg-black text-nowrap overflow-hidden traslate">
@@ -51,7 +56,10 @@ export default async function Page({
           </p>
           <div className="d-flex justify-content-center flex-wrap p-4">
             <video className="video-card" autoPlay muted loop>
-              <source src="./../video/PresentazioneNico.mp4" type="video/mp4" />
+              <source
+                src={"./../video/Presentazione" + users[0].name + ".mp4"}
+                type="video/mp4"
+              />
             </video>
             <div className="">
               <div className="d-flex flex-wrap p-2">
@@ -91,6 +99,10 @@ export default async function Page({
                 <p className="counters">&nbsp;AMMONIZIONI :&nbsp;</p>
                 <p className="counters">&nbsp;{users[0].warnings}&nbsp;</p>
               </div>
+              {/* <div className="d-flex flex-wrap p-2">
+                <p className="counters">&nbsp;RUOLO PREFERITO :&nbsp;</p>
+                <p className="counters">&nbsp;{users[0].warnings}&nbsp;</p>
+              </div> */}
               <div className="d-flex flex-wrap p-2">
                 <p className="counters">&nbsp;WR :&nbsp;</p>
                 <p className="counters">
@@ -108,18 +120,30 @@ export default async function Page({
             </div>
           </div>
           <div className="container bg-white">
-            <div className="row">
-              <div className="col">Date</div>
-              <div className="col">Game&nbsp;Name</div>
-              <div className="col">Role</div>
-              <div className="col">Win</div>
+            <div className="row text-center">
+              <div className="col fw-bold fs-5">DATE</div>
+              <div className="col fw-bold fs-5">GAME&nbsp;NAME</div>
+              <div className="col fw-bold fs-5">ROLE</div>
+              {/* <div className="col fw-bold fs-5">WIN</div> */}
             </div>
             {matchHistory.reverse().map((game) => (
-              <div className="row" key={game.id}>
-                <div className="col">{game.Match.date.split("T")[0]}</div>
+              <div
+                className={
+                  "row text-center p-2 bg-opacity-25 border-start border-3" +
+                  (game.hasWon
+                    ? " border-success bg-success"
+                    : " border-danger bg-danger")
+                }
+                key={game.id}
+              >
+                <div className="col fs-6">
+                  {game.Match.date.split("20")[1].split("T")[0]}
+                </div>
                 <div className="col">{game.Match.name}</div>
                 <div className="col">{game.role}</div>
-                <div className="col">{game.hasWon ? "Victory" : "Lose"}</div>
+                {/* <div className="col fw-bold">
+                  {game.hasWon ? "Victory" : "Lose"}
+                </div> */}
               </div>
             ))}
           </div>
