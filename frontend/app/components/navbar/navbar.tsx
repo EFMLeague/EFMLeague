@@ -1,12 +1,13 @@
-"use client";
 import React from "react";
+import Logout from "./logout";
+import { SessionProvider } from "next-auth/react";
 
 export default function navbar() {
   return (
     <div>
-      <nav className="navbar navbar-expand-lg bg-black">
+      <nav className="navbar navbar-expand-lg bg-black fixed-top">
         <div className="container">
-          <a className="navbar-title" href="#">
+          <a className="navbar-brand" href="#">
             EFM League
           </a>
           <button
@@ -22,20 +23,18 @@ export default function navbar() {
           </button>
           <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div className="navbar-nav">
-              <a className="nav-link" href="#">
+              <a className="nav-link active" aria-current="page" href="/">
                 Home
               </a>
-              <a className="nav-link" href="#">
-                Roster
+              <a className="nav-link" href="/users">
+                Users
               </a>
-              <a className="nav-link" href="#">
-                Rankings
-              </a>
-              <a className="nav-link" href="#">
-                Social
+              <a className="nav-link" href="/addMatch">
+                Add a match
               </a>
             </div>
           </div>
+          <Logout />
         </div>
       </nav>
     </div>

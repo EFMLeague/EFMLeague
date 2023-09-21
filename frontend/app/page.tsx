@@ -1,12 +1,8 @@
-"use clients";
-import Image from "next/image";
-import styles from "./page.module.css";
-import Navbar from "./components/navbar";
+import Navbar from "./components/navbar/navbar";
 
 export default function Home() {
   return (
     <div>
-      <Navbar />
       <div className="index">
         <div className="container">
           <div className=" row hero-area" id="hero-area">
