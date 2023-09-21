@@ -19,15 +19,15 @@ export default async function User() {
         <div className=" pt-5 d-flex justify-content-center">
           <p
             className="text-black bg-white p-1 m-2 fw-bold fst-italic"
-            style={{ fontSize: "4rem" }}
+            style={{ fontSize: "3rem" }}
           >
             OUR PLAYERS
           </p>
         </div>
-        <div className="d-flex flex-wrap">
+        <div className="d-flex flex-wrap gap-2">
           {users?.map((user, index) => (
             <div className="mx-auto" key={user.id}>
-              <div className="fs-1 fw-bold text-center text-white text-uppercase bg-black m-1">
+              <div className="fs-1 fw-bold text-center text-white text-uppercase bg-black">
                 <a className="text-white" href={"./user/" + user.name}>
                   {user.name}
                 </a>
@@ -35,13 +35,13 @@ export default async function User() {
               <div>
                 {user.video_source ? (
                   <img
-                    className="video-card"
+                    className="img-card"
                     src={"./img/screenshots/frame_" + user.name + ".jpg"}
                     alt=""
                   />
                 ) : (
                   <img
-                    className="video-card"
+                    className="img-card"
                     src={"./img/screenshots/frame_intro.jpg"}
                     alt=""
                   />

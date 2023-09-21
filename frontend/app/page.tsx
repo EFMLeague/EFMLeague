@@ -28,7 +28,7 @@ export default async function Home() {
   return (
     <div>
       <div className="index pb-5">
-        <div className="container pt-5">
+        <div className="container pt-5 mt-5">
           <div className=" row hero-area" id="hero-area">
             <div className="col">
               <div className="d-flex flex-column justify-content-center h-100 ">

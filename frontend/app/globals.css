@@ -84,6 +84,13 @@ body {
   max-height: 700px;
   padding: 8px;
 }
+.img-card {
+  height: auto;
+  width: auto;
+  min-width: 30%;
+  min-height: 100%;
+  max-height: 550px;
+}
 .team-name {
   color: black;
   font-size: 3rem;
