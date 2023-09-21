@@ -80,7 +80,7 @@ export default function FormMatch({ users }: { users: any }) {
 
   return (
     <div>
-      <p className="fw-bold text-white text-center title-users bg-black text-nowrap overflow-hidden traslate">
+      <p className="fw-bold text-white text-center title-users bg-black text-nowrap overflow-hidden traslate pt-5">
         GAME GAME GAME GAME GAME GAME GAME GAME GAME GAME GAME GAME GAME GAME
         GAME GAME GAME GAME GAME
       </p>

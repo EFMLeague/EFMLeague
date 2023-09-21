@@ -7,7 +7,7 @@ export default function navbar() {
     <div>
       <nav className="navbar navbar-expand-lg navbar-dark bg-black fixed-top">
         <div className="container">
-          <a className="navbar-title" href="#">
+          <a className="navbar-title" href="/">
             EFM League
           </a>
           <button
