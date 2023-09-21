@@ -26,28 +26,28 @@ export default async function User() {
         </div>
         <div className="d-flex flex-wrap gap-2">
           {users?.map((user, index) => (
-            <div className="mx-auto" key={user.id}>
-              <div className="fs-1 fw-bold text-center text-white text-uppercase bg-black">
-                <a className="text-white" href={"./user/" + user.name}>
+            <a className="text-white" href={"./user/" + user.name}>
+              <div className="mx-auto" key={user.id}>
+                <div className="fs-1 fw-bold text-center text-white text-uppercase bg-black">
                   {user.name}
-                </a>
+                </div>
+                <div>
+                  {user.video_source ? (
+                    <img
+                      className="img-card"
+                      src={"./img/screenshots/frame_" + user.name + ".jpg"}
+                      alt=""
+                    />
+                  ) : (
+                    <img
+                      className="img-card"
+                      src={"./img/screenshots/frame_intro.jpg"}
+                      alt=""
+                    />
+                  )}
+                </div>
               </div>
-              <div>
-                {user.video_source ? (
-                  <img
-                    className="img-card"
-                    src={"./img/screenshots/frame_" + user.name + ".jpg"}
-                    alt=""
-                  />
-                ) : (
-                  <img
-                    className="img-card"
-                    src={"./img/screenshots/frame_intro.jpg"}
-                    alt=""
-                  />
-                )}
-              </div>
-            </div>
+            </a>
           ))}
         </div>
       </div>
