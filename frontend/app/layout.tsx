@@ -1,5 +1,4 @@
 import "./globals.css";
-import "bootstrap/dist/css/bootstrap.css";
 import localFont from "next/font/local";
 import type { Metadata } from "next";
 import Navbar from "./components/navbar/navbar";
@@ -42,15 +41,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <head>
-        <link
-          href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
-          rel="stylesheet"
-        />
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-      </head>
       <body className={decaloType.className}>
-        <Navbar />
+        {/* <Navbar /> */}
         {children}
       </body>
     </html>

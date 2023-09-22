@@ -29,7 +29,7 @@ export default async function Page({
   };
   console.log(match);
   return (
-    <div>
+    <div className="overflow-hidden">
       <p className="fw-bold text-white text-center title-users bg-black text-nowrap overflow-hidden traslate pt-5">
         GAME GAME GAME GAME GAME GAME GAME GAME GAME GAME GAME GAME GAME GAME
         GAME GAME GAME GAME GAME
