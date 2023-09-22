@@ -40,7 +40,6 @@ export default async function Page({
   if (!winnedMatch || !playedMatch || !mvpMatch || !matchHistory) {
     return;
   }
-
   return (
     <div className="index pt-5">
       <button className="floating-button">
@@ -127,24 +126,26 @@ export default async function Page({
               {/* <div className="col fw-bold fs-5">WIN</div> */}
             </div>
             {matchHistory.reverse().map((game) => (
-              <div
-                className={
-                  "row text-center p-2 bg-opacity-25 border-start border-3" +
-                  (game.hasWon
-                    ? " border-success bg-success"
-                    : " border-danger bg-danger")
-                }
-                key={game.id}
-              >
-                <div className="col fs-6">
-                  {game.Match.date.split("20")[1].split("T")[0]}
+              <a href={"/match/" + game.rMatch}>
+                <div
+                  className={
+                    "row text-center p-2 bg-opacity-25 border-start border-3" +
+                    (game.hasWon
+                      ? " border-success bg-success"
+                      : " border-danger bg-danger")
+                  }
+                  key={game.id}
+                >
+                  <div className="col fs-6">
+                    {game.Match.date.split("T")[0].replaceAll("-", "/")}
+                  </div>
+                  <div className="col">{game.Match.name}</div>
+                  <div className="col">{game.role}</div>
+                  {/* <div className="col fw-bold">
+                    {game.hasWon ? "Victory" : "Lose"}
+                  </div> */}
                 </div>
-                <div className="col">{game.Match.name}</div>
-                <div className="col">{game.role}</div>
-                {/* <div className="col fw-bold">
-                  {game.hasWon ? "Victory" : "Lose"}
-                </div> */}
-              </div>
+              </a>
             ))}
           </div>
           <p className="fw-bold text-white text-center title-users bg-black text-nowrap overflow-hidden traslate1">

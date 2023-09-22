@@ -99,17 +99,6 @@ body {
   padding-bottom: 12px;
 }
 
-.side {
-  width: 100%;
-  padding-top: 100px;
-  border-right: #181818;
-  border: solid 3px;
-}
-@media (min-width: 580px) {
-  .side {
-    width: 50%;
-  }
-}
 .ruoli-blue {
   color: black;
   font-weight: bolder;
