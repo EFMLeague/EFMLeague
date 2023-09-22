@@ -24,7 +24,7 @@ export default async function Home() {
   const { data: mostMvpPlayer } = await supabase
     .from("most_mvp_players")
     .select();
-  console.log(mostLosingPlayers);
+
   return (
     <div className="">
       <div className="h-screen p-2">
@@ -83,7 +83,7 @@ export default async function Home() {
         </div>
       </div>
 
-      <div className="container mx-auto">
+      <div className="container mx-auto" id="rankings">
         <p className="text-4xl font-bold text-white text-center">
           <span className="">OUR</span>{" "}
           <span className="text-blue-700">RANKINGS</span>

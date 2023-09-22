@@ -22,7 +22,6 @@ export default function Navbar() {
     } else {
       setColorChange(false);
     }
-    console.log(colorChange);
   };
   if (typeof window !== "undefined") {
     // Client-side-only code
@@ -49,7 +48,7 @@ export default function Navbar() {
               <img src="/img/logo/Logocentrato.png" className="h-12" alt="" />
             </div>
             <a href="/">
-              <h1 className=" hidden lg:flex lg:font-bold">EFM Leaue</h1>
+              <h1 className=" hidden lg:flex lg:font-bold">EFM League</h1>
             </a>
           </div>
           <div
@@ -88,7 +87,7 @@ export default function Navbar() {
               </a>
             </li>
             <li>
-              <a href="/" onClick={() => handleOpen()}>
+              <a href="/#rankings" onClick={() => handleOpen()}>
                 RANKINGS
               </a>
             </li>

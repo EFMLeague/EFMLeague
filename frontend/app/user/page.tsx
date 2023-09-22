@@ -8,7 +8,6 @@ export default async function User() {
     .from("User")
     .select()
     .order("video_source,name", { ascending: true });
-  console.log(users);
   return (
     <div className="">
       <div className="container mx-auto">
