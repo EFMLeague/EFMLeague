@@ -52,8 +52,8 @@ export default async function Page({
             PLAYER PLAYER PLAYER PLAYER PLAYER PLAYER PLAYER PLAYER PLAYER
             PLAYER PLAYER PLAYER PLAYER PLAYER PLAYER PLAYER
           </p>
-          <div className="flex justify-center flex-wrap p-4">
-            <video className="video-card" autoPlay muted loop>
+          <div className="flex justify-center flex-wrap ">
+            <video className="max-h-[700px]" autoPlay muted loop>
               <source
                 src={"./../video/Presentazione" + users[0].name + ".mp4"}
                 type="video/mp4"
