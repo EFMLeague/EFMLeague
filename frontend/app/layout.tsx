@@ -4,7 +4,7 @@ import localFont from "next/font/local";
 import type { Metadata } from "next";
 import Navbar from "./components/navbar/navbar";
 
-export const dynamic = "auto";
+export const dynamic = "force-static";
 const decaloType = localFont({
   src: [
     {
