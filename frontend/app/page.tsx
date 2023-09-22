@@ -27,10 +27,6 @@ export default async function Home() {
 
   return (
     <div className="">
-      <div className="h-screen -z-10 fixed">
-        <img src="./img/banner.jpg" className="object-cover h-full" alt="" />
-        <div className="overlay"></div>
-      </div>
       <div className="h-screen p-2">
         <div className="h-full flex flex-wrap container">
           <div className="basis-full">
@@ -48,7 +44,11 @@ export default async function Home() {
             </p>
           </div>
           <div className="basis-full">
-            <img src="./img/logo/Logocentrato.png" alt="" />
+            <img
+              src="./img/logo/Logocentrato.png"
+              className="md:max-h-[300px]"
+              alt=""
+            />
           </div>
         </div>
       </div>
@@ -90,14 +90,15 @@ export default async function Home() {
         </p>
 
         <div className="bg-white grid grid-cols-6 text-black ">
-          <div className="col-span-6 border border-red-600 shadow-tableYellow">
-            <p className=" text-red-600 text-center font-bold">
+          <div className="col-span-6 border border-green-600 shadow-tableGreen">
+            <p className=" text-green-600 text-center font-bold uppercase text-[2rem]">
               Most winning player
             </p>
           </div>
+
           {mostWinningPlayers?.map((player, index) => (
             <>
-              <div className="col-span-1">{index + 1}</div>
+              <div className="col-span-1 ">{index + 1}</div>
               <div className="col-span-4">{player.name}</div>
               <div className="col-span-1 font-bold">{player.win}</div>
             </>

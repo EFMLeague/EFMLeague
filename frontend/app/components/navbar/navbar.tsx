@@ -48,7 +48,9 @@ export default function Navbar() {
             >
               <img src="/img/logo/Logocentrato.png" className="h-12" alt="" />
             </div>
-            <h1 className=" hidden lg:flex lg:font-bold">EFM Leaue</h1>
+            <a href="/">
+              <h1 className=" hidden lg:flex lg:font-bold">EFM Leaue</h1>
+            </a>
           </div>
           <div
             className=" text-[2rem] absolute right-5 hover:cursor-pointer lg:hidden"

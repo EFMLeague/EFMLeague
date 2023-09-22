@@ -43,6 +43,14 @@ export default function RootLayout({
     <html lang="en">
       <body className={decaloType.className}>
         <div className="pb-14">
+          <div className="h-screen w-screen -z-10 fixed">
+            <img
+              src="../img/banner.jpg"
+              className="object-cover h-full w-full"
+              alt=""
+            />
+            <div className="overlay"></div>
+          </div>
           <Navbar />
         </div>
         {children}

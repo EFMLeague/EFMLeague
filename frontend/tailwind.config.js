@@ -8,7 +8,7 @@ module.exports = {
   theme: {
     extend: {
       boxShadow: {
-        tableYellow: "0 0 5px red, inset 0 0 5px red;",
+        tableGreen: "0 0 5px green, inset 0 0 5px green;",
       },
     },
   },

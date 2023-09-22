@@ -8,27 +8,22 @@ export default async function User() {
     .from("User")
     .select()
     .order("video_source,name", { ascending: true });
+  console.log(users);
   return (
-    <div className="index">
-      <button className="floating-button">
-        <a className="text-decoration-none text-white" href="/">
-          HOME
-        </a>
-      </button>
-      <div className="container py-5">
-        <div className=" pt-5 d-flex justify-content-center">
-          <p
-            className="text-black bg-white p-1 m-2 fw-bold fst-italic"
-            style={{ fontSize: "3rem" }}
-          >
-            OUR PLAYERS
-          </p>
-        </div>
-        <div className="d-flex flex-wrap gap-2">
+    <div className="">
+      <div className="container mx-auto">
+        <p className="text-black bg-white p-1 m-2 font-bold text-5xl text-center">
+          OUR PLAYERS
+        </p>
+
+        <div className="grid grid-cols-4">
           {users?.map((user, index) => (
-            <a className="text-white" href={"./user/" + user.name}>
-              <div className="mx-auto" key={user.id}>
-                <div className="fs-1 fw-bold text-center text-white text-uppercase bg-black">
+            <a
+              className="col-span-4 m-2 md:col-span-1"
+              href={"./user/" + user.name}
+            >
+              <div className="" key={user.id}>
+                <div className="text-4xl font-bold text-center text-white bg-black">
                   {user.name}
                 </div>
                 <div>
