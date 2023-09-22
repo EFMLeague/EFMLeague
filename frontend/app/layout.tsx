@@ -3,8 +3,8 @@ import "bootstrap/dist/css/bootstrap.css";
 import localFont from "next/font/local";
 import type { Metadata } from "next";
 import Navbar from "./components/navbar/navbar";
-export const preferredRegion = "auto";
-export const dynamic = "force-static";
+
+export const dynamic = "auto";
 const decaloType = localFont({
   src: [
     {
