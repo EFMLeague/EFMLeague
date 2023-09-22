@@ -3,7 +3,8 @@ import "bootstrap/dist/css/bootstrap.css";
 import localFont from "next/font/local";
 import type { Metadata } from "next";
 import Navbar from "./components/navbar/navbar";
-
+export const preferredRegion = "auto";
+export const dynamic = "force-static";
 const decaloType = localFont({
   src: [
     {
@@ -28,7 +29,7 @@ const decaloType = localFont({
     },
   ],
 });
-export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "EFMLeague",
   description: "Created by Francesco Nicolo & Stefano Piccoli",
