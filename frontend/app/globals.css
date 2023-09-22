@@ -12,3 +12,7 @@
   z-index: 1;
   @apply bg-black/80;
 }
+
+#navlinks ul li {
+  @apply py-4 text-[1.3rem] w-2/3 rounded-b-sm mx-auto border-b-2 hover:scale-105 hover:pr-1 lg:pl-5  lg:py-0 lg:border-none lg:w-full;
+}

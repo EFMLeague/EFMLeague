@@ -42,7 +42,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={decaloType.className}>
-        {/* <Navbar /> */}
+        <div className="pb-14">
+          <Navbar />
+        </div>
         {children}
       </body>
     </html>
