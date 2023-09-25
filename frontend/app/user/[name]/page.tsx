@@ -53,12 +53,21 @@ export default async function Page({
             PLAYER PLAYER PLAYER PLAYER PLAYER PLAYER PLAYER
           </p>
           <div className="flex justify-center flex-wrap ">
-            <video className="max-h-[700px]" autoPlay muted loop>
-              <source
-                src={"./../video/Presentazione" + users[0].name + ".mp4"}
-                type="video/mp4"
+            {user.video_source ? (
+              <video className="max-h-[700px]" autoPlay muted loop>
+                <source
+                  src={"./../video/Presentazione" + users[0].name + ".mp4"}
+                  type="video/mp4"
+                />
+              </video>
+            ) : (
+              <img
+                className="max-h-[700px]"
+                src={"./../img/screenshots/frame_intro.jpg"}
+                alt=""
               />
-            </video>
+            )}
+
             <div className="">
               <div className="flex flex-wrap p-2">
                 <p className="text-3xl bg-black text-white font-bold">

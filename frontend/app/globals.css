@@ -16,3 +16,26 @@
 #navlinks ul li {
   @apply py-4 text-[1.3rem] w-2/3 rounded-b-sm mx-auto border-b-2 hover:scale-105 hover:pr-1 lg:pl-5  lg:py-0 lg:border-none lg:w-full;
 }
+
+/* Stile del testo */
+.italian-underline {
+  position: relative; /* Per posizionare il gradient rispetto al testo */
+}
+
+/* Gradient personalizzato per la sottolineatura */
+.italian-underline::after {
+  content: ""; /* Creiamo un elemento fittizio per il gradient */
+  position: absolute;
+  left: 0;
+  bottom: 0px; /* Regola la distanza della sottolineatura dal testo */
+  width: 100%; /* Assicura che la sottolineatura copra l'intera larghezza del testo */
+  height: 3px; /* Altezza della sottolineatura */
+  background: rgb(16, 167, 11);
+  background: linear-gradient(
+    90deg,
+    rgba(16, 167, 11, 1) 33%,
+    rgba(255, 255, 255, 1) 33%,
+    rgba(255, 255, 255, 1) 66%,
+    rgba(215, 13, 13, 1) 66%
+  ); /* Gradient personalizzato */
+}

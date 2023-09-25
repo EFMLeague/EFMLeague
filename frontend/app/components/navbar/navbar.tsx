@@ -23,6 +23,7 @@ export default function Navbar() {
       setColorChange(false);
     }
   };
+
   if (typeof window !== "undefined") {
     // Client-side-only code
     window.addEventListener("scroll", handleColorChange);
@@ -31,7 +32,7 @@ export default function Navbar() {
   return (
     <nav
       className={
-        "h-14 w-full fixed top-0 z-50 transition-all duration-500 bg-black text-white"
+        "h-16 w-full fixed top-0 z-50 transition-all duration-500 bg-black text-white"
       }
     >
       <div className="flex flex-col pt-1 lg:container lg:mx-auto lg:h-full lg:justify-between lg:flex-row">
@@ -48,7 +49,9 @@ export default function Navbar() {
               <img src="/img/logo/Logocentrato.png" className="h-12" alt="" />
             </div>
             <a href="/">
-              <h1 className=" hidden lg:flex lg:font-bold">EFM League</h1>
+              <h1 className=" hidden lg:flex italian-underline lg:font-bold">
+                EFM League
+              </h1>
             </a>
           </div>
           <div
@@ -70,7 +73,7 @@ export default function Navbar() {
             "text-[2rem] flex justify-center items-center overflow-hidden transition-all duration-[300ms] backdrop-blur-md backdrop-brightness-50 lg:transition-none lg:backdrop-blur-none lg:backdrop-brightness-100 lg:h-full lg:opacity-100 lg:pb-0 " +
             (isOpen === false
               ? " h-0 opacity-0 overflow-hidden lg:block "
-              : " h-screen opacity-100 pb-12 text-white lg:text-black ") +
+              : " h-screen opacity-100 pb-12 text-white ") +
             (colorChange === true ? " !text-white " : " ")
           }
           id="navlinks"
@@ -87,7 +90,7 @@ export default function Navbar() {
               </a>
             </li>
             <li>
-              <a href="/#rankings" onClick={() => handleOpen()}>
+              <a href="/ranking" onClick={() => handleOpen()}>
                 RANKINGS
               </a>
             </li>
