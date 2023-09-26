@@ -158,6 +158,53 @@ export default async function Page({
               </div>
             </div>
           </div>
+          <div className="container mx-auto pt-6">
+            <p className="text-white text-[3rem] uppercase font-bold">
+              Match history
+            </p>
+          </div>
+          <div className="container mx-auto grid grid-cols-12 bg-white rounded-xl my-10">
+            <div className="col-span-3 p-2 font-bold text-[1.4rem] uppercase border-2 bg-purple-200">
+              Data
+            </div>
+            <div className="col-span-3 p-2 font-bold text-[1.4rem] uppercase border-2 bg-yellow-200">
+              Role
+            </div>
+            <div className="col-span-3 p-2 font-bold text-[1.4rem] uppercase border-2 bg-blue-200">
+              Team
+            </div>
+            <div className="col-span-3 p-2 font-bold text-[1.4rem] uppercase border-2 bg-neutral-200">
+              Result
+            </div>
+            {matchHistory.reverse().map((game) => (
+              <a
+                href={"/match/" + game.rMatch}
+                className="col-span-12 grid grid-cols-12 hover:scale-105"
+              >
+                <div className="col-span-3 p-2 bg-purple-50 border-b-2 border-black/20">
+                  {game.Match.date.split("T")[0].replaceAll("-", "/")}
+                </div>
+                <div className="col-span-3 p-2 bg-yellow-50 text-[1.3rem] border-b-2 border-black/20">
+                  {game.role === "adc" ? "Botlane" : ""}
+                  {game.role === "sup" ? "Support" : ""}
+                  {game.role === "jng" ? "Jungle" : ""}
+                  {game.role === "top" ? "Toplane" : ""}
+                  {game.role === "mid" ? "Midlane" : ""}
+                </div>
+                <div className="col-span-3 p-2 bg-blue-50 text-[1.3rem] border-b-2 border-black/20 uppercase">
+                  {game.team}
+                </div>
+                <div
+                  className={
+                    "col-span-3 p-2 font-bold text-[1.3rem] border-b-2 border-black/20  " +
+                    (game.hasWon ? "bg-green-200" : "bg-red-200")
+                  }
+                >
+                  {game.hasWon ? "WIN" : "LOSE"}
+                </div>
+              </a>
+            ))}
+          </div>
           {/* <div className="container bg-white">
             <div className="row text-center">
               <div className="col fw-bold fs-5">DATE</div>

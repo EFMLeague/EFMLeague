@@ -30,7 +30,7 @@ export default async function Page({
   console.log(match);
   return (
     <div className="overflow-hidden">
-      <p className="fw-bold text-white text-center title-users bg-black text-nowrap overflow-hidden traslate pt-5">
+      <p className="font-bold text-white text-center bg-black overflow-hidden text-[3rem] whitespace-pre w-full">
         GAME GAME GAME GAME GAME GAME GAME GAME GAME GAME GAME GAME GAME GAME
         GAME GAME GAME GAME GAME
       </p>
@@ -56,73 +56,81 @@ export default async function Page({
 
         <img src="./../img/crown1.png" width={150} alt="" />
       </div>*/}
-      <div className="row">
-        <div className="bg-primary col col-md-4">
-          <p className="team-name text-center">TEAM BLUE</p>
+      <div className="grid grid-cols-6 ">
+        <div className="bg-blue-500 col-span-6 lg:col-span-2">
+          <p className="text-[3.5rem] font-bold text-white text-center">
+            TEAM BLUE
+          </p>
 
-          <div className="line-role-name">
+          <div className="flex items-center py-3">
             <img
               src="./../img/roles/top.png"
-              className="p-1"
-              height={50}
+              className="p-1 h-[100px]"
               alt=""
             />
-            <p className="ruoli-blue">{extractPlayer("top", "blue")}</p>
+            <p className="text-[1.8rem] font-bold text-white">
+              {extractPlayer("top", "blue")}
+            </p>
           </div>
 
-          <div className="line-role-name">
+          <div className="flex items-center py-3">
             <img
               src="./../img/roles/jungle.png"
-              className="p-1"
-              height={50}
+              className="p-1 h-[100px]"
               alt=""
             />
-            <p className="ruoli-blue">{extractPlayer("jng", "blue")}</p>
-          </div>
-          <div className="line-role-name">
-            <img
-              src="./../img/roles/mid.png"
-              className="p-1"
-              height={50}
-              alt=""
-            />
-            <p className="ruoli-blue">{extractPlayer("mid", "blue")}</p>
-          </div>
-          <div className="line-role-name">
-            <img
-              src="./../img/roles/bot.png"
-              className="p-1"
-              height={50}
-              alt=""
-            />
-            <p className="ruoli-blue">{extractPlayer("adc", "blue")}</p>
-          </div>
-          <div className="line-role-name">
-            <img
-              src="./../img/roles/support.png"
-              className="p-1"
-              height={50}
-              alt=""
-            />
-            <p className="ruoli-blue">{extractPlayer("sup", "blue")}</p>
-          </div>
-        </div>
-        <div className="bg-white col-12 col-md-4 ">
-          <div className="row">
-            <p className="bg-dark match-title">MATCH</p>
+            <p className="text-[1.8rem] font-bold text-white">
+              {extractPlayer("jng", "blue")}
+            </p>
           </div>
 
-          <div className="row">
-            <p className="label-match text-black text-center">
+          <div className="flex items-center py-3">
+            <img
+              src="./../img/roles/mid.png"
+              className="p-1 h-[100px]"
+              alt=""
+            />
+            <p className="text-[1.8rem] font-bold text-white">
+              {extractPlayer("mid", "blue")}
+            </p>
+          </div>
+
+          <div className="flex items-center py-3">
+            <img
+              src="./../img/roles/bot.png"
+              className="p-1 h-[100px]"
+              alt=""
+            />
+            <p className="text-[1.8rem] font-bold text-white">
+              {extractPlayer("adc", "blue")}
+            </p>
+          </div>
+          <div className="flex items-center py-3">
+            <img
+              src="./../img/roles/support.png"
+              className="p-1 h-[100px]"
+              alt=""
+            />
+            <p className="text-[1.8rem] font-bold text-white">
+              {extractPlayer("sup", "blue")}
+            </p>
+          </div>
+        </div>
+
+        <div className="bg-white col-span-6 flex flex-col justify-between min-h-[550px] py-12 lg:col-span-2 lg:py-0">
+          <div>
+            <p className="text-center text-[4rem] font-bold">MATCH</p>
+            <p className=" text-black text-center text-[1.8rem]">
               {match[0].match_date.split("T")[0].replaceAll("-", "/")}
             </p>
           </div>
-          <div className="row align-items-center">
-            <div className="col-4 text-center">
-              <img src="./../img/trofeo.png" width={130} alt="" />
+
+          <div className="flex justify-center items-center">
+            <div className="text-center">
+              <img src="./../img/trofeo.png" className="max-h-[200px]" alt="" />
             </div>
-            <div className="col-4">
-              <p className="fs-1 fw-bold text-uppercase text-black text-center">
+            <div>
+              <p className="text-[3rem] font-bold uppercase text-black text-center">
                 {match[0].hasPlayed_hasWon
                   ? match[0].hasPlayed_team
                   : match[0].hasPlayed_team === "RED"
@@ -130,76 +138,83 @@ export default async function Page({
                   : "RED"}
               </p>
             </div>
-            <div className="col-4 text-center ">
-              <img src="./../img/trofeo.png" width={130} alt="" />
+            <div className="text-center ">
+              <img src="./../img/trofeo.png" className="max-h-[200px]" alt="" />
             </div>
           </div>
 
-          <div className="row align-items-center">
-            <div className="col-3 text-center">
-              <img src="./../img/crown1.png" width={100} alt="" />
+          <div className="flex justify-center items-center pb-4">
+            <div className="text-center">
+              <img src="./../img/crown1.png" className="max-h-[150px]" alt="" />
             </div>
-            <div className="col-6 ">
-              <p className="fs-1 fw-bold text-black text-center ">
-                MVP:&nbsp;{match.find((p) => p.hasPlayed_mvp).user_name}
+            <div className="">
+              <p className="font-bold text-black text-center text-[2.3rem]">
+                {match.find((p) => p.hasPlayed_mvp).user_name}
               </p>
             </div>
             <div className="col-3 text-center">
-              <img src="./../img/crown1.png" width={100} alt="" />
+              <img src="./../img/crown1.png" className="max-h-[150px]" alt="" />
             </div>
           </div>
         </div>
-        <div className="bg-danger col-12 col-md-4">
-          <p className="team-name text-center">TEAM RED</p>
-          <div className="line-role-name">
+        <div className="bg-red-500 col-span-6 lg:col-span-2">
+          <p className="text-[3.5rem] font-bold text-white text-center">
+            TEAM RED
+          </p>
+          <div className="flex items-center py-3">
             <img
               src="./../img/roles/top.png"
-              className="p-1"
-              height={50}
+              className="p-1 h-[100px]"
               alt=""
             />
-            <label className="ruoli-red">{extractPlayer("top", "red")}</label>
+            <p className="text-[1.8rem] font-bold text-white">
+              {extractPlayer("top", "red")}
+            </p>
           </div>
-          <div className="line-role-name">
+          <div className="flex items-center py-3">
             <img
               src="./../img/roles/jungle.png"
-              className="p-1"
-              height={50}
+              className="p-1 h-[100px]"
               alt=""
             />
-            <label className="ruoli-red">{extractPlayer("jng", "red")}</label>
+            <p className="text-[1.8rem] font-bold text-white">
+              {extractPlayer("jng", "red")}
+            </p>
           </div>
-          <div className="line-role-name">
+          <div className="flex items-center py-3">
             <img
               src="./../img/roles/mid.png"
-              className="p-1"
-              height={50}
+              className="p-1 h-[100px]"
               alt=""
             />
-            <label className="ruoli-red">{extractPlayer("mid", "red")}</label>
+            <p className="text-[1.8rem] font-bold text-white">
+              {extractPlayer("mid", "red")}
+            </p>
           </div>
-          <div className="line-role-name">
+          <div className="flex items-center py-3">
             <img
               src="./../img/roles/bot.png"
-              className="p-1"
-              height={50}
+              className="p-1 h-[100px]"
               alt=""
             />
-            <label className="ruoli-red">{extractPlayer("adc", "red")}</label>
+            <p className="text-[1.8rem] font-bold text-white">
+              {extractPlayer("adc", "red")}
+            </p>
           </div>
-          <div className="line-role-name">
+          <div className="flex items-center py-3">
             <img
               src="./../img/roles/support.png"
-              className="p-1"
-              height={50}
+              className="p-1 h-[100px]"
               alt=""
             />
-            <label className="ruoli-red">{extractPlayer("sup", "red")}</label>
+            <p className="text-[1.8rem] font-bold text-white">
+              {extractPlayer("sup", "red")}
+            </p>
           </div>
         </div>
       </div>
 
-      <p className="fw-bold text-white text-center title-users bg-black text-nowrap overflow-hidden traslate">
+      <p className="font-bold text-white text-center bg-black overflow-hidden text-[3rem] whitespace-pre w-full">
         GAME GAME GAME GAME GAME GAME GAME GAME GAME GAME GAME GAME GAME GAME
         GAME GAME GAME GAME GAME
       </p>

@@ -79,28 +79,28 @@ export default function Navbar() {
           id="navlinks"
         >
           <ul className="flex flex-col text-center w-full lg:flex-row lg:items-center lg:justify-center lg:h-full">
-            <li>
-              <Link href="/" onClick={() => handleOpen()}>
+            <li className="underline-link">
+              <a href="/" onClick={() => handleOpen()}>
                 HOME
-              </Link>
+              </a>
             </li>
-            <li>
+            <li className="underline-link">
               <a href="/user" onClick={() => handleOpen()}>
                 USERS
               </a>
             </li>
-            <li>
+            <li className="underline-link">
               <a href="/ranking" onClick={() => handleOpen()}>
                 RANKINGS
               </a>
             </li>
-            <li>
-              <a href="/#contatti" onClick={() => handleOpen()}>
+            <li className="underline-link">
+              <a href="/" onClick={() => handleOpen()}>
                 CONTATTI
               </a>
             </li>
-            <li>
-              <a href="/#palestra" onClick={() => handleOpen()}>
+            <li className="underline-link">
+              <a href="/addMatch" onClick={() => handleOpen()}>
                 ADDGAME
               </a>
             </li>

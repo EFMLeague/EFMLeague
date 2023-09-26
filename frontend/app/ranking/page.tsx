@@ -16,7 +16,7 @@ export default async function page() {
     .from("most_playing_players")
     .select();
   const { data: mostMvpPlayer } = await supabase
-    .from("most_mvp_players")
+    .from("classifica_mvp")
     .select();
   const { data: mostWrPlayer } = await supabase
     .from("win_rate_utenti")
