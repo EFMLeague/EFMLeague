@@ -476,11 +476,11 @@ export default async function page() {
                 </div>
                 <div className="col-span-4 p-1 border-b border-neutral-200 hover:bg-neutral-100">
                   <a className="p-2" href={"./user/" + player.name}>
-                    {player.name}
+                    {player.NomeUtente}
                   </a>
                 </div>
                 <div className="col-span-1 p-1 font-bold border-b border-neutral-200">
-                  {player.played}
+                  {player.NumeroMVP}
                 </div>
               </>
             ))}
