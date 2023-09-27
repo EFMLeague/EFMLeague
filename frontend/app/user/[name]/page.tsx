@@ -31,13 +31,19 @@ export default async function Page({
     .eq("rUser", users[0].id)
     .eq("hasWon", true);
 
+  const { data: prefRole } = await supabase
+    .from("ruolo_piu_giocato")
+    .select("*")
+    .eq("IDUtente", users[0].id)
+    .order("ConteggioRuolo", { ascending: false });
+
   const { data: matchHistory } = await supabase
     .from("hasPlayed")
     .select("*,Match (*)")
     .eq("rUser", users[0].id)
     .order("name", { foreignTable: "Match", ascending: false });
 
-  if (!winnedMatch || !playedMatch || !mvpMatch || !matchHistory) {
+  if (!winnedMatch || !playedMatch || !mvpMatch || !matchHistory || !prefRole) {
     return;
   }
   return (
@@ -68,55 +74,36 @@ export default async function Page({
               />
             )}
 
-            <div className="">
+            <div className=" bg-white min-w-[350px]">
+              <p className="text-[2.5rem] font-semibold bg-white  text-center">
+                &nbsp;{user.name}&nbsp;
+              </p>
               <div className="flex flex-wrap p-2">
-                <p className="text-3xl bg-black text-white font-bold">
-                  &nbsp;PERSONAL &nbsp;
+                <p className="text-2xl font-semibold bg-black text-white">
+                  &nbsp;GAMES PLAYED&nbsp;
                 </p>
-                <p className="text-3xl bg-black text-white font-bold">
-                  &nbsp;STATS &nbsp;
-                </p>
-              </div>
-
-              <div className="flex flex-wrap p-2">
-                <p className="text-2xl font-semibold bg-white">
-                  &nbsp;USERNAME :&nbsp;
-                </p>
-                <p className="text-2xl font-semibold bg-white">
-                  &nbsp;{user.name}&nbsp;
-                </p>
-              </div>
-
-              <div className="flex flex-wrap p-2">
-                <p className="text-2xl font-semibold bg-white">
-                  &nbsp;RANK :&nbsp;
-                </p>
-                <p className="text-2xl font-semibold bg-white">
-                  &nbsp;soon&nbsp;
-                </p>
-              </div>
-
-              <div className="flex flex-wrap p-2">
-                <p className="text-3xl bg-black text-white font-bold">
-                  &nbsp;CUSTOM &nbsp;
-                </p>
-                <p className="text-3xl bg-black text-white font-bold">
-                  &nbsp;STATS &nbsp;
-                </p>
-              </div>
-              <div className="flex flex-wrap p-2">
-                <p className="text-2xl font-semibold bg-white">
-                  &nbsp;GAMES PLAYED :&nbsp;
-                </p>
-                <p className="text-2xl font-semibold bg-white">
+                <p className="text-2xl font-semibold bg-white border border-black">
                   &nbsp;{playedMatch?.length}&nbsp;
                 </p>
               </div>
               <div className="flex flex-wrap p-2">
-                <p className="text-2xl font-semibold bg-white">
-                  &nbsp;POINTS :&nbsp;
+                <p className="text-2xl font-semibold bg-black text-white">
+                  &nbsp;ROLE&nbsp;
                 </p>
-                <p className="text-2xl font-semibold bg-white">
+                <p className="text-2xl font-semibold bg-white uppercase border border-black">
+                  &nbsp;{prefRole[0].ruoloPiuGiocato}&nbsp;-&nbsp;
+                  {(
+                    (prefRole[0].ConteggioRuolo * 100) /
+                    playedMatch?.length
+                  ).toFixed(2)}
+                  %
+                </p>
+              </div>
+              <div className="flex flex-wrap p-2">
+                <p className="text-2xl font-semibold bg-black text-white">
+                  &nbsp;POINTS&nbsp;
+                </p>
+                <p className="text-2xl font-semibold bg-white border border-black">
                   &nbsp;
                   {winnedMatch
                     ? winnedMatch.length - Math.round(users[0].warnings / 2)
@@ -125,10 +112,10 @@ export default async function Page({
                 </p>
               </div>
               <div className="flex flex-wrap p-2">
-                <p className="text-2xl font-semibold bg-white">
-                  &nbsp;AMMONIZIONI :&nbsp;
+                <p className="text-2xl font-semibold bg-black text-white">
+                  &nbsp;AMMONIZIONI&nbsp;
                 </p>
-                <p className="text-2xl font-semibold bg-white">
+                <p className="text-2xl font-semibold bg-white border border-black">
                   &nbsp;{users[0].warnings}&nbsp;
                 </p>
               </div>
@@ -137,10 +124,10 @@ export default async function Page({
                 <p className="text-2xl font-semibold bg-white">&nbsp;{users[0].warnings}&nbsp;</p>
               </div> */}
               <div className="flex flex-wrap p-2">
-                <p className="text-2xl font-semibold bg-white">
-                  &nbsp;WR :&nbsp;
+                <p className="text-2xl font-semibold bg-black text-white">
+                  &nbsp;WR&nbsp;
                 </p>
-                <p className="text-2xl font-semibold bg-white">
+                <p className="text-2xl font-semibold bg-white border border-black">
                   &nbsp;
                   {((winnedMatch?.length * 100) / playedMatch?.length).toFixed(
                     2
@@ -149,10 +136,10 @@ export default async function Page({
                 </p>
               </div>
               <div className="flex flex-wrap p-2">
-                <p className="text-2xl font-semibold bg-white">
-                  &nbsp;MVP :&nbsp;
+                <p className="text-2xl font-semibold bg-black text-white">
+                  &nbsp;MVP&nbsp;
                 </p>
-                <p className="text-2xl font-semibold bg-white">
+                <p className="text-2xl font-semibold bg-white border border-black">
                   &nbsp;{mvpMatch.length}&nbsp;
                 </p>
               </div>

@@ -40,16 +40,13 @@ export default function Navbar() {
           <div className="flex h-full w-full items-center">
             <div
               className={
-                "h-full lg:h-full lg:w-14 transition-all w-16 items-centers " +
-                (colorChange === true
-                  ? " invisible lg:hidden "
-                  : "h-full visible lg:flex")
+                "h-full lg:h-full transition-all w-16 items-centers pt-2"
               }
             >
               <img src="/img/logo/Logocentrato.png" className="h-12" alt="" />
             </div>
             <a href="/">
-              <h1 className=" hidden lg:flex italian-underline lg:font-bold">
+              <h1 className="lg:flex italian-underline lg:font-bold">
                 EFM League
               </h1>
             </a>
@@ -95,8 +92,8 @@ export default function Navbar() {
               </a>
             </li>
             <li className="underline-link">
-              <a href="/" onClick={() => handleOpen()}>
-                CONTATTI
+              <a href="/match" onClick={() => handleOpen()}>
+                HISTORY
               </a>
             </li>
             <li className="underline-link">
