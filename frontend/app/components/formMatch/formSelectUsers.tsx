@@ -21,7 +21,7 @@ export default function formSelectUsers({
               !(
                 Object.values(blue).includes(String(user.id)) ||
                 Object.values(red).includes(String(user.id))
-              )
+              ) || user.name==='FORESTIERO'
             )
               return (
                 <option value={user.id} key={user.id}>
