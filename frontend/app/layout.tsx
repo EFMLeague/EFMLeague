@@ -41,6 +41,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head></head>
       <body className={decaloType.className}>
         <div className="pb-14">
           <div className="h-screen w-screen -z-10 fixed ">
@@ -53,6 +54,7 @@ export default function RootLayout({
           </div>
           <Navbar />
         </div>
+
         {children}
       </body>
     </html>

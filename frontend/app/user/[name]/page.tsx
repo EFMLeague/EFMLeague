@@ -60,7 +60,13 @@ export default async function Page({
           </p>
           <div className="flex justify-center flex-wrap ">
             {user.video_source ? (
-              <video className="max-h-[700px]" autoPlay muted loop>
+              <video
+                className="max-h-[700px]"
+                autoPlay
+                muted
+                loop
+                controls={false}
+              >
                 <source
                   src={"./../video/Presentazione" + users[0].name + ".mp4"}
                   type="video/mp4"
