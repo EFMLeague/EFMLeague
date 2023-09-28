@@ -99,11 +99,11 @@ export default function Navbar() {
             </li>
             <li className="underline-link">
               <a href="/addMatch" onClick={() => handleOpen()}>
-                ADDGAME
+                ADMIN
               </a>
             </li>
             <li>
-              <Logout/>
+              <Logout />
             </li>
           </ul>
         </div>

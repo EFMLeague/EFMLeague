@@ -64,3 +64,6 @@
   ); /* Gradient personalizzato */
   @apply lg:invisible lg:hover:visible;
 }
+.select-player {
+  @apply p-2;
+}

@@ -4,32 +4,35 @@ import React from "react";
 
 export default async function page() {
   const supabase = createServerComponentClient({ cookies });
+  const { data: users } = await supabase
+    .from("User")
+    .select()
+    .order("name", { ascending: true });
   const { data: mostWinningPlayers } = await supabase
     .from("most_winning_players")
     .select();
-
   const { data: mostLosingPlayers } = await supabase
     .from("most_losing_players")
     .select();
-
   const { data: mostActivePlayer } = await supabase
     .from("most_playing_players")
     .select();
   const { data: mostMvpPlayer } = await supabase
     .from("classifica_mvp")
-    .select();
+    .select()
+    .neq("NomeUtente", "FORESTIERO");
+
   const { data: mostWrPlayer } = await supabase
     .from("win_rate_utenti")
-    .select();
-  const { data: users } = await supabase
-    .from("User")
     .select()
-    .order("name", { ascending: true });
+    .neq("NomeUtente", "FORESTIERO");
+
   const { data: warnings } = await supabase
     .from("User")
     .select()
     .neq("name", "FORESTIERO")
     .order("warnings", { ascending: false });
+
   const { data: sola } = await supabase
     .from("differenza_match_disputati_e_giocati")
     .select();

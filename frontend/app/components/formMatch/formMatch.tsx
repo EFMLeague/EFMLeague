@@ -80,268 +80,268 @@ export default function FormMatch({ users }: { users: any }) {
 
   return (
     <div>
-      <p className="fw-bold text-white text-center title-users bg-black text-nowrap overflow-hidden traslate pt-5">
+      <p className="font-bold text-white text-center bg-black overflow-hidden text-[3rem] whitespace-pre w-full">
         GAME GAME GAME GAME GAME GAME GAME GAME GAME GAME GAME GAME GAME GAME
         GAME GAME GAME GAME GAME
       </p>
-      <form
-        className="d-flex flex-wrap w-100"
-        onSubmit={(e) => handleSubmit(e)}
-      >
-        <div className="d-flex flex-wrap w-100 bg-white justify-content-center">
-          <div className="w-100 d-flex justify-content-center">
-            <p className="bg-dark match-title ">MATCH</p>
-          </div>
-          <div className="input-match">
-            <label className="label-match">MATCH NAME:</label>
+
+      <form className="" onSubmit={(e) => handleSubmit(e)}>
+        <p className="bg-black text-white text-[3.3rem] font-bold text-center">
+          MATCH
+        </p>
+        <div className="w-100 bg-white min-h-[400px] flex flex-col justify-evenly p-4">
+          <div className=" flex justify-evenly flex-wrap">
+            <label className="text-[1.5rem] font-bold pr-2">MATCH NAME:</label>
             <input
               type="text"
-              className="label-match"
+              className="border"
               required
               onChange={(e) => setMatchName(e.target.value)}
             />
-          </div>
-          <div className="input-match">
-            <label className="label-match">DAY OF THE MATCH:</label>
+            <label className="text-[1.5rem] font-bold pr-2">
+              DAY OF THE MATCH:
+            </label>
             <input
               type="datetime-local"
-              className="label-match"
+              className="border"
               required
               onChange={(e) => setMatchDate(e.target.value)}
             />
           </div>
-          <div className="d-flex justify-content-center align-items-center w-100 p-4">
-            <img src="./img/trofeo.png" width={150} alt="" />
-            <label className="label-match">WINNERS</label>
+          <div className="flex justify-center items-center w-100">
+            <img src="./img/trofeo.png" className="max-h-[100px]" alt="" />
+            <label className="text-[1.5rem] font-bold pr-3">WINNERS</label>
             <select
-              className="label-match"
+              className="p-3 border"
               required
               onChange={(e) => handleChangeWinner(e)}
             >
               <option value="blue">BLUE</option>
               <option value="red">RED</option>
             </select>
-            <img src="./img/trofeo.png" width={150} alt="" />
+            <img src="./img/trofeo.png" className="max-h-[100px]" alt="" />
           </div>
         </div>
-        <div className="bg-primary side">
-          <p className="team-name text-center">TEAM BLUE</p>
-          <div className="line-role-name">
-            <img src="./img/roles/top.png" className="p-1" height={50} alt="" />
-            <p className="ruoli-blue">TOP:</p>
-            <select
-              className="select-player"
-              required
-              onChange={(e) =>
-                setBlue((blue) => ({ ...blue, top: e.target.value }))
-              }
-            >
-              <FormSelectUsers
-                users={users}
-                red={red}
-                blue={blue}
-                mode="exclude"
+        <div className="flex w-full flex-wrap">
+          <div className="bg-blue-500 basis-full lg:basis-1/2">
+            <p className="text-white text-[3rem] font-bold text-center">
+              TEAM BLUE
+            </p>
+            <div className="flex items-center py-5">
+              <img src="./img/roles/top.png" className="p-1  h-[50px]" alt="" />
+              <p className="text-[2rem] font-bold">TOP:</p>
+              <select
+                className="select-player"
+                required
+                onChange={(e) =>
+                  setBlue((blue) => ({ ...blue, top: e.target.value }))
+                }
+              >
+                <FormSelectUsers
+                  users={users}
+                  red={red}
+                  blue={blue}
+                  mode="exclude"
+                />
+              </select>
+            </div>
+
+            <div className="flex items-center py-5">
+              <img
+                src="./img/roles/jungle.png"
+                className=" h-[50px] p-1"
+                alt=""
               />
-            </select>
+              <p className="text-[2rem] font-bold">JUNGLE:</p>
+
+              <select
+                className="select-player"
+                required
+                onChange={(e) =>
+                  setBlue((blue) => ({ ...blue, jng: e.target.value }))
+                }
+              >
+                <FormSelectUsers
+                  users={users}
+                  red={red}
+                  blue={blue}
+                  mode="exclude"
+                />
+              </select>
+            </div>
+            <div className="flex items-center py-5">
+              <img src="./img/roles/mid.png" className=" h-[50px] p-1" alt="" />
+              <p className="text-[2rem] font-bold">MID:</p>
+
+              <select
+                className="select-player"
+                required
+                onChange={(e) =>
+                  setBlue((blue) => ({ ...blue, mid: e.target.value }))
+                }
+              >
+                <FormSelectUsers
+                  users={users}
+                  red={red}
+                  blue={blue}
+                  mode="exclude"
+                />
+              </select>
+            </div>
+            <div className="flex items-center py-5">
+              <img src="./img/roles/bot.png" className=" h-[50px] p-1" alt="" />
+              <p className="text-[2rem] font-bold">ADC:</p>
+
+              <select
+                className="select-player"
+                required
+                onChange={(e) =>
+                  setBlue((blue) => ({ ...blue, adc: e.target.value }))
+                }
+              >
+                <FormSelectUsers
+                  users={users}
+                  red={red}
+                  blue={blue}
+                  mode="exclude"
+                />
+              </select>
+            </div>
+            <div className="flex items-center py-5">
+              <img
+                src="./img/roles/support.png"
+                className=" h-[50px] p-1"
+                alt=""
+              />
+              <p className="text-[2rem] font-bold">SUPP:</p>
+
+              <select
+                className="select-player"
+                required
+                onChange={(e) =>
+                  setBlue((blue) => ({ ...blue, sup: e.target.value }))
+                }
+              >
+                <FormSelectUsers
+                  users={users}
+                  red={red}
+                  blue={blue}
+                  mode="exclude"
+                />
+              </select>
+            </div>
           </div>
-
-          <div className="line-role-name">
-            <img
-              src="./img/roles/jungle.png"
-              className="p-1"
-              height={50}
-              alt=""
-            />
-            <p className="ruoli-blue">JUNGLE:</p>
-
-            <select
-              className="select-player"
-              required
-              onChange={(e) =>
-                setBlue((blue) => ({ ...blue, jng: e.target.value }))
-              }
-            >
-              <FormSelectUsers
-                users={users}
-                red={red}
-                blue={blue}
-                mode="exclude"
+          <div className="basis-full bg-red-500 lg:basis-1/2">
+            <p className="text-white text-[3rem] font-bold text-center">
+              TEAM RED
+            </p>
+            <div className="flex items-center py-5">
+              <img src="./img/roles/top.png" className=" h-[50px] p-1" alt="" />
+              <label className="text-[2rem] font-bold">TOP:</label>
+              <select
+                className="select-player"
+                required
+                onChange={(e) =>
+                  setRed((red) => ({ ...red, top: e.target.value }))
+                }
+              >
+                <FormSelectUsers
+                  users={users}
+                  red={red}
+                  blue={blue}
+                  mode="exclude"
+                />
+              </select>
+            </div>
+            <div className="flex items-center py-5">
+              <img
+                src="./img/roles/jungle.png"
+                className=" h-[50px] p-1"
+                alt=""
               />
-            </select>
-          </div>
-          <div className="line-role-name">
-            <img src="./img/roles/mid.png" className="p-1" height={50} alt="" />
-            <p className="ruoli-blue">MID:</p>
+              <label className="text-[2rem] font-bold">JUNGLE:</label>
 
-            <select
-              className="select-player"
-              required
-              onChange={(e) =>
-                setBlue((blue) => ({ ...blue, mid: e.target.value }))
-              }
-            >
-              <FormSelectUsers
-                users={users}
-                red={red}
-                blue={blue}
-                mode="exclude"
-              />
-            </select>
-          </div>
-          <div className="line-role-name">
-            <img src="./img/roles/bot.png" className="p-1" height={50} alt="" />
-            <p className="ruoli-blue">ADC:</p>
+              <select
+                className="select-player"
+                required
+                onChange={(e) =>
+                  setRed((red) => ({ ...red, jng: e.target.value }))
+                }
+              >
+                <FormSelectUsers
+                  users={users}
+                  red={red}
+                  blue={blue}
+                  mode="exclude"
+                />
+              </select>
+            </div>
+            <div className="flex items-center py-5">
+              <img src="./img/roles/mid.png" className=" h-[50px] p-1" alt="" />
+              <label className="text-[2rem] font-bold">MID:</label>
 
-            <select
-              className="select-player"
-              required
-              onChange={(e) =>
-                setBlue((blue) => ({ ...blue, adc: e.target.value }))
-              }
-            >
-              <FormSelectUsers
-                users={users}
-                red={red}
-                blue={blue}
-                mode="exclude"
-              />
-            </select>
-          </div>
-          <div className="line-role-name">
-            <img
-              src="./img/roles/support.png"
-              className="p-1"
-              height={50}
-              alt=""
-            />
-            <p className="ruoli-blue">SUPP:</p>
+              <select
+                className="select-player"
+                required
+                onChange={(e) =>
+                  setRed((red) => ({ ...red, mid: e.target.value }))
+                }
+              >
+                <FormSelectUsers
+                  users={users}
+                  red={red}
+                  blue={blue}
+                  mode="exclude"
+                />
+              </select>
+            </div>
+            <div className="flex items-center py-5">
+              <img src="./img/roles/bot.png" className=" h-[50px] p-1" alt="" />
+              <label className="text-[2rem] font-bold">ADC:</label>
 
-            <select
-              className="select-player"
-              required
-              onChange={(e) =>
-                setBlue((blue) => ({ ...blue, sup: e.target.value }))
-              }
-            >
-              <FormSelectUsers
-                users={users}
-                red={red}
-                blue={blue}
-                mode="exclude"
+              <select
+                className="select-player"
+                required
+                onChange={(e) =>
+                  setRed((red) => ({ ...red, adc: e.target.value }))
+                }
+              >
+                <FormSelectUsers
+                  users={users}
+                  red={red}
+                  blue={blue}
+                  mode="exclude"
+                />
+              </select>
+            </div>
+            <div className="flex items-center py-5">
+              <img
+                src="./img/roles/support.png"
+                className=" h-[50px] p-1"
+                alt=""
               />
-            </select>
+              <label className="text-[2rem] font-bold">SUPP:</label>
+
+              <select
+                className="select-player"
+                required
+                onChange={(e) =>
+                  setRed((red) => ({ ...red, sup: e.target.value }))
+                }
+              >
+                <FormSelectUsers
+                  users={users}
+                  red={red}
+                  blue={blue}
+                  mode="exclude"
+                />
+              </select>
+            </div>
           </div>
         </div>
-        <div className="side bg-danger">
-          <p className="team-name text-center">TEAM RED</p>
-          <div className="line-role-name">
-            <img src="./img/roles/top.png" className="p-1" height={50} alt="" />
-            <label className="ruoli-red">TOP:</label>
-            <select
-              className="select-player"
-              required
-              onChange={(e) =>
-                setRed((red) => ({ ...red, top: e.target.value }))
-              }
-            >
-              <FormSelectUsers
-                users={users}
-                red={red}
-                blue={blue}
-                mode="exclude"
-              />
-            </select>
-          </div>
-          <div className="line-role-name">
-            <img
-              src="./img/roles/jungle.png"
-              className="p-1"
-              height={50}
-              alt=""
-            />
-            <label className="ruoli-red">JUNGLE:</label>
-
-            <select
-              className="select-player"
-              required
-              onChange={(e) =>
-                setRed((red) => ({ ...red, jng: e.target.value }))
-              }
-            >
-              <FormSelectUsers
-                users={users}
-                red={red}
-                blue={blue}
-                mode="exclude"
-              />
-            </select>
-          </div>
-          <div className="line-role-name">
-            <img src="./img/roles/mid.png" className="p-1" height={50} alt="" />
-            <label className="ruoli-red">MID:</label>
-
-            <select
-              className="select-player"
-              required
-              onChange={(e) =>
-                setRed((red) => ({ ...red, mid: e.target.value }))
-              }
-            >
-              <FormSelectUsers
-                users={users}
-                red={red}
-                blue={blue}
-                mode="exclude"
-              />
-            </select>
-          </div>
-          <div className="line-role-name">
-            <img src="./img/roles/bot.png" className="p-1" height={50} alt="" />
-            <label className="ruoli-red">ADC:</label>
-
-            <select
-              className="select-player"
-              required
-              onChange={(e) =>
-                setRed((red) => ({ ...red, adc: e.target.value }))
-              }
-            >
-              <FormSelectUsers
-                users={users}
-                red={red}
-                blue={blue}
-                mode="exclude"
-              />
-            </select>
-          </div>
-          <div className="line-role-name">
-            <img
-              src="./img/roles/support.png"
-              className="p-1"
-              height={50}
-              alt=""
-            />
-            <label className="ruoli-red">SUPP:</label>
-
-            <select
-              className="select-player"
-              required
-              onChange={(e) =>
-                setRed((red) => ({ ...red, sup: e.target.value }))
-              }
-            >
-              <FormSelectUsers
-                users={users}
-                red={red}
-                blue={blue}
-                mode="exclude"
-              />
-            </select>
-          </div>
-        </div>
-        <div className="d-flex justify-content-center align-items-center w-100 p-4 bg-white">
+        <div className="flex justify-center items-center w-100 p-4 bg-white">
           <img src="./img/crown1.png" width={150} alt="" />
-          <label className="label-match text-black">MVP</label>
+          <label className="text-[2rem] font-bold text-black">MVP</label>
           <select
             className="label-match"
             required
@@ -361,11 +361,15 @@ export default function FormMatch({ users }: { users: any }) {
           </select>
           <img src="./img/crown1.png" width={150} alt="" />
         </div>
-        <div className="text-center w-100 bg-white">
-          <input type="submit" className="submit-match" value="Submit" />
+        <div className="text-center w-100 bg-white py-4">
+          <input
+            type="submit"
+            className="bg-black text-white text-[2rem] p-4"
+            value="Submit"
+          />
         </div>
       </form>
-      <p className="fw-bold text-white text-center title-users bg-black text-nowrap overflow-hidden traslate">
+      <p className="font-bold text-white text-center bg-black overflow-hidden text-[3rem] whitespace-pre w-full">
         GAME GAME GAME GAME GAME GAME GAME GAME GAME GAME GAME GAME GAME GAME
         GAME GAME GAME GAME GAME
       </p>
