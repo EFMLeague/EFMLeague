@@ -17,20 +17,13 @@ export default function Ruota({ data }: { data: any[] }) {
     }
   };
 
-  function rimuoviElementoPerIndice(array: any[], indice: number) {
-    if (indice >= 0 && indice < array.length) {
-      array.splice(indice, 1); // Utilizza il metodo splice() per rimuovere un elemento dall'array
-    } else {
-      console.error("L'indice specificato non è valido.");
-    }
-  }
-
   return (
     <>
       <Wheel
         mustStartSpinning={mustSpin}
         prizeNumber={prizeNumber}
         data={data}
+        spinDuration={0.5}
         backgroundColors={backgrounds}
         onStopSpinning={() => {
           setMustSpin(false);

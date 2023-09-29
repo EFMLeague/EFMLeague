@@ -1,7 +1,6 @@
 "use client";
-import React, { useState } from "react";
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
-import { cookies } from "next/headers";
+import React, { useEffect, useState } from "react";
+import Wheel from "./Wheel";
 
 export default function formWheel({ data }: { data: any[] }) {
   const [selection, setSelection] = useState<any[]>([]);
@@ -14,32 +13,40 @@ export default function formWheel({ data }: { data: any[] }) {
       }
     }
   };
+  const w = selection.map((w) => ({ option: w.name }));
 
+  console.log(w);
   return (
-    <div className="grid grid-cols-10 gap-2">
-      {data.map((user) => (
-        <div
-          key={user.id}
-          className={
-            "bg-black " +
-            (selection.includes(user)
-              ? "border-4 border-green-600"
-              : "border border-white")
-          }
-          onClick={() => handleChange(user)}
-        >
-          <img
-            className="object-cover object-center w-full h-[150px]"
-            src={
-              user.video_source
-                ? "./img/screenshots/frame_" + user.name + ".jpg"
-                : "./img/screenshots/frame_intro.jpg"
+    <div>
+      <Wheel data={selection.length === 0 ? [{ option: "VUOTO" }] : w} />
+      {/* <p className="text-white text-[3rem]">{w.toString()}</p> */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 xl:grid-cols-8 gap-4">
+        {data.map((user) => (
+          <div
+            key={user.id}
+            className={
+              "bg-black overflow-hidden " +
+              (selection.includes(user)
+                ? "border-4 border-green-600"
+                : "border border-white")
             }
-            alt=""
-          />
-          <p className="bg-black text-white text-xl text-center">{user.name}</p>
-        </div>
-      ))}
+            onClick={() => handleChange(user)}
+          >
+            <img
+              className="object-cover object-center w-full h-[170px]"
+              src={
+                user.video_source
+                  ? "./img/screenshots/frame_" + user.name + ".jpg"
+                  : "./img/screenshots/frame_intro.jpg"
+              }
+              alt=""
+            />
+            <p className="bg-black text-white text-xl text-center">
+              {user.name}
+            </p>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
