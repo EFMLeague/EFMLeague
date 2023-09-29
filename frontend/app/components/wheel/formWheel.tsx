@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import Wheel from "./Wheel";
+import Ruota from "./Ruota";
 
 export default function formWheel({ data }: { data: any[] }) {
   const [selection, setSelection] = useState<any[]>([]);
@@ -18,8 +18,10 @@ export default function formWheel({ data }: { data: any[] }) {
   console.log(w);
   return (
     <div>
-      <Wheel data={selection.length === 0 ? [{ option: "VUOTO" }] : w} />
-      {/* <p className="text-white text-[3rem]">{w.toString()}</p> */}
+      <Ruota
+        data={selection.length === 0 ? [{ option: "VUOTO" }] : w}
+        setSelection={setSelection}
+      />
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 xl:grid-cols-8 gap-4">
         {data.map((user) => (
           <div

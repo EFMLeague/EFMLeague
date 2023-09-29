@@ -2,6 +2,7 @@
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import FormWheel from "../components/wheel/formWheel";
+
 export default async function WheelPage() {
   const supabase = createServerComponentClient({ cookies });
   const { data: users } = await supabase.from("User").select();
@@ -14,7 +15,6 @@ export default async function WheelPage() {
       <p className="text-center text-white text-[4rem] font-bold uppercase">
         Wheel of Fortune
       </p>
-
       <FormWheel data={users} />
     </div>
   );
