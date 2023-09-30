@@ -18,10 +18,6 @@ export default function formWheel({ data }: { data: any[] }) {
   console.log(w);
   return (
     <div>
-      <Ruota
-        data={selection.length === 0 ? [{ option: "VUOTO" }] : w}
-        setSelection={setSelection}
-      />
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 xl:grid-cols-8 gap-4">
         {data.map((user) => (
           <div
@@ -49,6 +45,10 @@ export default function formWheel({ data }: { data: any[] }) {
           </div>
         ))}
       </div>
+      <Ruota
+        data={selection.length === 0 ? [{ option: "VUOTO" }] : w}
+        setSelection={setSelection}
+      />
     </div>
   );
 }

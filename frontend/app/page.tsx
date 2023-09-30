@@ -8,7 +8,7 @@ export default async function Home() {
       <div className="h-screen p-2">
         <div className="min-h-full  flex flex-wrap container justify-center items-center mx-auto">
           <div className="basis-full md:basis-1/2 pt-2">
-            <p className="text-4xl font-bold text-neutral-200">
+            <p className="text-4xl font-bold text-gray-100">
               <span className="text-white text-[3rem]">NEW</span> COMPETITIVE
               TOURNAMENT
               <br />
@@ -17,7 +17,7 @@ export default async function Home() {
               <span className="text-red-800 text-[3rem]">L</span>EGENDS
             </p>
             <p className="text-2xl font-bold text-white pt-4">WHO WE ARE</p>
-            <p className="text-lg text-neutral-200 tracking-wide ">
+            <p className="text-lg text-gray-100 tracking-wide ">
               EFM League is where League of Legends legends come to life. We are
               a group of LoL enthusiasts who have come together to create a
               unique and stimulating community for all League of Legends
@@ -26,7 +26,7 @@ export default async function Home() {
               to expert.
             </p>
             <p className="text-2xl font-bold text-white pt-4">OUR MISSION</p>
-            <p className="text-lg text-neutral-100 tracking-wide">
+            <p className="text-lg text-gray-100 tracking-wide">
               EFM League is committed to promoting friendship, healthy
               competition, and individual growth within the League of Legends
               community. We want to provide an extraordinary gaming experience
@@ -42,17 +42,17 @@ export default async function Home() {
           </div>
         </div>
         <div className="container mx-auto py-14">
-          <p className="text-4xl font-bold text-neutral-100 text-center ">
+          <p className="text-4xl font-bold text-gray-100 text-center ">
             DOWNLOAD:
           </p>
           <div className="flex justify-evenly flex-wrap">
             <a href="./pdf/regolamento.pdf" download>
-              <div className=" text-neutral-100 text-[2rem] min-w-[300px] text-center bg-blue-600 p-3 rounded-lg font-bold mt-4 hover:bg-blue-900 hover:cursor-pointer">
+              <div className=" text-gray-100 text-[2rem] min-w-[300px] text-center bg-blue-600 p-3 rounded-lg font-bold mt-4 hover:bg-blue-900 hover:cursor-pointer">
                 REGOLAMENTO
               </div>
             </a>
             <a href="./pdf/organigramma.pdf" download>
-              <div className="text-neutral-100 text-[2rem] min-w-[300px] text-center bg-red-600 p-3 rounded-lg font-bold mt-4 hover:bg-red-900 hover:cursor-pointer">
+              <div className="text-gray-100 text-[2rem] min-w-[300px] text-center bg-red-600 p-3 rounded-lg font-bold mt-4 hover:bg-red-900 hover:cursor-pointer">
                 ORGANIGRAMMA
               </div>
             </a>
