@@ -97,7 +97,7 @@ export default async function Page({
 
           <div className="flex items-center py-3">
             <img
-              src="./../img/roles/bot.png"
+              src="./../img/roles/adc.png"
               className="p-1 h-[100px]"
               alt=""
             />
@@ -193,7 +193,7 @@ export default async function Page({
           </div>
           <div className="flex items-center py-3">
             <img
-              src="./../img/roles/bot.png"
+              src="./../img/roles/adc.png"
               className="p-1 h-[100px]"
               alt=""
             />

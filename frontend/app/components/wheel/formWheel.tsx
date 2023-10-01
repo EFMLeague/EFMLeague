@@ -3,6 +3,20 @@ import React, { useEffect, useState } from "react";
 import Ruota from "./Ruota";
 
 export default function formWheel({ data }: { data: any[] }) {
+  const [roles, setRoles] = useState([
+    //spazio per indicare RED TEAM
+    { option: "TOP ", style: { backgroundColor: "#ff1900" } },
+    { option: "TOP", style: { backgroundColor: "#0800ff" } },
+    { option: "JUNGLE ", style: { backgroundColor: "#ff1900" } },
+    { option: "JUNGLE", style: { backgroundColor: "#0800ff" } },
+    { option: "MID ", style: { backgroundColor: "#ff1900" } },
+    { option: "MID", style: { backgroundColor: "#0800ff" } },
+    { option: "ADC ", style: { backgroundColor: "#ff1900" } },
+    { option: "ADC", style: { backgroundColor: "#0800ff" } },
+    { option: "SUPPORT ", style: { backgroundColor: "#ff1900" } },
+    { option: "SUPPORT", style: { backgroundColor: "#0800ff" } },
+  ]);
+
   const [selection, setSelection] = useState<any[]>([]);
   const handleChange = (user: any) => {
     if (selection.includes(user)) {
@@ -15,7 +29,6 @@ export default function formWheel({ data }: { data: any[] }) {
   };
   const w = selection.map((w) => ({ option: w.name }));
 
-  console.log(w);
   return (
     <div>
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 xl:grid-cols-8 gap-4">
@@ -46,7 +59,17 @@ export default function formWheel({ data }: { data: any[] }) {
         ))}
       </div>
       <Ruota
-        data={selection.length === 0 ? [{ option: "VUOTO" }] : w}
+        data={
+          selection.length === 0
+            ? [{ option: "VUOTO", style: { backgroundColor: "#898c8b" } }]
+            : w
+        }
+        roles={
+          roles.length === 0
+            ? [{ option: "VUOTO", style: { backgroundColor: "#898c8b" } }]
+            : roles
+        }
+        setRoles={setRoles}
         setSelection={setSelection}
       />
     </div>

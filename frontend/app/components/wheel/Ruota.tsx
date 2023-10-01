@@ -3,12 +3,14 @@ import React, { useState } from "react";
 import { Wheel } from "react-custom-roulette";
 export default function Ruota({
   data,
-
   setSelection,
+  roles,
+  setRoles,
 }: {
   data: any[];
-
   setSelection: React.Dispatch<React.SetStateAction<any[]>>;
+  roles: any[];
+  setRoles: React.Dispatch<React.SetStateAction<any[]>>;
 }) {
   const backgroundUser = [
     "#e8911e",
@@ -22,22 +24,11 @@ export default function Ruota({
     "#ebcc1e",
     "#98e0eb",
   ];
-  const backgroundSide = ["#0905fc", "#fc0505"];
-  const backgroundRole = [
-    "#f5cd05",
-    "#6df505",
-    "#9661f2",
-    "#e3611b",
-    "#f72daa",
-  ];
-  const side = [{ option: "BLUE" }, { option: "RED" }];
-  const role = [
-    { option: "TOP" },
-    { option: "JUNGLE" },
-    { option: "MID" },
-    { option: "ADC" },
-    { option: "SUPP" },
-  ];
+
+  const [generatedTeam, setGeneratedTeam] = useState({
+    red: { TOP: "", JUNGLE: "", MID: "", ADC: "", SUPPORT: "" },
+    blue: { TOP: "", JUNGLE: "", MID: "", ADC: "", SUPPORT: "" },
+  });
   const [mustSpin, setMustSpin] = useState(false);
   const [prizeNumber, setPrizeNumber] = useState(0);
   const [showModal, setShowModal] = useState({
@@ -51,7 +42,24 @@ export default function Ruota({
       const newPrizeNumber = Math.floor(Math.random() * data.length);
       setPrizeNumber(newPrizeNumber);
       setMustSpin(true);
-      console.log(data[newPrizeNumber].option);
+    }
+  };
+
+  const generateTeam = () => {
+    if (roles[prizeNumber].option.endsWith(" ")) {
+      const roleNoSpace = roles[prizeNumber].option.split(" ")[0];
+      setGeneratedTeam((generatedTeam) => ({
+        ...generatedTeam,
+        red: { ...generatedTeam.red, [roleNoSpace]: data[prizeNumber].option },
+      }));
+    } else {
+      setGeneratedTeam((generatedTeam) => ({
+        ...generatedTeam,
+        blue: {
+          ...generatedTeam.blue,
+          [roles[prizeNumber].option]: data[prizeNumber].option,
+        },
+      }));
     }
   };
 
@@ -60,10 +68,14 @@ export default function Ruota({
     setSelection((selection) =>
       selection.filter((el) => el.name !== data[prizeNumber].option)
     );
+    setRoles((roles) =>
+      roles.filter((el) => el.option !== roles[prizeNumber].option)
+    );
+    generateTeam();
   };
   return (
     <>
-      <div className="grid grid-rows-2 grid-flow-col">
+      <div className="grid grid-rows-2 grid-flow-row md:grid-flow-col ">
         <div className="flex overflow-hidden row-span-2 justify-center items-center ">
           <Wheel
             mustStartSpinning={mustSpin}
@@ -81,66 +93,101 @@ export default function Ruota({
           />
         </div>
 
-        <div className="overflow-hidden ">
-          <div className="scale-[60%]">
-            <Wheel
-              mustStartSpinning={mustSpin}
-              prizeNumber={prizeNumber}
-              data={role}
-              spinDuration={0.5}
-              backgroundColors={backgroundRole}
-              onStopSpinning={() => {
-                setMustSpin(false);
-                setShowModal((showModal) => ({
-                  ...showModal,
-                  userSpinning: true,
-                }));
-              }}
-            />
-          </div>
-        </div>
-        <div className="overflow-hidden ">
-          <div className="scale-[60%]">
-            <Wheel
-              mustStartSpinning={mustSpin}
-              prizeNumber={prizeNumber}
-              data={side}
-              spinDuration={0.5}
-              backgroundColors={backgroundSide}
-              onStopSpinning={() => {
-                setMustSpin(false);
-                setShowModal((showModal) => ({
-                  ...showModal,
-                  userSpinning: true,
-                }));
-              }}
-            />
-          </div>
+        <div className="flex overflow-hidden row-span-2 justify-center items-center ">
+          <Wheel
+            mustStartSpinning={mustSpin}
+            prizeNumber={prizeNumber}
+            data={roles.length === 0 ? [{ option: "VUOTO" }] : roles}
+            spinDuration={0.5}
+            onStopSpinning={() => {
+              setMustSpin(false);
+              setShowModal((showModal) => ({
+                ...showModal,
+                userSpinning: true,
+              }));
+            }}
+          />
         </div>
 
-        <div className=" bg-neutral-100 overflow-hidden row-span-2">
-          aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaa
+        <div className="bg-white min-w-[300px]">
+          <p className="bg-red-600 text-white text-center border-2 border-red-900 text-[2rem]">
+            RED
+          </p>
+          {Object.entries(generatedTeam.red).map(([key, value]) => (
+            <div className="flex justify-start items-center py-2 pl-2">
+              <img
+                src={"../../img/roles/" + key.toLowerCase() + ".png"}
+                alt=""
+                className="h-8"
+              />
+              <p className="font-bold">{`: ${value}`} </p>
+            </div>
+          ))}
+        </div>
+        <div className=" bg-white">
+          <p className="bg-blue-600 text-white text-center border-2 border-blue-900 text-[2rem]">
+            BLUE
+          </p>
+          {Object.entries(generatedTeam.blue).map(([key, value]) => (
+            <div className="flex justify-start items-center py-2 pl-2">
+              <img
+                src={"../../img/roles/" + key.toLowerCase() + ".png"}
+                alt=""
+                className="h-8"
+              />
+              <p className="font-bold">{`: ${value}`} </p>
+            </div>
+          ))}
         </div>
       </div>
 
       <p
-        onClick={handleSpinClick}
-        className="text-[4rem] bg-white text-center mx-auto rounded-xl my-4 hover:bg-slate-100 hover:cursor-pointer hover:scale-105"
+        onClick={() => handleSpinClick()}
+        className={
+          "text-[4rem] text-center mx-auto rounded-xl my-4 hover:bg-slate-100 hover:cursor-pointer hover:scale-105 " +
+          (data[0].option === "VUOTO"
+            ? " bg-gray-600 pointer-events-none "
+            : " bg-gray-200") +
+          (roles[0].option === "VUOTO"
+            ? " bg-gray-600 pointer-events-none "
+            : " bg-gray-200")
+        }
       >
         SPIN!
       </p>
+
       <div
         className={
-          "fixed top-[50%] left-[50%] -translate-x-[50%] " +
+          "fixed top-[50%] left-[50%] -translate-x-[50%] z-50 w-[80%] bg-gray-200 border-4 border-black " +
           (showModal.userSpinning ? "" : "hidden")
         }
       >
-        <p
-          onClick={handleConfirm}
-          className="text-[4rem] bg-white text-center mx-auto rounded-xl my-4 hover:bg-slate-100 hover:cursor-pointer hover:scale-105"
-        >
-          ok
-        </p>
+        <div className="text-[4rem] text-center my-4 ">
+          <p>
+            <span className="font-bold">{roles[prizeNumber].option}</span>
+            {": "}
+            {data[prizeNumber].option}
+          </p>
+          <div className="flex justify-evenly w-full">
+            <div
+              className="bg-green-600 rounded-md w-1/4 hover:scale-105 hover:cursor-pointer"
+              onClick={() => handleConfirm()}
+            >
+              OK!
+            </div>
+            <div
+              className="bg-red-600 rounded-md w-1/4 hover:scale-105 hover:cursor-pointer"
+              onClick={() =>
+                setShowModal((showModal) => ({
+                  ...showModal,
+                  userSpinning: false,
+                }))
+              }
+            >
+              NOPE!
+            </div>
+          </div>
+        </div>
       </div>
     </>
   );

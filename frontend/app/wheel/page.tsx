@@ -2,6 +2,8 @@
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import FormWheel from "../components/wheel/formWheel";
+import MatchHistory from "../components/tailwind/matchHistory";
+import React from "react";
 
 export default async function WheelPage() {
   const supabase = createServerComponentClient({ cookies });
@@ -16,6 +18,7 @@ export default async function WheelPage() {
         Wheel of Fortune
       </p>
       <FormWheel data={users} />
+      {/* <MatchHistory /> */}
     </div>
   );
 }

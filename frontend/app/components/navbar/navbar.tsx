@@ -98,6 +98,11 @@ export default function Navbar() {
               </a>
             </li>
             <li className="underline-link">
+              <a href="/wheel" onClick={() => handleOpen()}>
+                RUOTA
+              </a>
+            </li>
+            <li className="underline-link">
               <a href="/addMatch" onClick={() => handleOpen()}>
                 ADMIN
               </a>

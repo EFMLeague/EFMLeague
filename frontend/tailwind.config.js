@@ -7,6 +7,9 @@ module.exports = withMT({
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
+    colors: {
+      Gold: "#FFDF00",
+    },
     extend: {
       boxShadow: {
         tableGreen: "0 0 5px green, inset 0 0 5px green;",

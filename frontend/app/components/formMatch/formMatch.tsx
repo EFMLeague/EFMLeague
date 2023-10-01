@@ -189,7 +189,7 @@ export default function FormMatch({ users }: { users: any }) {
               </select>
             </div>
             <div className="flex items-center py-5">
-              <img src="./img/roles/bot.png" className=" h-[50px] p-1" alt="" />
+              <img src="./img/roles/adc.png" className=" h-[50px] p-1" alt="" />
               <p className="text-[2rem] font-bold">ADC:</p>
 
               <select
@@ -296,7 +296,7 @@ export default function FormMatch({ users }: { users: any }) {
               </select>
             </div>
             <div className="flex items-center py-5">
-              <img src="./img/roles/bot.png" className=" h-[50px] p-1" alt="" />
+              <img src="./img/roles/adc.png" className=" h-[50px] p-1" alt="" />
               <label className="text-[2rem] font-bold">ADC:</label>
 
               <select
