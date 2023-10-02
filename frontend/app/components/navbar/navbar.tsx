@@ -68,7 +68,7 @@ export default function Navbar() {
         </div>
         <div
           className={
-            "text-[2rem] flex flex-col justify-evenly items-center overflow-hidden transition-all duration-[300ms] backdrop-blur-md backdrop-brightness-50 lg:transition-none lg:backdrop-blur-none lg:backdrop-brightness-100 lg:h-full lg:opacity-100 lg:pb-0 " +
+            "text-[2rem] flex flex-col justify-evenly items-center overflow-hidden transition-all duration-[300ms] bg-black lg:transition-none lg:backdrop-blur-none lg:backdrop-brightness-100 lg:h-full lg:opacity-100 lg:pb-0 " +
             (isOpen === false
               ? " h-0 opacity-0 overflow-hidden lg:block "
               : " h-screen opacity-100 pb-12 text-white ") +

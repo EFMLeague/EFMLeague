@@ -20,7 +20,7 @@ export default async function page() {
       </div>
       <div className="container mx-auto grid grid-cols-12 bg-white rounded-xl my-10">
         <div className="col-span-3 p-2 font-bold text-[1.4rem] uppercase border-2 bg-purple-200">
-          Data
+          Date
         </div>
         <div className="col-span-3 p-2 font-bold text-[1.4rem] uppercase border-2 bg-yellow-200">
           Name

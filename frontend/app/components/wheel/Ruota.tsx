@@ -14,7 +14,7 @@ export default function Ruota({
 }) {
   const backgroundUser = [
     "#e8911e",
-    "#e81e1e",
+    "#a832a4",
     "#e1e81e",
     "#e81eca",
     "#1ee8b6",

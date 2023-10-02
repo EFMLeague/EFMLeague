@@ -133,7 +133,7 @@ export default async function Page({
               <p className="text-[3rem] font-bold uppercase text-black text-center">
                 {match[0].hasPlayed_hasWon
                   ? match[0].hasPlayed_team
-                  : match[0].hasPlayed_team === "RED"
+                  : match[0].hasPlayed_team === "red"
                   ? "BLUE"
                   : "RED"}
               </p>
