@@ -4,6 +4,6 @@ export const getUserEloSoloQ = async (userId: string) => {
   const result = await fetch(API + userId, {
     headers: { "X-Riot-Token": process.env.RIOT_TOKEN as string },
   });
-  const elo = await result.json();
-  return elo[1];
+  const elo = (await result.json()) as any[];
+  return elo.find((queue) => queue.queueType === "RANKED_SOLO_5x5");
 };

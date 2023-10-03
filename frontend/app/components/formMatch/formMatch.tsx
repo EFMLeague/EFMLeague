@@ -147,11 +147,7 @@ export default function FormMatch({ users }: { users: any }) {
             </div>
 
             <div className="flex items-center py-5">
-              <img
-                src="./img/roles/jungle.png"
-                className=" h-[50px] p-1"
-                alt=""
-              />
+              <img src="./img/roles/jng.png" className=" h-[50px] p-1" alt="" />
               <p className="text-[2rem] font-bold">JUNGLE:</p>
 
               <select
@@ -208,11 +204,7 @@ export default function FormMatch({ users }: { users: any }) {
               </select>
             </div>
             <div className="flex items-center py-5">
-              <img
-                src="./img/roles/support.png"
-                className=" h-[50px] p-1"
-                alt=""
-              />
+              <img src="./img/roles/sup.png" className=" h-[50px] p-1" alt="" />
               <p className="text-[2rem] font-bold">SUPP:</p>
 
               <select
@@ -254,11 +246,7 @@ export default function FormMatch({ users }: { users: any }) {
               </select>
             </div>
             <div className="flex items-center py-5">
-              <img
-                src="./img/roles/jungle.png"
-                className=" h-[50px] p-1"
-                alt=""
-              />
+              <img src="./img/roles/jng.png" className=" h-[50px] p-1" alt="" />
               <label className="text-[2rem] font-bold">JUNGLE:</label>
 
               <select
@@ -315,11 +303,7 @@ export default function FormMatch({ users }: { users: any }) {
               </select>
             </div>
             <div className="flex items-center py-5">
-              <img
-                src="./img/roles/support.png"
-                className=" h-[50px] p-1"
-                alt=""
-              />
+              <img src="./img/roles/sup.png" className=" h-[50px] p-1" alt="" />
               <label className="text-[2rem] font-bold">SUPP:</label>
 
               <select

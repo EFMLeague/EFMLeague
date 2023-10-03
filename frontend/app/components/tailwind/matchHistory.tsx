@@ -66,11 +66,7 @@ export default function matchHistory() {
                   </p>
                 </div>
                 <div className="flex items-center py-4">
-                  <img
-                    src="../../img/roles/jungle.png"
-                    className="h-16"
-                    alt=""
-                  />{" "}
+                  <img src="../../img/roles/jng.png" className="h-16" alt="" />{" "}
                   <p className="text-[1.5rem] font-semibold text-black">
                     Minimo Pericolo
                   </p>
@@ -88,11 +84,7 @@ export default function matchHistory() {
                   </p>
                 </div>
                 <div className="flex items-center py-4">
-                  <img
-                    src="../../img/roles/support.png"
-                    className="h-16"
-                    alt=""
-                  />{" "}
+                  <img src="../../img/roles/sup.png" className="h-16" alt="" />{" "}
                   <p className="text-[1.5rem] font-semibold text-black">
                     Minimo Pericolo
                   </p>
@@ -122,11 +114,7 @@ export default function matchHistory() {
                   <p className="text-[1.5rem] font-semibold text-black">
                     Minimo Pericolo
                   </p>
-                  <img
-                    src="../../img/roles/jungle.png"
-                    className="h-16"
-                    alt=""
-                  />{" "}
+                  <img src="../../img/roles/jng.png" className="h-16" alt="" />{" "}
                 </div>
                 <div className="flex items-center justify-end py-4">
                   <p className="text-[1.5rem] font-semibold text-black">
@@ -144,11 +132,7 @@ export default function matchHistory() {
                   <p className="text-[1.5rem] font-semibold text-black">
                     Minimo Pericolo
                   </p>
-                  <img
-                    src="../../img/roles/support.png"
-                    className="h-16"
-                    alt=""
-                  />{" "}
+                  <img src="../../img/roles/sup.png" className="h-16" alt="" />{" "}
                 </div>
               </div>
             </div>

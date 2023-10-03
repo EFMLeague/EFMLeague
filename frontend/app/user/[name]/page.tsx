@@ -6,6 +6,8 @@ import { getUserByName } from "@/app/utils/riot/getUserByName";
 import { getLoLVersion } from "@/app/utils/riot/getLoLVersion";
 import { getUserEloFlex } from "@/app/utils/riot/getUserEloFlex";
 import { getUserEloSoloQ } from "@/app/utils/riot/getUserEloSoloQ";
+import CircularProgress from "@/app/components/tailwind/circularProgress";
+import ProgBar from "@/app/components/tailwind/progBar";
 
 export default async function Page({
   params: { name },
@@ -19,16 +21,18 @@ export default async function Page({
   const userData = await getUserByName(name);
   const versionLOL = await getLoLVersion();
 
+  const eloFlex = await getUserEloFlex(userData.id);
+  const eloSoloQ = await getUserEloSoloQ(userData.id);
+
+  //CREAZIONE LINK IMMAGINI
   const iconUser =
     "https://ddragon.leagueoflegends.com/cdn/" +
     versionLOL +
     "/img/profileicon/" +
     userData.profileIconId +
     ".png";
-
-  const eloFlex = await getUserEloFlex(userData.id);
-  const eloSoloQ = await getUserEloSoloQ(userData.id);
-
+  const iconEloSoloQ = "../../img/elo/" + eloSoloQ.tier.toLowerCase() + ".png";
+  const iconEloFlex = "../../img/elo/" + eloFlex.tier.toLowerCase() + ".png";
   const { data: users } = await supabase
     .from("User")
     .select()
@@ -67,9 +71,17 @@ export default async function Page({
     .eq("rUser", users[0].id)
     .order("name", { foreignTable: "Match", ascending: false });
 
+  const { data: rolesPlayed } = await supabase
+    .from("win_rate_per_ruolo")
+    .select()
+    .eq("IDUtente", users[0].id);
+
   if (!winnedMatch || !playedMatch || !mvpMatch || !matchHistory || !prefRole) {
     return;
   }
+  const winRate = ((winnedMatch?.length * 100) / playedMatch?.length).toFixed(
+    2
+  );
   return (
     <div className="">
       <div className="h-screen -z-10 fixed">
@@ -78,52 +90,81 @@ export default async function Page({
       </div>
       {users?.map((user) => (
         <div>
-          <div className="flex justify-center flex-wrap container mx-auto bg-white">
-            <img src={iconUser} alt="" />
-            {/* {user.video_source ? (
-              <video
-                className="max-h-[700px]"
-                autoPlay
-                muted
-                loop
-                controls={false}
-              >
-                <source
-                  src={"./../video/Presentazione" + users[0].name + ".mp4"}
-                  type="video/mp4"
-                />
-              </video>
-            ) : (
-              <img
-                className="max-h-[700px]"
-                src={"./../img/screenshots/frame_intro.jpg"}
-                alt=""
-              />
-            )} */}
+          <div className="container flex mx-auto bg-white pt-6 pl-6">
+            <img
+              src={iconUser}
+              className="w-20 rounded-full border-2 border-gray-900"
+              alt="icon user"
+            />
+            <p className="text-[3.5rem] font-semibold text-center">
+              &nbsp;{userData.name}&nbsp;
+            </p>
+          </div>
+          <div className="flex justify-center flex-wrap container mx-auto bg-white pt-6">
+            <div className="flex flex-col justify-center items-center">
+              <div className="flex">
+                <div>
+                  <img src={iconEloSoloQ} className="w-32" alt="elo user" />
+                  <p className="text-center">Solo/Duo</p>
+                </div>
+                <div>
+                  <img src={iconEloFlex} className="w-32" alt="elo user" />
+                  <p className="text-center">Flex</p>
+                </div>
+              </div>
+            </div>
 
-            <div className=" bg-white min-w-[350px]">
-              <p className="text-[2.5rem] font-semibold bg-white  text-center">
-                &nbsp;{userData.name}&nbsp;
-              </p>
+            <CircularProgress
+              percent={winRate}
+              color={winRate >= "50" ? "#15a32f" : "#c9242a"}
+            />
+
+            <div className="grid grid-cols-9 border place-items-center gap-4 shadow-md p-3">
+              <div className="col-span-2">Roles</div>
+              <div className="col-span-1">Played</div>
+              <div className="col-span-3">WinRate</div>
+              <div className="col-span-3">PlayRate</div>
+              {rolesPlayed?.map((roleStats) => (
+                <>
+                  <div className="flex col-span-2">
+                    <img
+                      src={"/img/roles/" + roleStats.Ruolo + ".png"}
+                      alt=""
+                      className="h-12"
+                    />
+                  </div>
+                  <div className="col-span-1 text-lg">
+                    {roleStats.PartiteGiocate}
+                  </div>
+                  <div className="col-span-3 w-full">
+                    <ProgBar
+                      value={roleStats.WinRate.toFixed(2)}
+                      colors={
+                        roleStats.WinRate.toFixed(2) >= 50 ? "green" : "red"
+                      }
+                    />
+                  </div>
+                  <div className="col-span-3 w-full">
+                    <ProgBar
+                      value={Number(
+                        (
+                          (roleStats.PartiteGiocate * 100) /
+                          playedMatch?.length
+                        ).toFixed(2)
+                      )}
+                      colors={"blue"}
+                    />
+                  </div>
+                </>
+              ))}
+            </div>
+            <div className=" bg-white min-w-[350px] mt-4">
               <div className="flex flex-wrap p-2">
                 <p className="text-2xl font-semibold bg-black text-white">
                   &nbsp;GAMES PLAYED&nbsp;
                 </p>
                 <p className="text-2xl font-semibold bg-white border border-black">
                   &nbsp;{playedMatch?.length}&nbsp;
-                </p>
-              </div>
-              <div className="flex flex-wrap p-2">
-                <p className="text-2xl font-semibold bg-black text-white">
-                  &nbsp;ROLE&nbsp;
-                </p>
-                <p className="text-2xl font-semibold bg-white uppercase border border-black">
-                  &nbsp;{prefRole[0].ruoloPiuGiocato}&nbsp;-&nbsp;
-                  {(
-                    (prefRole[0].ConteggioRuolo * 100) /
-                    playedMatch?.length
-                  ).toFixed(2)}
-                  %
                 </p>
               </div>
               <div className="flex flex-wrap p-2">
@@ -146,22 +187,7 @@ export default async function Page({
                   &nbsp;{users[0].warnings}&nbsp;
                 </p>
               </div>
-              {/* <div className="flex flex-wrap p-2">
-                <p className="text-2xl font-semibold bg-white">&nbsp;RUOLO PREFERITO :&nbsp;</p>
-                <p className="text-2xl font-semibold bg-white">&nbsp;{users[0].warnings}&nbsp;</p>
-              </div> */}
-              <div className="flex flex-wrap p-2">
-                <p className="text-2xl font-semibold bg-black text-white">
-                  &nbsp;WR&nbsp;
-                </p>
-                <p className="text-2xl font-semibold bg-white border border-black">
-                  &nbsp;
-                  {((winnedMatch?.length * 100) / playedMatch?.length).toFixed(
-                    2
-                  )}
-                  % &nbsp;
-                </p>
-              </div>
+
               <div className="flex flex-wrap p-2">
                 <p className="text-2xl font-semibold bg-black text-white">
                   &nbsp;MVP&nbsp;
@@ -172,6 +198,7 @@ export default async function Page({
               </div>
             </div>
           </div>
+
           {/* <div className="container mx-auto pt-6">
             <p className="text-white text-[3rem] uppercase font-bold">
               Match history

@@ -75,7 +75,7 @@ export default async function Page({
 
           <div className="flex items-center py-3">
             <img
-              src="./../img/roles/jungle.png"
+              src="./../img/roles/jng.png"
               className="p-1 h-[100px]"
               alt=""
             />
@@ -107,7 +107,7 @@ export default async function Page({
           </div>
           <div className="flex items-center py-3">
             <img
-              src="./../img/roles/support.png"
+              src="./../img/roles/sup.png"
               className="p-1 h-[100px]"
               alt=""
             />
@@ -173,7 +173,7 @@ export default async function Page({
           </div>
           <div className="flex items-center py-3">
             <img
-              src="./../img/roles/jungle.png"
+              src="./../img/roles/jng.png"
               className="p-1 h-[100px]"
               alt=""
             />
@@ -203,7 +203,7 @@ export default async function Page({
           </div>
           <div className="flex items-center py-3">
             <img
-              src="./../img/roles/support.png"
+              src="./../img/roles/sup.png"
               className="p-1 h-[100px]"
               alt=""
             />
