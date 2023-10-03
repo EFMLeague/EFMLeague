@@ -47,7 +47,7 @@ export default function formWheel({ data }: { data: any[] }) {
               className="object-cover object-center w-full h-[170px]"
               src={
                 user.video_source
-                  ? "./img/screenshots/frame_" + user.name + ".jpg"
+                  ? "./img/screenshots/frame_" + user.dbName + ".jpg"
                   : "./img/screenshots/frame_intro.jpg"
               }
               alt=""

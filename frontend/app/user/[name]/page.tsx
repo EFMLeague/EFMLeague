@@ -2,6 +2,11 @@ import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import React from "react";
 import "../../../app/globals.css";
+import { getUserByName } from "@/app/utils/riot/getUserByName";
+import { getLoLVersion } from "@/app/utils/riot/getLoLVersion";
+import { getUserEloFlex } from "@/app/utils/riot/getUserEloFlex";
+import { getUserEloSoloQ } from "@/app/utils/riot/getUserEloSoloQ";
+
 export default async function Page({
   params: { name },
 }: {
@@ -10,10 +15,29 @@ export default async function Page({
   };
 }) {
   const supabase = createServerComponentClient({ cookies });
-  const { data: users } = await supabase.from("User").select().eq("name", name);
+
+  const userData = await getUserByName(name);
+  const versionLOL = await getLoLVersion();
+
+  const iconUser =
+    "https://ddragon.leagueoflegends.com/cdn/" +
+    versionLOL +
+    "/img/profileicon/" +
+    userData.profileIconId +
+    ".png";
+
+  const eloFlex = await getUserEloFlex(userData.id);
+  const eloSoloQ = await getUserEloSoloQ(userData.id);
+
+  const { data: users } = await supabase
+    .from("User")
+    .select()
+    .eq("puuid", userData.puuid);
+
   if (!users) {
     return;
   }
+
   const { data: playedMatch } = await supabase
     .from("hasPlayed")
     .select("")
@@ -54,12 +78,9 @@ export default async function Page({
       </div>
       {users?.map((user) => (
         <div>
-          <p className="font-bold text-white text-center bg-black overflow-hidden text-[3rem] whitespace-pre w-full">
-            PLAYER PLAYER PLAYER PLAYER PLAYER PLAYER PLAYER PLAYER PLAYER
-            PLAYER PLAYER PLAYER PLAYER PLAYER PLAYER PLAYER
-          </p>
-          <div className="flex justify-center flex-wrap ">
-            {user.video_source ? (
+          <div className="flex justify-center flex-wrap container mx-auto bg-white">
+            <img src={iconUser} alt="" />
+            {/* {user.video_source ? (
               <video
                 className="max-h-[700px]"
                 autoPlay
@@ -78,11 +99,11 @@ export default async function Page({
                 src={"./../img/screenshots/frame_intro.jpg"}
                 alt=""
               />
-            )}
+            )} */}
 
             <div className=" bg-white min-w-[350px]">
               <p className="text-[2.5rem] font-semibold bg-white  text-center">
-                &nbsp;{user.name}&nbsp;
+                &nbsp;{userData.name}&nbsp;
               </p>
               <div className="flex flex-wrap p-2">
                 <p className="text-2xl font-semibold bg-black text-white">
@@ -151,7 +172,7 @@ export default async function Page({
               </div>
             </div>
           </div>
-          <div className="container mx-auto pt-6">
+          {/* <div className="container mx-auto pt-6">
             <p className="text-white text-[3rem] uppercase font-bold">
               Match history
             </p>
@@ -197,37 +218,7 @@ export default async function Page({
                 </div>
               </a>
             ))}
-          </div>
-          {/* <div className="container bg-white">
-            <div className="row text-center">
-              <div className="col fw-bold fs-5">DATE</div>
-              <div className="col fw-bold fs-5">GAME&nbsp;NAME</div>
-              <div className="col fw-bold fs-5">ROLE</div>
-            </div>
-            {matchHistory.reverse().map((game) => (
-              <a href={"/match/" + game.rMatch}>
-                <div
-                  className={
-                    "row text-center p-2 bg-opacity-25 border-start border-3" +
-                    (game.hasWon
-                      ? " border-success bg-success"
-                      : " border-danger bg-danger")
-                  }
-                  key={game.id}
-                >
-                  <div className="col fs-6">
-                    {game.Match.date.split("T")[0].replaceAll("-", "/")}
-                  </div>
-                  <div className="col">{game.Match.name}</div>
-                  <div className="col">{game.role}</div>
-                </div>
-              </a>
-            ))}
           </div> */}
-          <p className="font-bold text-white text-center bg-black overflow-hidden text-[3rem] whitespace-pre w-full">
-            PLAYER PLAYER PLAYER PLAYER PLAYER PLAYER PLAYER PLAYER PLAYER
-            PLAYER PLAYER PLAYER PLAYER PLAYER PLAYER PLAYER
-          </p>
         </div>
       ))}
     </div>

@@ -4,13 +4,19 @@ import { cookies } from "next/headers";
 import FormWheel from "../components/wheel/formWheel";
 import MatchHistory from "../components/tailwind/matchHistory";
 import React from "react";
+import { getUsersByPuuid } from "../utils/riot/getUsersByPuuid";
 
 export default async function WheelPage() {
   const supabase = createServerComponentClient({ cookies });
-  const { data: users } = await supabase.from("User").select();
-  if (!users) {
+  const { data: dbUsers } = await supabase
+    .from("User")
+    .select("puuid,video_source,name")
+    .neq("name", "FORESTIERO")
+    .order("video_source,name", { ascending: true });
+  if (!dbUsers) {
     return;
   }
+  const users = await getUsersByPuuid(dbUsers);
 
   return (
     <div className="container mx-auto">

@@ -114,7 +114,10 @@ export default function Ruota({
             RED
           </p>
           {Object.entries(generatedTeam.red).map(([key, value]) => (
-            <div className="flex justify-start items-center py-2 pl-2">
+            <div
+              className="flex justify-start items-center py-2 pl-2"
+              key={key}
+            >
               <img
                 src={"../../img/roles/" + key.toLowerCase() + ".png"}
                 alt=""
@@ -129,7 +132,10 @@ export default function Ruota({
             BLUE
           </p>
           {Object.entries(generatedTeam.blue).map(([key, value]) => (
-            <div className="flex justify-start items-center py-2 pl-2">
+            <div
+              className="flex justify-start items-center py-2 pl-2"
+              key={key}
+            >
               <img
                 src={"../../img/roles/" + key.toLowerCase() + ".png"}
                 alt=""
@@ -164,9 +170,9 @@ export default function Ruota({
       >
         <div className="text-[4rem] text-center my-4 ">
           <p>
-            <span className="font-bold">{roles[prizeNumber].option}</span>
+            <span className="font-bold">{roles[prizeNumber]?.option}</span>
             {": "}
-            {data[prizeNumber].option}
+            {data[prizeNumber]?.option}
           </p>
           <div className="flex justify-evenly w-full">
             <div

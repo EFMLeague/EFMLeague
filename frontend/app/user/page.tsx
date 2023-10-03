@@ -1,13 +1,21 @@
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import React from "react";
+import { getUsersByPuuid } from "../utils/riot/getUsersByPuuid";
 
 export default async function User() {
   const supabase = createServerComponentClient({ cookies });
-  const { data: users } = await supabase
+
+  const { data: dbUsers } = await supabase
     .from("User")
-    .select()
+    .select("puuid,video_source,name")
+    .neq("name", "FORESTIERO")
     .order("video_source,name", { ascending: true });
+  if (!dbUsers) {
+    return;
+  }
+  const users = await getUsersByPuuid(dbUsers);
+
   return (
     <div className="">
       <div className="container mx-auto">
@@ -29,7 +37,7 @@ export default async function User() {
                   {user.video_source ? (
                     <img
                       className="img-card"
-                      src={"./img/screenshots/frame_" + user.name + ".jpg"}
+                      src={"./img/screenshots/frame_" + user.dbName + ".jpg"}
                       alt=""
                     />
                   ) : (
