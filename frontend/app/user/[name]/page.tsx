@@ -23,7 +23,7 @@ export default async function Page({
 
   const eloFlex = await getUserEloFlex(userData.id);
   const eloSoloQ = await getUserEloSoloQ(userData.id);
-
+  // console.log(eloSoloQ);
   //CREAZIONE LINK IMMAGINI
   const iconUser =
     "https://ddragon.leagueoflegends.com/cdn/" +
@@ -102,21 +102,35 @@ export default async function Page({
           </div>
           <div className="flex justify-center flex-wrap container mx-auto bg-white pt-6">
             <div className="flex flex-col justify-center items-center">
-              <div className="flex">
-                <div>
-                  <img src={iconEloSoloQ} className="w-32" alt="elo user" />
-                  <p className="text-center">Solo/Duo</p>
+              <div className="flex border-2 shadow-2xl ">
+                <div className="">
+                  <div className="relative">
+                    <img src={iconEloSoloQ} className="w-48" alt="elo user" />
+                    <p className="text-center font-light italic absolute bottom-4 left-[50%] -translate-x-[50%]">
+                      Solo/Duo
+                    </p>
+                  </div>
+                  <p className="text-center text-2xl font-semibold">
+                    {eloSoloQ.tier}&nbsp;<span>{eloSoloQ.rank}</span>
+                  </p>
                 </div>
                 <div>
-                  <img src={iconEloFlex} className="w-32" alt="elo user" />
-                  <p className="text-center">Flex</p>
+                  <div className="relative">
+                    <img src={iconEloFlex} className="w-48" alt="elo user" />
+                    <p className="text-center font-light italic absolute bottom-4 left-[50%] -translate-x-[50%]">
+                      Flex
+                    </p>
+                  </div>
+                  <p className="text-center text-2xl font-semibold">
+                    {eloFlex.tier}&nbsp;<span>{eloFlex.rank}</span>
+                  </p>
                 </div>
               </div>
             </div>
 
             <CircularProgress
               percent={winRate}
-              color={winRate >= "50" ? "#15a32f" : "#c9242a"}
+              color={Number(winRate) >= 50 ? "#4caf50" : "#f44336"}
             />
 
             <div className="grid grid-cols-9 border place-items-center gap-4 shadow-md p-3">
@@ -142,6 +156,12 @@ export default async function Page({
                       colors={
                         roleStats.WinRate.toFixed(2) >= 50 ? "green" : "red"
                       }
+                      barProps={
+                        roleStats.WinRate.toFixed(2) <= 0.0 &&
+                        roleStats.PartiteGiocate != 0
+                          ? "bg-red-500"
+                          : ""
+                      }
                     />
                   </div>
                   <div className="col-span-3 w-full">
@@ -153,6 +173,7 @@ export default async function Page({
                         ).toFixed(2)
                       )}
                       colors={"blue"}
+                      barProps=""
                     />
                   </div>
                 </>

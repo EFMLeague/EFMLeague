@@ -5,5 +5,9 @@ export const getUserEloSoloQ = async (userId: string) => {
     headers: { "X-Riot-Token": process.env.RIOT_TOKEN as string },
   });
   const elo = (await result.json()) as any[];
-  return elo.find((queue) => queue.queueType === "RANKED_SOLO_5x5");
+  if (elo.length === 0) {
+    return { tier: "UNRANKED", rank: " " };
+  } else {
+    return elo.find((queue) => queue.queueType === "RANKED_SOLO_5x5");
+  }
 };

@@ -62,5 +62,5 @@
 }
 
 .cardProgress:nth-child(2) svg circle:last-of-type {
-  stroke: #2ecc71;
+  stroke: var(--colorHex);
 }

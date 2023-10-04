@@ -46,11 +46,11 @@ export default function Navbar() {
             >
               <img src="/img/logo/Logocentrato.png" className="h-12" alt="" />
             </div>
-            <a href="/">
+            <Link href="/">
               <h1 className="lg:flex italian-underline lg:font-bold">
                 EFM League
               </h1>
-            </a>
+            </Link>
           </div>
           <div
             className=" text-[2rem] absolute right-5 hover:cursor-pointer lg:hidden"
@@ -78,34 +78,34 @@ export default function Navbar() {
         >
           <ul className="flex flex-col text-center w-full lg:flex-row lg:items-center lg:justify-center lg:h-full">
             <li className="underline-link">
-              <a href="/" onClick={() => handleOpen()}>
+              <Link href="/" onClick={() => handleOpen()}>
                 HOME
-              </a>
+              </Link>
             </li>
             <li className="underline-link">
-              <a href="/user" onClick={() => handleOpen()}>
+              <Link href="/user" onClick={() => handleOpen()}>
                 USERS
-              </a>
+              </Link>
             </li>
             <li className="underline-link">
-              <a href="/ranking" onClick={() => handleOpen()}>
+              <Link href="/ranking" onClick={() => handleOpen()}>
                 RANKINGS
-              </a>
+              </Link>
             </li>
             <li className="underline-link">
-              <a href="/match" onClick={() => handleOpen()}>
+              <Link href="/match" onClick={() => handleOpen()}>
                 HISTORY
-              </a>
+              </Link>
             </li>
             <li className="underline-link">
-              <a href="/wheel" onClick={() => handleOpen()}>
+              <Link href="/wheel" onClick={() => handleOpen()}>
                 RUOTA
-              </a>
+              </Link>
             </li>
             <li className="underline-link">
-              <a href="/addMatch" onClick={() => handleOpen()}>
+              <Link href="/addMatch" onClick={() => handleOpen()}>
                 ADMIN
-              </a>
+              </Link>
             </li>
             <li>
               <Logout />
