@@ -8,7 +8,7 @@ import { getUserEloFlex } from "@/app/utils/riot/getUserEloFlex";
 import { getUserEloSoloQ } from "@/app/utils/riot/getUserEloSoloQ";
 import CircularProgress from "@/app/components/tailwind/circularProgress";
 import ProgBar from "@/app/components/tailwind/progBar";
-
+import Image from "next/image";
 export default async function Page({
   params: { name },
 }: {
@@ -64,7 +64,7 @@ export default async function Page({
     .select("*")
     .eq("IDUtente", users[0].id)
     .order("ConteggioRuolo", { ascending: false });
-
+  const { data: match } = await supabase.from("Match").select();
   const { data: matchHistory } = await supabase
     .from("hasPlayed")
     .select("*,Match (*)")
@@ -76,7 +76,14 @@ export default async function Page({
     .select()
     .eq("IDUtente", users[0].id);
 
-  if (!winnedMatch || !playedMatch || !mvpMatch || !matchHistory || !prefRole) {
+  if (
+    !winnedMatch ||
+    !playedMatch ||
+    !mvpMatch ||
+    !matchHistory ||
+    !prefRole ||
+    !match
+  ) {
     return;
   }
   const winRate = ((winnedMatch?.length * 100) / playedMatch?.length).toFixed(
@@ -90,19 +97,24 @@ export default async function Page({
       </div>
       {users?.map((user) => (
         <div>
-          <div className="container flex mx-auto bg-white pt-6 pl-6">
+          <div className="container md:flex md:justify-center md:items-center mx-auto bg-white pt-6">
             <img
               src={iconUser}
-              className="w-20 rounded-full border-2 border-gray-900"
+              className="w-20 rounded-full border-2 border-gray-900 object-center mx-auto md:mx-0"
               alt="icon user"
             />
-            <p className="text-[3.5rem] font-semibold text-center">
+            <p className="text-[2.5rem] md:text-[3.5rem] font-semibold text-center">
               &nbsp;{userData.name}&nbsp;
             </p>
+            <img
+              src={iconUser}
+              className="w-20 rounded-full border-2 border-gray-900 object-center mx-auto hidden md:block md:mx-0"
+              alt="icon user"
+            />
           </div>
-          <div className="flex justify-center flex-wrap container mx-auto bg-white pt-6">
-            <div className="flex flex-col justify-center items-center">
-              <div className="flex border-2 shadow-2xl ">
+          <div className="flex justify-center flex-wrap container mx-auto bg-white p-6">
+            <div className="flex flex-col justify-center items-center basis-full">
+              <div className="flex">
                 <div className="">
                   <div className="relative">
                     <img src={iconEloSoloQ} className="w-48" alt="elo user" />
@@ -127,11 +139,28 @@ export default async function Page({
                 </div>
               </div>
             </div>
-
-            <CircularProgress
-              percent={winRate}
-              color={Number(winRate) >= 50 ? "#4caf50" : "#f44336"}
-            />
+            <p className="basis-full text-[2rem] font-bold italic py-6">
+              EFM League stats
+            </p>
+            <div className="flex justify-center items-center flex-wrap">
+              <CircularProgress
+                percent={winRate}
+                textInside={winRate}
+                textSpan="%"
+                color={Number(winRate) >= 50 ? "#4caf50" : "#f44336"}
+                title="WinRate"
+              />
+              <CircularProgress
+                percent={(
+                  (100 * Number(playedMatch?.length.toFixed(2))) /
+                  match?.length
+                ).toString()}
+                textInside={playedMatch?.length.toString()}
+                textSpan={" of " + match?.length}
+                color={"blue"}
+                title="Presence"
+              />
+            </div>
 
             <div className="grid grid-cols-9 border place-items-center gap-4 shadow-md p-3">
               <div className="col-span-2">Roles</div>
@@ -179,15 +208,45 @@ export default async function Page({
                 </>
               ))}
             </div>
-            <div className=" bg-white min-w-[350px] mt-4">
-              <div className="flex flex-wrap p-2">
-                <p className="text-2xl font-semibold bg-black text-white">
-                  &nbsp;GAMES PLAYED&nbsp;
+            <div className="grid grid-cols-3 w-full py-6">
+              <div className="flex justify-between items-center col-span-3 md:col-span-1 md:justify-center">
+                <p className="text-4xl font-semibold bg-white ">
+                  Points:&nbsp;
+                  {winnedMatch
+                    ? winnedMatch.length - Math.round(users[0].warnings / 2)
+                    : "errore"}
                 </p>
-                <p className="text-2xl font-semibold bg-white border border-black">
-                  &nbsp;{playedMatch?.length}&nbsp;
-                </p>
+                <Image
+                  src={"/img/icons/cup64.png"}
+                  height={64}
+                  width={64}
+                  alt=""
+                ></Image>
               </div>
+              <div className="flex justify-between items-center col-span-3 md:col-span-1 md:justify-center">
+                <p className="text-4xl font-semibold bg-white ">
+                  Warnings:&nbsp;{users[0].warnings}&nbsp;
+                </p>
+                <Image
+                  src={"/img/icons/yellowCard64.png"}
+                  height={64}
+                  width={64}
+                  alt=""
+                ></Image>
+              </div>
+              <div className="flex justify-between items-center col-span-3 md:col-span-1 md:justify-center">
+                <p className="text-4xl font-semibold bg-white ">
+                  MVP:&nbsp;{mvpMatch.length}&nbsp;
+                </p>
+                <Image
+                  src={"/img/icons/crown64.png"}
+                  height={64}
+                  width={64}
+                  alt=""
+                ></Image>
+              </div>
+            </div>
+            {/* <div className=" bg-white min-w-[350px] mt-4">
               <div className="flex flex-wrap p-2">
                 <p className="text-2xl font-semibold bg-black text-white">
                   &nbsp;POINTS&nbsp;
@@ -217,7 +276,7 @@ export default async function Page({
                   &nbsp;{mvpMatch.length}&nbsp;
                 </p>
               </div>
-            </div>
+            </div> */}
           </div>
 
           {/* <div className="container mx-auto pt-6">

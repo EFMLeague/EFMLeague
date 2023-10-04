@@ -3,9 +3,15 @@ import "./circularProgress.css";
 export default function circularProgress({
   percent,
   color,
+  title,
+  textInside,
+  textSpan,
 }: {
   percent: string;
   color: string;
+  title: string;
+  textInside: string;
+  textSpan: string;
 }) {
   return (
     <div className="cardProgress">
@@ -24,13 +30,13 @@ export default function circularProgress({
         </svg>
         <div className="number">
           <h3>
-            {percent}
-            <span>%</span>
+            {textInside}
+            <span>{textSpan}</span>
           </h3>
         </div>
       </div>
       <div className="title">
-        <h2>Win Rate</h2>
+        <h2>{title}</h2>
       </div>
     </div>
   );
