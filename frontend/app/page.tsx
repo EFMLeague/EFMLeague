@@ -1,7 +1,7 @@
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import Navbar from "./components/navbar/navbar";
 import { cookies } from "next/headers";
-
+import Image from "next/image";
 export default async function Home() {
   return (
     <div className="">
@@ -34,9 +34,11 @@ export default async function Home() {
             </p>
           </div>
           <div className="basis-full pt-8 md:basis-1/2 md:pt-0">
-            <img
+            <Image
               src="./img/logo/Logocentrato.png"
               className="mx-auto md:max-h-[450px]"
+              height={500}
+              width={500}
               alt=""
             />
           </div>
