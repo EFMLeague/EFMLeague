@@ -157,7 +157,7 @@ export default async function Page({
                 ).toString()}
                 textInside={playedMatch?.length.toString()}
                 textSpan={" of " + match?.length}
-                color={"blue"}
+                color={"#2196f3"}
                 title="Presence"
               />
             </div>
@@ -210,11 +210,13 @@ export default async function Page({
             </div>
             <div className="grid grid-cols-3 w-full py-6">
               <div className="flex justify-between items-center col-span-3 md:col-span-1 md:justify-center">
-                <p className="text-4xl font-semibold bg-white ">
+                <p className="text-4xl bg-white ">
                   Points:&nbsp;
-                  {winnedMatch
-                    ? winnedMatch.length - Math.round(users[0].warnings / 2)
-                    : "errore"}
+                  <span className="font-bold">
+                    {winnedMatch
+                      ? winnedMatch.length - Math.round(users[0].warnings / 2)
+                      : "errore"}
+                  </span>
                 </p>
                 <Image
                   src={"/img/icons/cup64.png"}
@@ -224,8 +226,11 @@ export default async function Page({
                 ></Image>
               </div>
               <div className="flex justify-between items-center col-span-3 md:col-span-1 md:justify-center">
-                <p className="text-4xl font-semibold bg-white ">
-                  Warnings:&nbsp;{users[0].warnings}&nbsp;
+                <p className="text-4xl  bg-white ">
+                  Warnings:
+                  <span className="font-bold">
+                    &nbsp;{users[0].warnings}&nbsp;
+                  </span>
                 </p>
                 <Image
                   src={"/img/icons/yellowCard64.png"}
@@ -235,8 +240,11 @@ export default async function Page({
                 ></Image>
               </div>
               <div className="flex justify-between items-center col-span-3 md:col-span-1 md:justify-center">
-                <p className="text-4xl font-semibold bg-white ">
-                  MVP:&nbsp;{mvpMatch.length}&nbsp;
+                <p className="text-4xl bg-white ">
+                  MVP:{" "}
+                  <span className="font-bold">
+                    &nbsp;{mvpMatch.length}&nbsp;
+                  </span>
                 </p>
                 <Image
                   src={"/img/icons/crown64.png"}
