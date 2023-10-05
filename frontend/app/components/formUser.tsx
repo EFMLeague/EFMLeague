@@ -11,7 +11,7 @@ export default function userForm() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const error = await supabase
-      .from("User")
+      .from("user_ordered_by_name")
       .insert({ name: name, puuid: puuid, warnings: warnings });
     console.log(error);
   };

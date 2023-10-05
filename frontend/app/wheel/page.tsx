@@ -9,7 +9,7 @@ import { getUsersByPuuid } from "../utils/riot/getUsersByPuuid";
 export default async function WheelPage() {
   const supabase = createServerComponentClient({ cookies });
   const { data: dbUsers } = await supabase
-    .from("User")
+    .from("user_ordered_by_name")
     .select("puuid,video_source,name")
     .neq("name", "FORESTIERO")
     .order("video_source,name", { ascending: true });

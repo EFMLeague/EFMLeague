@@ -34,7 +34,7 @@ export default async function Page({
   const iconEloSoloQ = "../../img/elo/" + eloSoloQ.tier.toLowerCase() + ".png";
   const iconEloFlex = "../../img/elo/" + eloFlex.tier.toLowerCase() + ".png";
   const { data: users } = await supabase
-    .from("User")
+    .from("user_ordered_by_name")
     .select()
     .eq("puuid", userData.puuid);
 

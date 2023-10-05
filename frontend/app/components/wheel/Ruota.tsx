@@ -195,7 +195,7 @@ export default function Ruota({
               className="bg-green-600 rounded-md w-1/4 hover:scale-105 hover:cursor-pointer"
               onClick={() => handleConfirm()}
             >
-              OK!
+              Y
             </div>
             <div
               className="bg-red-600 rounded-md w-1/4 hover:scale-105 hover:cursor-pointer"
@@ -206,7 +206,7 @@ export default function Ruota({
                 }))
               }
             >
-              NOPE!
+              N
             </div>
           </div>
         </div>

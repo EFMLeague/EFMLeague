@@ -5,7 +5,7 @@ import React from "react";
 export default async function page() {
   const supabase = createServerComponentClient({ cookies });
   const { data: users } = await supabase
-    .from("User")
+    .from("user_ordered_by_name")
     .select()
     .order("name", { ascending: true });
   const { data: mostWinningPlayers } = await supabase
@@ -28,7 +28,7 @@ export default async function page() {
     .neq("NomeUtente", "FORESTIERO");
 
   const { data: warnings } = await supabase
-    .from("User")
+    .from("user_ordered_by_name")
     .select()
     .neq("name", "FORESTIERO")
     .order("warnings", { ascending: false });
