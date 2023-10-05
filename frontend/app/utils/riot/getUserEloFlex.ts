@@ -5,9 +5,9 @@ export const getUserEloFlex = async (userId: string) => {
     headers: { "X-Riot-Token": process.env.RIOT_TOKEN as string },
   });
   const elo = (await result.json()) as any[];
-  if (elo.length === 0) {
-    return { tier: "UNRANKED", rank: " " };
-  } else {
+  if (elo.find((queue) => queue.queueType === "RANKED_FLEX_SR")) {
     return elo.find((queue) => queue.queueType === "RANKED_FLEX_SR");
+  } else {
+    return { tier: "UNRANKED", rank: " " };
   }
 };
