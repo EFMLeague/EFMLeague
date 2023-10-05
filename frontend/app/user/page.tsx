@@ -15,7 +15,7 @@ export default async function User() {
     return;
   }
   const users = await getUsersByPuuid(dbUsers);
-
+  console.log(users);
   return (
     <div className="">
       <div className="container mx-auto">
