@@ -99,7 +99,7 @@ export default function Navbar() {
             </li>
             <li className="underline-link">
               <Link href="/wheel" onClick={() => handleOpen()}>
-                RUOTA
+                WHEEL
               </Link>
             </li>
             <li className="underline-link">

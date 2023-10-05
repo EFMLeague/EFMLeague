@@ -35,7 +35,7 @@ export default async function Home() {
           </div>
           <div className="basis-full pt-8 md:basis-1/2 md:pt-0">
             <Image
-              src="./img/logo/Logocentrato.png"
+              src="/img/logo/Logocentrato.png"
               className="mx-auto md:max-h-[450px]"
               height={500}
               width={500}

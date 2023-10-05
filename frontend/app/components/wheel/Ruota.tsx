@@ -119,7 +119,15 @@ export default function Ruota({
               key={key}
             >
               <img
-                src={"../../img/roles/" + key.toLowerCase() + ".png"}
+                src={
+                  "/img/roles/" +
+                  (key.toLowerCase() === "support"
+                    ? "sup"
+                    : key.toLowerCase() === "jungle"
+                    ? "jng"
+                    : key.toLowerCase()) +
+                  ".png"
+                }
                 alt=""
                 className="h-8"
               />
@@ -137,7 +145,15 @@ export default function Ruota({
               key={key}
             >
               <img
-                src={"../../img/roles/" + key.toLowerCase() + ".png"}
+                src={
+                  "/img/roles/" +
+                  (key.toLowerCase() === "support"
+                    ? "sup"
+                    : key.toLowerCase() === "jungle"
+                    ? "jng"
+                    : key.toLowerCase()) +
+                  ".png"
+                }
                 alt=""
                 className="h-8"
               />
@@ -164,7 +180,7 @@ export default function Ruota({
 
       <div
         className={
-          "fixed top-[50%] left-[50%] -translate-x-[50%] z-50 w-[80%] bg-gray-200 border-4 border-black " +
+          "fixed top-[50%] left-[50%] -translate-x-[50%] z-50 w-full md:w-[80%] bg-gray-200 border-4 border-black " +
           (showModal.userSpinning ? "" : "hidden")
         }
       >
