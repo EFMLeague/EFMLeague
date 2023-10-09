@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Ruota from "./Ruota";
-
+import Image from "next/image";
 export default function formWheel({ data }: { data: any[] }) {
   const [roles, setRoles] = useState([
     //spazio per indicare RED TEAM
@@ -43,14 +43,16 @@ export default function formWheel({ data }: { data: any[] }) {
             }
             onClick={() => handleChange(user)}
           >
-            <img
+            <Image
               className="object-cover object-center w-full h-[170px]"
               src={
                 user.video_source
-                  ? "./img/screenshots/frame_" + user.dbName + ".jpg"
-                  : "./img/screenshots/frame_intro.jpg"
+                  ? "/img/screenshots/frame_" + user.dbName + ".jpg"
+                  : "/img/screenshots/frame_intro.jpg"
               }
               alt=""
+              height={300}
+              width={300}
             />
             <p className="bg-black text-white text-xl text-center">
               {user.name}

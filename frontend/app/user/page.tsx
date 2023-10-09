@@ -3,6 +3,7 @@ import { cookies } from "next/headers";
 import React, { Suspense } from "react";
 import { getUsersByPuuid } from "../utils/riot/getUsersByPuuid";
 import Image from "next/image";
+import { getAllChamps } from "../utils/riot/getAllChamps";
 export default async function User() {
   const supabase = createServerComponentClient({ cookies });
 
@@ -13,8 +14,9 @@ export default async function User() {
   if (!dbUsers) {
     return;
   }
+
   const users = await getUsersByPuuid(dbUsers);
-  console.log(users);
+
   return (
     <div className="">
       <div className="container mx-auto">
