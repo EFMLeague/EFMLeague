@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { Wheel } from "react-custom-roulette";
+import Image from "next/image";
 export default function Ruota({
   data,
   setSelection,
@@ -118,7 +119,7 @@ export default function Ruota({
               className="flex justify-start items-center py-2 pl-2"
               key={key}
             >
-              <img
+              <Image
                 src={
                   "/img/roles/" +
                   (key.toLowerCase() === "support"
@@ -130,6 +131,8 @@ export default function Ruota({
                 }
                 alt=""
                 className="h-8"
+                height={32}
+                width={32}
               />
               <p className="font-bold">{`: ${value}`} </p>
             </div>
@@ -144,7 +147,7 @@ export default function Ruota({
               className="flex justify-start items-center py-2 pl-2"
               key={key}
             >
-              <img
+              <Image
                 src={
                   "/img/roles/" +
                   (key.toLowerCase() === "support"
@@ -156,6 +159,8 @@ export default function Ruota({
                 }
                 alt=""
                 className="h-8"
+                height={32}
+                width={32}
               />
               <p className="font-bold">{`: ${value}`} </p>
             </div>

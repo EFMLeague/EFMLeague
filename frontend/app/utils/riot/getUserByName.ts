@@ -5,6 +5,7 @@ export const getUserByName = async (name: string) => {
     headers: {
       "X-Riot-Token": process.env.RIOT_TOKEN as string,
     },
+    next: { revalidate: 150 },
   });
   return result.json();
 };
