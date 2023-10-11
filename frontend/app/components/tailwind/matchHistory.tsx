@@ -15,7 +15,7 @@ const Icon = (id: any, open: any) => {
       strokeWidth={2}
       stroke="currentColor"
       className={`${
-        id === open ? "rotate-180" : ""
+        id === open ? " rotate-180 " : ""
       } h-5 w-5 transition-transform`}
     >
       <path
@@ -37,13 +37,13 @@ export default function matchHistory() {
     <div>
       <Accordion open={open === 1} icon={<Icon id={1} open={open} />}>
         <div className=" flex ">
-          <p className="border-2 bg-black border-Gold text-white text-[2rem] hover:text-gray-300">
+          <p className="border bg-black border-Gold text-white text-[2rem] hover:text-gray-300">
             01/10/2023
           </p>
         </div>
         <AccordionHeader
           onClick={() => handleOpen(1)}
-          className="border-2 bg-black border-Gold text-white grid grid-cols-8 text-[2rem] hover:text-gray-300"
+          className="border bg-black border-Gold text-white grid grid-cols-8 text-[2rem] hover:text-gray-300"
         >
           <div className="pl-2 col-span-2 ">22:30</div>
           <div className="col-span-4 text-center ">
@@ -137,49 +137,6 @@ export default function matchHistory() {
               </div>
             </div>
           </div>
-        </AccordionBody>
-      </Accordion>
-      <Accordion open={open === 2} icon={<Icon id={2} open={open} />}>
-        <div className=" flex ">
-          <p className="border-2 bg-black border-Gold text-white text-[2rem] hover:text-gray-300">
-            20/09/2023
-          </p>
-        </div>
-        <AccordionHeader
-          onClick={() => handleOpen(2)}
-          className="border-2 bg-black border-Gold text-white grid grid-cols-8 text-[2rem] hover:text-gray-300"
-        >
-          <div className="pl-2 col-span-2 ">22:30</div>
-          <div className="col-span-4 text-center ">
-            <span className="text-red-500">RED</span> ↤ 0 - 1 ↦{" "}
-            <span className="text-blue-500">BLUE</span>
-          </div>
-          <div className="col-span-1">{""}</div>
-        </AccordionHeader>
-        <AccordionBody>
-          We&apos;re not always in the position that we want to be at.
-          We&apos;re constantly growing. We&apos;re constantly making mistakes.
-          We&apos;re constantly trying to express ourselves and actualize our
-          dreams.
-        </AccordionBody>
-      </Accordion>
-      <Accordion open={open === 3} icon={<Icon id={3} open={open} />}>
-        <AccordionHeader
-          onClick={() => handleOpen(3)}
-          className="border-2 bg-black border-Gold text-white grid grid-cols-8 text-[2rem] hover:text-gray-300"
-        >
-          <div className="pl-2 col-span-2 ">22:30</div>
-          <div className="col-span-4 text-center ">
-            <span className="text-red-500">RED</span> ↤ 0 - 1 ↦{" "}
-            <span className="text-blue-500">BLUE</span>
-          </div>
-          <div className="col-span-1">{""}</div>
-        </AccordionHeader>
-        <AccordionBody>
-          We&apos;re not always in the position that we want to be at.
-          We&apos;re constantly growing. We&apos;re constantly making mistakes.
-          We&apos;re constantly trying to express ourselves and actualize our
-          dreams.
         </AccordionBody>
       </Accordion>
     </div>

@@ -1,6 +1,7 @@
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import React from "react";
+import MatchHistory from "../components/tailwind/matchHistory";
 
 export default async function page() {
   const supabase = createServerComponentClient({ cookies });
@@ -17,6 +18,7 @@ export default async function page() {
         <p className="text-center text-white text-[3rem] font-bold">
           MATCH HISTORY EFM League
         </p>
+        {/* <MatchHistory /> */}
       </div>
       <div className="container mx-auto grid grid-cols-12 bg-white rounded-xl my-10">
         <div className="col-span-3 p-2 font-bold text-[1.4rem] uppercase border-2 bg-purple-200">

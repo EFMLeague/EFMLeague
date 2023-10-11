@@ -11,8 +11,8 @@ export default async function WheelPage() {
   const { data: dbUsers } = await supabase
     .from("user_ordered_by_name")
     .select("puuid,video_source,name")
-    .neq("name", "FORESTIERO")
-    .order("video_source,name", { ascending: true });
+    .neq("name", "FORESTIERO");
+
   if (!dbUsers) {
     return;
   }
