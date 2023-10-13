@@ -151,6 +151,7 @@ export default function FormMatch({
                   mode="exclude"
                 />
               </select>
+
               <SelectChamp championData={allChamps} />
             </div>
 

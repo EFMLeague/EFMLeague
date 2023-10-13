@@ -499,6 +499,13 @@ export default async function page() {
             adoranteguardia (<span className="">8</span>)
           </span>
         </a>
+        <br />
+        <br />
+        <a href="./user/MasonLuis">
+          <span className="bg-black border p-2 hover:bg-neutral-900">
+            MasonLuis (<span className="">8</span>)
+          </span>
+        </a>
       </p>
     </div>
   );
