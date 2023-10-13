@@ -1,6 +1,13 @@
-const API =
-  "https://ddragon.leagueoflegends.com/cdn/13.19.1/data/en_US/champion.json";
+import { getLoLVersion } from "./getLoLVersion";
+
 export const getAllChamps = async () => {
-  const result = await fetch(API);
-  return result.json();
+  const version = await getLoLVersion();
+  const API =
+    "https://ddragon.leagueoflegends.com/cdn/" +
+    version +
+    "/data/en_US/champion.json";
+  const res = await fetch(API);
+  const result = await res.json();
+
+  return result.data;
 };

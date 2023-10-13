@@ -2,8 +2,15 @@
 import React, { useEffect, useState } from "react";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import FormSelectUsers from "./formSelectUsers";
+import SelectChamp from "../selectChamp/selectChamp";
 
-export default function FormMatch({ users }: { users: any }) {
+export default function FormMatch({
+  users,
+  allChamps,
+}: {
+  users: any;
+  allChamps: any;
+}) {
   const supabase = createClientComponentClient<any>();
 
   // STATI MATCH
@@ -144,6 +151,7 @@ export default function FormMatch({ users }: { users: any }) {
                   mode="exclude"
                 />
               </select>
+              <SelectChamp championData={allChamps} />
             </div>
 
             <div className="flex items-center py-5">
