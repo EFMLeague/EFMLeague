@@ -55,12 +55,33 @@ export default function matchHistory({ game }: { game: any }) {
     return p.ChampGiocato;
   };
 
-  const exractMVP = game.data.map((el: { MVP: any; NomeUtente: any }) => {
+  const extractMVP = game.data.map((el: { MVP: any; NomeUtente: any }) => {
     if (el.MVP) return el.NomeUtente;
   });
 
   const [open, setOpen] = useState(0);
 
+  const month = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+  const getDate = (date: string) => {
+    const numberMonth = Number(date.split("-")[1]);
+    const nameMonth = month[numberMonth];
+    const newDay = date.split("-")[2];
+    const newYear = date.split("-")[0];
+    return newDay + " " + nameMonth + " " + newYear;
+  };
   const exractWinnerTeam = () => {
     if (game.data[0].Vittoria) {
       return game.data[0].Squadra;
@@ -77,20 +98,20 @@ export default function matchHistory({ game }: { game: any }) {
     setOpen(open === value ? 0 : value);
 
   return (
-    <div>
+    <div className="pt-2">
       <Accordion
         open={open === game.IDPartita}
         icon={<Icon id={game.IDPartita} open={open} />}
       >
-        <div className=" flex ">
-          <p className="border bg-black border-Gold text-white text-[1rem] hover:text-gray-300">
-            {game.data[0].DataPartita.split("T")[0]}
+        <div className=" flex">
+          <p className="border bg-[#0f0f0f] text-white text-[1rem] hover:text-gray-300 p-1">
+            {getDate(game.data[0].DataPartita.split("T")[0])}
           </p>
         </div>
 
         <AccordionHeader
           onClick={() => handleOpen(game.IDPartita)}
-          className="border bg-black border-Gold text-white grid grid-cols-8 text-[1.5rem] hover:text-gray-300"
+          className="border bg-[#0f0f0f] text-white grid grid-cols-8 text-[1.5rem] hover:text-gray-300"
         >
           <div className="pl-2 col-span-2 ">
             {game.data[0].DataPartita.split("T")[1].substr(0, 5)}
@@ -129,7 +150,7 @@ export default function matchHistory({ game }: { game: any }) {
         </AccordionHeader>
         <AccordionBody>
           <div className="grid grid-cols-2 relative">
-            <div className="bg-white border border-black">
+            <div className="bg-white border border-black col-span-2 lg:col-span-1">
               <p className="bg-blue-400 text-white text-center text-[3rem] font-bold">
                 TEAM BLUE
               </p>
@@ -251,15 +272,17 @@ export default function matchHistory({ game }: { game: any }) {
                 </div>
               </div>
             </div>
-            <div className="absolute border-2 p-1 border-black bg-white left-[50%] top-[50%] -translate-x-[50%] shadow-lg">
-              <p className="text-[3rem] text-yellow-700 b-white font-bold  text-center">
+
+            <div className="col-span-2 order-last lg:col-span-1 lg:absolute border-2 p-1 border-black bg-white lg:left-[50%] lg:top-[50%] lg:-translate-x-[50%] shadow-lg">
+              <p className="text-[3rem] text-yellow-700 b-white font-bold text-center">
                 MVP
               </p>
-              <p className="text-[3rem] text-black b-white font-bold">
-                {exractMVP}
+              <p className="text-[3rem] text-black b-white font-bold text-center">
+                {extractMVP}
               </p>
             </div>
-            <div className="bg-white border border-black">
+
+            <div className="bg-white border border-black col-span-2 lg:col-span-1">
               <p className="bg-red-400 text-white text-center text-[3rem] font-bold">
                 TEAM RED
               </p>
