@@ -27,7 +27,7 @@ export default async function Page({
     );
     return <span>{p.user_name}</span>;
   };
-  console.log(match);
+  //console.log(match);
   return (
     <div className="overflow-hidden">
       <p className="font-bold text-white text-center bg-black overflow-hidden text-[3rem] whitespace-pre w-full">
@@ -144,16 +144,10 @@ export default async function Page({
           </div>
 
           <div className="flex justify-center items-center pb-4">
-            <div className="text-center">
-              <img src="./../img/crown1.png" className="max-h-[150px]" alt="" />
-            </div>
             <div className="">
               <p className="font-bold text-black text-center text-[2.3rem]">
                 {match.find((p) => p.hasPlayed_mvp).user_name}
               </p>
-            </div>
-            <div className="col-3 text-center">
-              <img src="./../img/crown1.png" className="max-h-[150px]" alt="" />
             </div>
           </div>
         </div>

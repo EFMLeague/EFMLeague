@@ -1,10 +1,11 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import {
   Accordion,
   AccordionHeader,
   AccordionBody,
 } from "@material-tailwind/react";
+import Image from "next/image";
 
 const Icon = (id: any, open: any) => {
   return (
@@ -27,67 +28,226 @@ const Icon = (id: any, open: any) => {
   );
 };
 
-export default function matchHistory() {
-  const [open, setOpen] = React.useState(0);
+export default function matchHistory({ game }: { game: any }) {
+  // console.log(game.data);
+  // console.log(allGames);
+
+  const extractPlayer = (
+    role: "top" | "mid" | "jng" | "adc" | "sup",
+    team: "blue" | "red"
+  ) => {
+    const p = game.data.find(
+      (el: { Ruolo: string; Squadra: string }) =>
+        el.Ruolo === role && el.Squadra === team
+    );
+    return <span>{p.NomeUtente}</span>;
+  };
+
+  const extractChamp = (
+    role: "top" | "mid" | "jng" | "adc" | "sup",
+    team: "blue" | "red"
+  ) => {
+    const p = game.data.find(
+      (el: { Ruolo: string; Squadra: string }) =>
+        el.Ruolo === role && el.Squadra === team
+    );
+    if (p.ChampGiocato === null) p.ChampGiocato = "Aatrox";
+    return p.ChampGiocato;
+  };
+
+  const exractMVP = game.data.map((el: { MVP: any; NomeUtente: any }) => {
+    if (el.MVP) return el.NomeUtente;
+  });
+
+  const [open, setOpen] = useState(0);
+
+  const exractWinnerTeam = () => {
+    if (game.data[0].Vittoria) {
+      return game.data[0].Squadra;
+    } else {
+      if (game.data[0].Squadra === "red") {
+        return "red";
+      } else {
+        return "blue";
+      }
+    }
+  };
 
   const handleOpen = (value: React.SetStateAction<number>) =>
     setOpen(open === value ? 0 : value);
 
   return (
     <div>
-      <Accordion open={open === 1} icon={<Icon id={1} open={open} />}>
+      <Accordion
+        open={open === game.IDPartita}
+        icon={<Icon id={game.IDPartita} open={open} />}
+      >
         <div className=" flex ">
-          <p className="border bg-black border-Gold text-white text-[2rem] hover:text-gray-300">
-            01/10/2023
+          <p className="border bg-black border-Gold text-white text-[1rem] hover:text-gray-300">
+            {game.data[0].DataPartita.split("T")[0]}
           </p>
         </div>
+
         <AccordionHeader
-          onClick={() => handleOpen(1)}
-          className="border bg-black border-Gold text-white grid grid-cols-8 text-[2rem] hover:text-gray-300"
+          onClick={() => handleOpen(game.IDPartita)}
+          className="border bg-black border-Gold text-white grid grid-cols-8 text-[1.5rem] hover:text-gray-300"
         >
-          <div className="pl-2 col-span-2 ">22:30</div>
-          <div className="col-span-4 text-center ">
-            <span className="text-red-500">RED</span> ↤ 0 - 1 ↦{" "}
-            <span className="text-blue-500">BLUE</span>
+          <div className="pl-2 col-span-2 ">
+            {game.data[0].DataPartita.split("T")[1].substr(0, 5)}
+          </div>
+
+          <div className="col-span-4 ">
+            {exractWinnerTeam() === "blue" ? (
+              <div className="flex justify-center items-center">
+                <Image
+                  src="/img/icons/crown64.png"
+                  className="h-12 w-12"
+                  height={48}
+                  width={48}
+                  alt=""
+                />
+                <p className="text-blue-500">BLUE</p>
+                <p className="text-white px-4">VS</p>
+                <p className="text-red-500">RED</p>
+              </div>
+            ) : (
+              <div className="flex justify-center items-center">
+                <p className="text-blue-500">BLUE</p>
+                <p className="text-white px-4">VS</p>
+                <p className="text-red-500">RED</p>
+                <Image
+                  src="/img/icons/crown64.png"
+                  className="h-12 w-12"
+                  height={48}
+                  width={48}
+                  alt=""
+                />
+              </div>
+            )}
           </div>
           <div className="col-span-1">{""}</div>
         </AccordionHeader>
         <AccordionBody>
           <div className="grid grid-cols-2 relative">
             <div className="bg-white border border-black">
-              <p className="bg-red-400 text-white text-center text-[3rem] font-bold">
-                TEAM RED
+              <p className="bg-blue-400 text-white text-center text-[3rem] font-bold">
+                TEAM BLUE
               </p>
-              <div className="pl-6">
-                <div className="flex items-center py-4">
-                  <img src="../../img/roles/top.png" className="h-16" alt="" />{" "}
+              <div className="pr-6">
+                <div className="flex items-center justify-start py-4">
+                  <Image
+                    src="/img/roles/top.png"
+                    height={64}
+                    width={64}
+                    className="h-16"
+                    alt=""
+                  />{" "}
                   <p className="text-[1.5rem] font-semibold text-black">
-                    Minimo Pericolo
+                    {extractPlayer("top", "blue")}
                   </p>
+                  <Image
+                    src={
+                      "https://ddragon.leagueoflegends.com/cdn/13.20.1/img/champion/" +
+                      extractChamp("top", "blue") +
+                      ".png"
+                    }
+                    alt=""
+                    width={52}
+                    height={52}
+                    className="h-14 w-14  rounded-full"
+                  />
                 </div>
-                <div className="flex items-center py-4">
-                  <img src="../../img/roles/jng.png" className="h-16" alt="" />{" "}
+                <div className="flex items-center justify-start py-4">
+                  <Image
+                    src="/img/roles/jng.png"
+                    height={64}
+                    width={64}
+                    className="h-16"
+                    alt=""
+                  />{" "}
                   <p className="text-[1.5rem] font-semibold text-black">
-                    Minimo Pericolo
+                    {extractPlayer("jng", "blue")}
                   </p>
+                  <Image
+                    src={
+                      "https://ddragon.leagueoflegends.com/cdn/13.20.1/img/champion/" +
+                      extractChamp("jng", "blue") +
+                      ".png"
+                    }
+                    alt=""
+                    width={52}
+                    height={52}
+                    className="h-14 w-14  rounded-full"
+                  />
                 </div>
-                <div className="flex items-center py-4">
-                  <img src="../../img/roles/mid.png" className="h-16" alt="" />{" "}
+                <div className="flex items-center justify-start py-4">
+                  <Image
+                    src="/img/roles/mid.png"
+                    height={64}
+                    width={64}
+                    className="h-16"
+                    alt=""
+                  />{" "}
                   <p className="text-[1.5rem] font-semibold text-black">
-                    Minimo Pericolo
+                    {extractPlayer("mid", "blue")}
                   </p>
+                  <Image
+                    src={
+                      "https://ddragon.leagueoflegends.com/cdn/13.20.1/img/champion/" +
+                      extractChamp("mid", "blue") +
+                      ".png"
+                    }
+                    alt=""
+                    width={52}
+                    height={52}
+                    className="h-14 w-14  rounded-full"
+                  />
                 </div>
-                <div className="flex items-center py-4">
-                  <img src="../../img/roles/adc.png" className="h-16" alt="" />{" "}
+                <div className="flex items-center justify-start py-4">
+                  <Image
+                    src="/img/roles/adc.png"
+                    height={64}
+                    width={64}
+                    className="h-16"
+                    alt=""
+                  />{" "}
                   <p className="text-[1.5rem] font-semibold text-black">
-                    Minimo Pericolo
+                    {extractPlayer("adc", "blue")}
                   </p>
+                  <Image
+                    src={
+                      "https://ddragon.leagueoflegends.com/cdn/13.20.1/img/champion/" +
+                      extractChamp("adc", "blue") +
+                      ".png"
+                    }
+                    alt=""
+                    width={52}
+                    height={52}
+                    className="h-14 w-14  rounded-full"
+                  />
                 </div>
-                <div className="flex items-center py-4">
-                  <img src="../../img/roles/sup.png" className="h-16" alt="" />{" "}
+                <div className="flex items-center justify-start py-4">
+                  <Image
+                    src="/img/roles/sup.png"
+                    height={64}
+                    width={64}
+                    className="h-16"
+                    alt=""
+                  />{" "}
                   <p className="text-[1.5rem] font-semibold text-black">
-                    Minimo Pericolo
+                    {extractPlayer("sup", "blue")}
                   </p>
+                  <Image
+                    src={
+                      "https://ddragon.leagueoflegends.com/cdn/13.20.1/img/champion/" +
+                      extractChamp("sup", "blue") +
+                      ".png"
+                    }
+                    alt=""
+                    width={52}
+                    height={52}
+                    className="h-14 w-14  rounded-full"
+                  />
                 </div>
               </div>
             </div>
@@ -96,43 +256,128 @@ export default function matchHistory() {
                 MVP
               </p>
               <p className="text-[3rem] text-black b-white font-bold">
-                Minimo pericolo
+                {exractMVP}
               </p>
             </div>
             <div className="bg-white border border-black">
-              <p className="bg-blue-400 text-white text-center text-[3rem] font-bold">
-                TEAM BLUE
+              <p className="bg-red-400 text-white text-center text-[3rem] font-bold">
+                TEAM RED
               </p>
-              <div className="pr-6">
-                <div className="flex items-center justify-end py-4">
+              <div className="pl-6">
+                <div className="flex items-center justify-end py-4 ">
+                  <Image
+                    src={
+                      "https://ddragon.leagueoflegends.com/cdn/13.20.1/img/champion/" +
+                      extractChamp("top", "red") +
+                      ".png"
+                    }
+                    alt=""
+                    width={52}
+                    height={52}
+                    className="h-14 w-14  rounded-full"
+                  />
                   <p className="text-[1.5rem] font-semibold text-black">
-                    Minimo Pericolo
+                    {extractPlayer("top", "red")}
                   </p>
-                  <img src="../../img/roles/top.png" className="h-16" alt="" />{" "}
+                  <Image
+                    src="/img/roles/top.png"
+                    height={64}
+                    width={64}
+                    className="h-16"
+                    alt=""
+                  />{" "}
                 </div>
                 <div className="flex items-center justify-end py-4">
+                  <Image
+                    src={
+                      "https://ddragon.leagueoflegends.com/cdn/13.20.1/img/champion/" +
+                      extractChamp("top", "red") +
+                      ".png"
+                    }
+                    alt=""
+                    width={52}
+                    height={52}
+                    className="h-14 w-14  rounded-full"
+                  />
                   <p className="text-[1.5rem] font-semibold text-black">
-                    Minimo Pericolo
+                    {extractPlayer("jng", "red")}
                   </p>
-                  <img src="../../img/roles/jng.png" className="h-16" alt="" />{" "}
+                  <Image
+                    src="/img/roles/jng.png"
+                    height={64}
+                    width={64}
+                    className="h-16"
+                    alt=""
+                  />{" "}
                 </div>
                 <div className="flex items-center justify-end py-4">
+                  <Image
+                    src={
+                      "https://ddragon.leagueoflegends.com/cdn/13.20.1/img/champion/" +
+                      extractChamp("top", "red") +
+                      ".png"
+                    }
+                    alt=""
+                    width={52}
+                    height={52}
+                    className="h-14 w-14  rounded-full"
+                  />
                   <p className="text-[1.5rem] font-semibold text-black">
-                    Minimo Pericolo
+                    {extractPlayer("mid", "red")}
                   </p>
-                  <img src="../../img/roles/mid.png" className="h-16" alt="" />{" "}
+                  <Image
+                    src="/img/roles/mid.png"
+                    height={64}
+                    width={64}
+                    className="h-16"
+                    alt=""
+                  />{" "}
                 </div>
                 <div className="flex items-center justify-end py-4">
+                  <Image
+                    src={
+                      "https://ddragon.leagueoflegends.com/cdn/13.20.1/img/champion/" +
+                      extractChamp("top", "red") +
+                      ".png"
+                    }
+                    alt=""
+                    width={52}
+                    height={52}
+                    className="h-14 w-14  rounded-full"
+                  />
                   <p className="text-[1.5rem] font-semibold text-black">
-                    Minimo Pericolo
+                    {extractPlayer("adc", "red")}
                   </p>
-                  <img src="../../img/roles/adc.png" className="h-16" alt="" />{" "}
+                  <Image
+                    src="/img/roles/adc.png"
+                    height={64}
+                    width={64}
+                    className="h-16"
+                    alt=""
+                  />{" "}
                 </div>
                 <div className="flex items-center justify-end py-4">
+                  <Image
+                    src={
+                      "https://ddragon.leagueoflegends.com/cdn/13.20.1/img/champion/" +
+                      extractChamp("top", "red") +
+                      ".png"
+                    }
+                    alt=""
+                    width={52}
+                    height={52}
+                    className="h-14 w-14  rounded-full"
+                  />
                   <p className="text-[1.5rem] font-semibold text-black">
-                    Minimo Pericolo
+                    {extractPlayer("sup", "red")}
                   </p>
-                  <img src="../../img/roles/sup.png" className="h-16" alt="" />{" "}
+                  <Image
+                    src="/img/roles/sup.png"
+                    height={64}
+                    width={64}
+                    className="h-16"
+                    alt=""
+                  />{" "}
                 </div>
               </div>
             </div>
