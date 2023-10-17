@@ -83,13 +83,13 @@ export default function matchHistory({ game }: { game: any }) {
     return newDay + " " + nameMonth + " " + newYear;
   };
   const exractWinnerTeam = () => {
-    if (game.data[0].Vittoria) {
+    if (game.data[0].Vittoria === true) {
       return game.data[0].Squadra;
     } else {
       if (game.data[0].Squadra === "red") {
-        return "red";
-      } else {
         return "blue";
+      } else {
+        return "red";
       }
     }
   };
