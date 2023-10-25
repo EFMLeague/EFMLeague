@@ -4,6 +4,7 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import FormSelectUsers from "./formSelectUsers";
 import SelectChamp from "../selectChamp/selectChamp";
 
+type Trole = "top" | "jng" | "mid" | "adc" | "sup";
 export default function FormMatch({
   users,
   allChamps,
@@ -37,6 +38,17 @@ export default function FormMatch({
   const [winner, setWinner] = useState<"blue" | "red">("blue");
   const [MVP, setMVP] = useState("");
 
+  const [selectedChampions, setSelectedChampions] = useState({
+    blue: {
+      top: "",
+      jng: "",
+      mid: "",
+      adc: "",
+      sup: "",
+    },
+    red: { top: "", jng: "", mid: "", adc: "", sup: "" },
+  });
+
   const handleChangeWinner = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setWinner(
       e.target.value === "blue" || e.target.value === "red"
@@ -63,6 +75,7 @@ export default function FormMatch({
             role: role,
             mvp: id === MVP,
             hasWon: winner === "blue",
+            champPlayed: (selectedChampions as any)["blue"][role],
           })
           .select()
       );
@@ -77,6 +90,7 @@ export default function FormMatch({
               role: role,
               mvp: id === MVP,
               hasWon: winner === "red",
+              champPlayed: (selectedChampions as any)["red"][role],
             })
             .select()
       );
@@ -152,7 +166,13 @@ export default function FormMatch({
                 />
               </select>
 
-              <SelectChamp championData={allChamps} />
+              <SelectChamp
+                championData={allChamps}
+                setSelectedChampion={setSelectedChampions}
+                selectedChampion={selectedChampions}
+                team="blue"
+                role="top"
+              />
             </div>
 
             <div className="flex items-center py-5">
@@ -173,6 +193,13 @@ export default function FormMatch({
                   mode="exclude"
                 />
               </select>
+              <SelectChamp
+                championData={allChamps}
+                setSelectedChampion={setSelectedChampions}
+                selectedChampion={selectedChampions}
+                team="blue"
+                role="jng"
+              />
             </div>
             <div className="flex items-center py-5">
               <img src="./img/roles/mid.png" className=" h-[50px] p-1" alt="" />
@@ -192,6 +219,13 @@ export default function FormMatch({
                   mode="exclude"
                 />
               </select>
+              <SelectChamp
+                championData={allChamps}
+                setSelectedChampion={setSelectedChampions}
+                selectedChampion={selectedChampions}
+                team="blue"
+                role="mid"
+              />
             </div>
             <div className="flex items-center py-5">
               <img src="./img/roles/adc.png" className=" h-[50px] p-1" alt="" />
@@ -211,6 +245,13 @@ export default function FormMatch({
                   mode="exclude"
                 />
               </select>
+              <SelectChamp
+                championData={allChamps}
+                setSelectedChampion={setSelectedChampions}
+                selectedChampion={selectedChampions}
+                team="blue"
+                role="adc"
+              />
             </div>
             <div className="flex items-center py-5">
               <img src="./img/roles/sup.png" className=" h-[50px] p-1" alt="" />
@@ -230,6 +271,13 @@ export default function FormMatch({
                   mode="exclude"
                 />
               </select>
+              <SelectChamp
+                championData={allChamps}
+                setSelectedChampion={setSelectedChampions}
+                selectedChampion={selectedChampions}
+                team="blue"
+                role="sup"
+              />
             </div>
           </div>
           <div className="basis-full bg-red-500 lg:basis-1/2">
@@ -253,6 +301,13 @@ export default function FormMatch({
                   mode="exclude"
                 />
               </select>
+              <SelectChamp
+                championData={allChamps}
+                setSelectedChampion={setSelectedChampions}
+                selectedChampion={selectedChampions}
+                team="red"
+                role="top"
+              />
             </div>
             <div className="flex items-center py-5">
               <img src="./img/roles/jng.png" className=" h-[50px] p-1" alt="" />
@@ -272,6 +327,13 @@ export default function FormMatch({
                   mode="exclude"
                 />
               </select>
+              <SelectChamp
+                championData={allChamps}
+                setSelectedChampion={setSelectedChampions}
+                selectedChampion={selectedChampions}
+                team="red"
+                role="jng"
+              />
             </div>
             <div className="flex items-center py-5">
               <img src="./img/roles/mid.png" className=" h-[50px] p-1" alt="" />
@@ -291,6 +353,13 @@ export default function FormMatch({
                   mode="exclude"
                 />
               </select>
+              <SelectChamp
+                championData={allChamps}
+                setSelectedChampion={setSelectedChampions}
+                selectedChampion={selectedChampions}
+                team="red"
+                role="mid"
+              />
             </div>
             <div className="flex items-center py-5">
               <img src="./img/roles/adc.png" className=" h-[50px] p-1" alt="" />
@@ -310,6 +379,13 @@ export default function FormMatch({
                   mode="exclude"
                 />
               </select>
+              <SelectChamp
+                championData={allChamps}
+                setSelectedChampion={setSelectedChampions}
+                selectedChampion={selectedChampions}
+                team="red"
+                role="adc"
+              />
             </div>
             <div className="flex items-center py-5">
               <img src="./img/roles/sup.png" className=" h-[50px] p-1" alt="" />
@@ -329,6 +405,13 @@ export default function FormMatch({
                   mode="exclude"
                 />
               </select>
+              <SelectChamp
+                championData={allChamps}
+                setSelectedChampion={setSelectedChampions}
+                selectedChampion={selectedChampions}
+                team="red"
+                role="sup"
+              />
             </div>
           </div>
         </div>
