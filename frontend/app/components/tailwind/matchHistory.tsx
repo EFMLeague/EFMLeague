@@ -304,7 +304,7 @@ export default function matchHistory({ game }: { game: any }) {
                   <Image
                     src={
                       "https://ddragon.leagueoflegends.com/cdn/13.20.1/img/champion/" +
-                      extractChamp("top", "red") +
+                      extractChamp("jng", "red") +
                       ".png"
                     }
                     alt=""
@@ -327,7 +327,7 @@ export default function matchHistory({ game }: { game: any }) {
                   <Image
                     src={
                       "https://ddragon.leagueoflegends.com/cdn/13.20.1/img/champion/" +
-                      extractChamp("top", "red") +
+                      extractChamp("mid", "red") +
                       ".png"
                     }
                     alt=""
@@ -350,7 +350,7 @@ export default function matchHistory({ game }: { game: any }) {
                   <Image
                     src={
                       "https://ddragon.leagueoflegends.com/cdn/13.20.1/img/champion/" +
-                      extractChamp("top", "red") +
+                      extractChamp("adc", "red") +
                       ".png"
                     }
                     alt=""
@@ -373,7 +373,7 @@ export default function matchHistory({ game }: { game: any }) {
                   <Image
                     src={
                       "https://ddragon.leagueoflegends.com/cdn/13.20.1/img/champion/" +
-                      extractChamp("top", "red") +
+                      extractChamp("sup", "red") +
                       ".png"
                     }
                     alt=""
