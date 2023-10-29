@@ -84,16 +84,12 @@ export default async function Page({
     .eq("IDGiocatore", users[0].id)
     .order("DataPartita", { ascending: false });
 
-  // const { data: statsChamp } = await supabase.rpc("run_sql", {
-  //   sql: `
-  //       SELECT "champPlayed" AS Campione, COUNT(*) AS PartiteGiocate
-  //       FROM public."hasPlayed"
-  //       WHERE "rUser" = ${users[0].id}
-  //       GROUP BY "champPlayed"
-  //       ORDER BY PartiteGiocate DESC;
-  //     `,
-  // });
-  // console.log("--> " + statsChamp[0].PartiteGiocate);
+  const { data: champs_stats } = await supabase
+    .from("all_champs_stats")
+    .select("*")
+    .eq("idutente", users[0].id)
+    .order("partitegiocate", { ascending: false });
+
   if (
     !winnedMatch ||
     !playedMatch ||
@@ -101,7 +97,8 @@ export default async function Page({
     !matchHistory ||
     !prefRole ||
     !match ||
-    !partiteGiocate
+    !partiteGiocate ||
+    !champs_stats
   ) {
     return;
   }
@@ -273,17 +270,83 @@ export default async function Page({
             </div>
           </div>
           <div className="w-full">
-            <p className="text-[2rem] font-bold italic py-6">Champion stats</p>
-            <div className="grid grid-cols-3 w-1/2">
-              <div className="">
+            <p className="text-[2rem] font-bold italic py-6 text-center">
+              Champions stats
+            </p>
+            <div className="grid grid-cols-4 md:w-1/2 w-full gap-2 border p-4 shadow-lg mx-auto">
+              <div className="italic col-span-2">
                 <p>Champion</p>
               </div>
-              <div>
+              <div className="italic col-span-1">
                 <p>Played</p>
               </div>
-              <div>
+              <div className="italic col-span-1">
                 <p>WinRate</p>
               </div>
+              {champs_stats?.map((champ) => (
+                <>
+                  <div className="flex items-center col-span-2">
+                    <Image
+                      src={
+                        "https://ddragon.leagueoflegends.com/cdn/13.20.1/img/champion/" +
+                        champ.campione +
+                        ".png"
+                      }
+                      alt=""
+                      width={40}
+                      height={40}
+                    ></Image>
+                    <p className="px-4">{champ.campione}</p>
+                  </div>
+                  <div className="col-span-1">
+                    <ProgBar
+                      value={Number(
+                        (
+                          (champ.partitegiocate * 100) /
+                          champs_stats[0].partitegiocate
+                        ).toFixed(2)
+                      )}
+                      typography={champ.partitegiocate}
+                      colors={"blue"}
+                      barProps={
+                        (
+                          (((champ.partitevinte as any) * 100) /
+                            champ.partitegiocate) as any
+                        ).toFixed(2) <= 0.0 && champ.partitegiocate != 0
+                          ? "bg-red-500"
+                          : ""
+                      }
+                      percent={true}
+                    />
+                  </div>
+                  <div className="col-span-1">
+                    <ProgBar
+                      value={Number(
+                        (
+                          (champ.partitevinte * 100) /
+                          champ.partitegiocate
+                        ).toFixed(2)
+                      )}
+                      colors={
+                        (
+                          (((champ.partitevinte as any) * 100) /
+                            champ.partitegiocate) as any
+                        ).toFixed(2) >= 50
+                          ? "green"
+                          : "red"
+                      }
+                      barProps={
+                        (
+                          (((champ.partitevinte as any) * 100) /
+                            champ.partitegiocate) as any
+                        ).toFixed(2) <= 0.0 && champ.partitegiocate != 0
+                          ? "bg-red-500"
+                          : ""
+                      }
+                    />
+                  </div>
+                </>
+              ))}
             </div>
           </div>
           <div className="">

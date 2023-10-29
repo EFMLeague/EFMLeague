@@ -405,7 +405,7 @@ export default function matchHistory({
                 </div>
               </div>
             </div>
-            <div className="bg-white border order-2 lg:order-3 border-black col-span-2 lg:col-span-1">
+            {/* <div className="bg-white border order-2 lg:order-3 border-black col-span-2 lg:col-span-1">
               <p className="bg-blue-400 text-white text-center text-[2rem] font-bold">
                 BAN
               </p>
@@ -440,7 +440,7 @@ export default function matchHistory({
                   className="h-14 w-14  rounded-full"
                 />
               </div>
-            </div>
+            </div> */}
           </div>
         </AccordionBody>
       </Accordion>
