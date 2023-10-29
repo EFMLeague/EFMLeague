@@ -9,6 +9,7 @@ import { getUserEloSoloQ } from "@/app/utils/riot/getUserEloSoloQ";
 import CircularProgress from "@/app/components/tailwind/circularProgress";
 import ProgBar from "@/app/components/tailwind/progBar";
 import Image from "next/image";
+import MatchHistory from "@/app/components/tailwind/matchHistory";
 export default async function Page({
   params: { name },
 }: {
@@ -23,6 +24,7 @@ export default async function Page({
 
   const eloFlex = await getUserEloFlex(userData.id);
   const eloSoloQ = await getUserEloSoloQ(userData.id);
+
   // console.log(eloSoloQ);
   //CREAZIONE LINK IMMAGINI
   const iconUser =
@@ -76,266 +78,232 @@ export default async function Page({
     .select()
     .eq("IDUtente", users[0].id);
 
+  const { data: partiteGiocate } = await supabase
+    .from("merged_hasplayed_match")
+    .select("*")
+    .eq("IDGiocatore", users[0].id)
+    .order("DataPartita", { ascending: false });
+
+  // const { data: statsChamp } = await supabase.rpc("run_sql", {
+  //   sql: `
+  //       SELECT "champPlayed" AS Campione, COUNT(*) AS PartiteGiocate
+  //       FROM public."hasPlayed"
+  //       WHERE "rUser" = ${users[0].id}
+  //       GROUP BY "champPlayed"
+  //       ORDER BY PartiteGiocate DESC;
+  //     `,
+  // });
+  // console.log("--> " + statsChamp[0].PartiteGiocate);
   if (
     !winnedMatch ||
     !playedMatch ||
     !mvpMatch ||
     !matchHistory ||
     !prefRole ||
-    !match
+    !match ||
+    !partiteGiocate
   ) {
     return;
   }
   const winRate = ((winnedMatch?.length * 100) / playedMatch?.length).toFixed(
     2
   );
+
   return (
     <div className="">
       <div className="h-screen -z-10 fixed">
         <img src="./img/banner.jpg" className="object-cover h-full" alt="" />
         <div className="overlay"></div>
       </div>
-      {users?.map((user) => (
-        <div>
-          <div className="container md:flex md:justify-center md:items-center mx-auto bg-white pt-6">
-            <img
-              src={iconUser}
-              className="w-20 rounded-full border-2 border-gray-900 object-center mx-auto md:mx-0"
-              alt="icon user"
+
+      <div>
+        <div className="container md:flex md:justify-center md:items-center mx-auto bg-white pt-6">
+          <img
+            src={iconUser}
+            className="w-20 rounded-full border-2 border-gray-900 object-center mx-auto md:mx-0"
+            alt="icon user"
+          />
+          <p className="text-[2.5rem] md:text-[3.5rem] font-semibold text-center">
+            &nbsp;{userData.name}&nbsp;
+          </p>
+          <img
+            src={iconUser}
+            className="w-20 rounded-full border-2 border-gray-900 object-center mx-auto hidden md:block md:mx-0"
+            alt="icon user"
+          />
+        </div>
+        <div className="flex justify-center flex-wrap container mx-auto bg-white p-6">
+          <div className="flex flex-col justify-center items-center basis-full">
+            <div className="flex">
+              <div className="">
+                <div className="relative">
+                  <img src={iconEloSoloQ} className="w-48" alt="elo user" />
+                  <p className="text-center font-light italic absolute bottom-4 left-[50%] -translate-x-[50%]">
+                    Solo/Duo
+                  </p>
+                </div>
+                <p className="text-center text-2xl font-semibold">
+                  {eloSoloQ.tier}&nbsp;<span>{eloSoloQ.rank}</span>
+                </p>
+              </div>
+              <div>
+                <div className="relative">
+                  <img src={iconEloFlex} className="w-48" alt="elo user" />
+                  <p className="text-center font-light italic absolute bottom-4 left-[50%] -translate-x-[50%]">
+                    Flex
+                  </p>
+                </div>
+                <p className="text-center text-2xl font-semibold">
+                  {eloFlex.tier}&nbsp;<span>{eloFlex.rank}</span>
+                </p>
+              </div>
+            </div>
+          </div>
+          <p className="basis-full text-[2rem] font-bold italic py-6">
+            EFM League stats
+          </p>
+          <div className="flex justify-center items-center flex-wrap">
+            <CircularProgress
+              percent={winRate}
+              textInside={winRate}
+              textSpan="%"
+              color={Number(winRate) >= 50 ? "#4caf50" : "#f44336"}
+              title="WinRate"
             />
-            <p className="text-[2.5rem] md:text-[3.5rem] font-semibold text-center">
-              &nbsp;{userData.name}&nbsp;
-            </p>
-            <img
-              src={iconUser}
-              className="w-20 rounded-full border-2 border-gray-900 object-center mx-auto hidden md:block md:mx-0"
-              alt="icon user"
+            <CircularProgress
+              percent={(
+                (100 * Number(playedMatch?.length.toFixed(2))) /
+                match?.length
+              ).toString()}
+              textInside={playedMatch?.length.toString()}
+              textSpan={" of " + match?.length}
+              color={"#2196f3"}
+              title="Presence"
             />
           </div>
-          <div className="flex justify-center flex-wrap container mx-auto bg-white p-6">
-            <div className="flex flex-col justify-center items-center basis-full">
-              <div className="flex">
-                <div className="">
-                  <div className="relative">
-                    <img src={iconEloSoloQ} className="w-48" alt="elo user" />
-                    <p className="text-center font-light italic absolute bottom-4 left-[50%] -translate-x-[50%]">
-                      Solo/Duo
-                    </p>
-                  </div>
-                  <p className="text-center text-2xl font-semibold">
-                    {eloSoloQ.tier}&nbsp;<span>{eloSoloQ.rank}</span>
-                  </p>
-                </div>
-                <div>
-                  <div className="relative">
-                    <img src={iconEloFlex} className="w-48" alt="elo user" />
-                    <p className="text-center font-light italic absolute bottom-4 left-[50%] -translate-x-[50%]">
-                      Flex
-                    </p>
-                  </div>
-                  <p className="text-center text-2xl font-semibold">
-                    {eloFlex.tier}&nbsp;<span>{eloFlex.rank}</span>
-                  </p>
-                </div>
-              </div>
-            </div>
-            <p className="basis-full text-[2rem] font-bold italic py-6">
-              EFM League stats
-            </p>
-            <div className="flex justify-center items-center flex-wrap">
-              <CircularProgress
-                percent={winRate}
-                textInside={winRate}
-                textSpan="%"
-                color={Number(winRate) >= 50 ? "#4caf50" : "#f44336"}
-                title="WinRate"
-              />
-              <CircularProgress
-                percent={(
-                  (100 * Number(playedMatch?.length.toFixed(2))) /
-                  match?.length
-                ).toString()}
-                textInside={playedMatch?.length.toString()}
-                textSpan={" of " + match?.length}
-                color={"#2196f3"}
-                title="Presence"
-              />
-            </div>
 
-            <div className="grid grid-cols-9 border place-items-center gap-4 shadow-md p-3">
-              <div className="col-span-2">Roles</div>
-              <div className="col-span-1">Played</div>
-              <div className="col-span-3">WinRate</div>
-              <div className="col-span-3">PlayRate</div>
-              {rolesPlayed?.map((roleStats) => (
-                <>
-                  <div className="flex col-span-2">
-                    <img
-                      src={"/img/roles/" + roleStats.Ruolo + ".png"}
-                      alt=""
-                      className="h-12"
-                    />
-                  </div>
-                  <div className="col-span-1 text-lg">
-                    {roleStats.PartiteGiocate}
-                  </div>
-                  <div className="col-span-3 w-full">
-                    <ProgBar
-                      value={roleStats.WinRate.toFixed(2)}
-                      colors={
-                        roleStats.WinRate.toFixed(2) >= 50 ? "green" : "red"
-                      }
-                      barProps={
-                        roleStats.WinRate.toFixed(2) <= 0.0 &&
-                        roleStats.PartiteGiocate != 0
-                          ? "bg-red-500"
-                          : ""
-                      }
-                    />
-                  </div>
-                  <div className="col-span-3 w-full">
-                    <ProgBar
-                      value={Number(
-                        (
-                          (roleStats.PartiteGiocate * 100) /
-                          playedMatch?.length
-                        ).toFixed(2)
-                      )}
-                      colors={"blue"}
-                      barProps=""
-                    />
-                  </div>
-                </>
-              ))}
-            </div>
-            <div className="grid grid-cols-3 w-full py-6">
-              <div className="flex justify-between items-center col-span-3 md:col-span-1 md:justify-center">
-                <p className="text-4xl bg-white ">
-                  Points:&nbsp;
-                  <span className="font-bold">
-                    {winnedMatch
-                      ? winnedMatch.length - Math.round(users[0].warnings / 2)
-                      : "errore"}
-                  </span>
-                </p>
-                <Image
-                  src={"/img/icons/cup64.png"}
-                  height={64}
-                  width={64}
-                  alt=""
-                ></Image>
-              </div>
-              <div className="flex justify-between items-center col-span-3 md:col-span-1 md:justify-center">
-                <p className="text-4xl  bg-white ">
-                  Warnings:
-                  <span className="font-bold">
-                    &nbsp;{users[0].warnings}&nbsp;
-                  </span>
-                </p>
-                <Image
-                  src={"/img/icons/yellowCard64.png"}
-                  height={64}
-                  width={64}
-                  alt=""
-                ></Image>
-              </div>
-              <div className="flex justify-between items-center col-span-3 md:col-span-1 md:justify-center">
-                <p className="text-4xl bg-white ">
-                  MVP:{" "}
-                  <span className="font-bold">
-                    &nbsp;{mvpMatch.length}&nbsp;
-                  </span>
-                </p>
-                <Image
-                  src={"/img/icons/crown64.png"}
-                  height={64}
-                  width={64}
-                  alt=""
-                ></Image>
-              </div>
-            </div>
-            {/* <div className=" bg-white min-w-[350px] mt-4">
-              <div className="flex flex-wrap p-2">
-                <p className="text-2xl font-semibold bg-black text-white">
-                  &nbsp;POINTS&nbsp;
-                </p>
-                <p className="text-2xl font-semibold bg-white border border-black">
-                  &nbsp;
+          <div className="grid grid-cols-9 border place-items-center gap-4 shadow-md p-3">
+            <div className="col-span-2">Roles</div>
+            <div className="col-span-1">Played</div>
+            <div className="col-span-3">WinRate</div>
+            <div className="col-span-3">PlayRate</div>
+            {rolesPlayed?.map((roleStats) => (
+              <>
+                <div className="flex col-span-2">
+                  <img
+                    src={"/img/roles/" + roleStats.Ruolo + ".png"}
+                    alt=""
+                    className="h-12"
+                  />
+                </div>
+                <div className="col-span-1 text-lg">
+                  {roleStats.PartiteGiocate}
+                </div>
+                <div className="col-span-3 w-full">
+                  <ProgBar
+                    value={roleStats.WinRate.toFixed(2)}
+                    colors={
+                      roleStats.WinRate.toFixed(2) >= 50 ? "green" : "red"
+                    }
+                    barProps={
+                      roleStats.WinRate.toFixed(2) <= 0.0 &&
+                      roleStats.PartiteGiocate != 0
+                        ? "bg-red-500"
+                        : ""
+                    }
+                  />
+                </div>
+                <div className="col-span-3 w-full">
+                  <ProgBar
+                    value={Number(
+                      (
+                        (roleStats.PartiteGiocate * 100) /
+                        playedMatch?.length
+                      ).toFixed(2)
+                    )}
+                    colors={"blue"}
+                    barProps=""
+                  />
+                </div>
+              </>
+            ))}
+          </div>
+          <div className="grid grid-cols-3 w-full py-6">
+            <div className="flex justify-between items-center col-span-3 md:col-span-1 md:justify-center">
+              <p className="text-4xl bg-white ">
+                Points:&nbsp;
+                <span className="font-bold">
                   {winnedMatch
                     ? winnedMatch.length - Math.round(users[0].warnings / 2)
                     : "errore"}
-                  &nbsp;
-                </p>
-              </div>
-              <div className="flex flex-wrap p-2">
-                <p className="text-2xl font-semibold bg-black text-white">
-                  &nbsp;AMMONIZIONI&nbsp;
-                </p>
-                <p className="text-2xl font-semibold bg-white border border-black">
+                </span>
+              </p>
+              <Image
+                src={"/img/icons/cup64.png"}
+                height={64}
+                width={64}
+                alt=""
+              ></Image>
+            </div>
+            <div className="flex justify-between items-center col-span-3 md:col-span-1 md:justify-center">
+              <p className="text-4xl  bg-white ">
+                Warnings:
+                <span className="font-bold">
                   &nbsp;{users[0].warnings}&nbsp;
-                </p>
-              </div>
-
-              <div className="flex flex-wrap p-2">
-                <p className="text-2xl font-semibold bg-black text-white">
-                  &nbsp;MVP&nbsp;
-                </p>
-                <p className="text-2xl font-semibold bg-white border border-black">
-                  &nbsp;{mvpMatch.length}&nbsp;
-                </p>
-              </div>
-            </div> */}
+                </span>
+              </p>
+              <Image
+                src={"/img/icons/yellowCard64.png"}
+                height={64}
+                width={64}
+                alt=""
+              ></Image>
+            </div>
+            <div className="flex justify-between items-center col-span-3 md:col-span-1 md:justify-center">
+              <p className="text-4xl bg-white ">
+                MVP:{" "}
+                <span className="font-bold">&nbsp;{mvpMatch.length}&nbsp;</span>
+              </p>
+              <Image
+                src={"/img/icons/crown64.png"}
+                height={64}
+                width={64}
+                alt=""
+              ></Image>
+            </div>
           </div>
-
-          {/* <div className="container mx-auto pt-6">
-            <p className="text-white text-[3rem] uppercase font-bold">
+          <div className="w-full">
+            <p className="text-[2rem] font-bold italic py-6">Champion stats</p>
+            <div className="grid grid-cols-3 w-1/2">
+              <div className="">
+                <p>Champion</p>
+              </div>
+              <div>
+                <p>Played</p>
+              </div>
+              <div>
+                <p>WinRate</p>
+              </div>
+            </div>
+          </div>
+          <div className="">
+            <p className="basis-full text-[2rem] font-bold italic py-6">
               Match history
             </p>
-          </div>
-          <div className="container mx-auto grid grid-cols-12 bg-white rounded-xl my-10">
-            <div className="col-span-3 p-2 font-bold text-[1.4rem] uppercase border-2 bg-purple-200">
-              Data
-            </div>
-            <div className="col-span-3 p-2 font-bold text-[1.4rem] uppercase border-2 bg-yellow-200">
-              Role
-            </div>
-            <div className="col-span-3 p-2 font-bold text-[1.4rem] uppercase border-2 bg-blue-200">
-              Team
-            </div>
-            <div className="col-span-3 p-2 font-bold text-[1.4rem] uppercase border-2 bg-neutral-200">
-              Result
-            </div>
-            {matchHistory.reverse().map((game) => (
-              <a
-                href={"/match/" + game.rMatch}
-                className="col-span-12 grid grid-cols-12 hover:scale-105"
-              >
-                <div className="col-span-3 p-2 bg-purple-50 border-b-2 border-black/20">
-                  {game.Match.date.split("T")[0].replaceAll("-", "/")}
-                </div>
-                <div className="col-span-3 p-2 bg-yellow-50 text-[1.3rem] border-b-2 border-black/20">
-                  {game.role === "adc" ? "Botlane" : ""}
-                  {game.role === "sup" ? "Support" : ""}
-                  {game.role === "jng" ? "Jungle" : ""}
-                  {game.role === "top" ? "Toplane" : ""}
-                  {game.role === "mid" ? "Midlane" : ""}
-                </div>
-                <div className="col-span-3 p-2 bg-blue-50 text-[1.3rem] border-b-2 border-black/20 uppercase">
-                  {game.team}
-                </div>
-                <div
-                  className={
-                    "col-span-3 p-2 font-bold text-[1.3rem] border-b-2 border-black/20  " +
-                    (game.hasWon ? "bg-green-200" : "bg-red-200")
-                  }
-                >
-                  {game.hasWon ? "WIN" : "LOSE"}
-                </div>
-              </a>
+            {partiteGiocate.map(async (game) => (
+              <div key={game.IDPartita}>
+                <MatchHistory
+                  game={await supabase
+                    .from("hasplayed_match_merged")
+                    .select("*")
+                    .eq("IDPartita", game.IDPartita)}
+                  hasWon={game.Vittoria}
+                />
+              </div>
             ))}
-          </div> */}
+          </div>
         </div>
-      ))}
+      </div>
     </div>
   );
 }

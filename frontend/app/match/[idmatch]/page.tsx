@@ -34,28 +34,6 @@ export default async function Page({
         GAME GAME GAME GAME GAME GAME GAME GAME GAME GAME GAME GAME GAME GAME
         GAME GAME GAME GAME GAME
       </p>
-
-      {/* <div className="w-100 d-flex justify-content-center">
-        <p className="bg-dark match-title">MATCH</p>
-      </div>
-
-      <div className="input-match">
-        <label className="label-match">MATCH NAME:</label>
-      </div>
-      <div className="input-match">
-        <label className="label-match">DAY OF THE MATCH:</label>
-      </div>
-      <div className="d-flex justify-content-center align-items-center w-100 p-4">
-        <img src="./../img/trofeo.png" width={150} alt="" />
-        <label className="label-match">WINNERS</label>
-        <img src="./../img/trofeo.png" width={150} alt="" />
-      </div> 
-        <div className="d-flex justify-content-center align-items-center w-100 p-4 bg-white">
-        <img src="./../img/crown1.png" width={150} alt="" />
-        <label className="label-match text-black">MVP</label>
-
-        <img src="./../img/crown1.png" width={150} alt="" />
-      </div>*/}
       <div className="grid grid-cols-6 ">
         <div className="bg-blue-500 col-span-6 lg:col-span-2">
           <p className="text-[3.5rem] font-bold text-white text-center">
