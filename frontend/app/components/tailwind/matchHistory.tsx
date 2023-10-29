@@ -28,10 +28,13 @@ const Icon = (id: any, open: any) => {
   );
 };
 
-export default function matchHistory({ game }: { game: any }) {
-  // console.log(game.data);
-  // console.log(allGames);
-
+export default function matchHistory({
+  game,
+  hasWon,
+}: {
+  game: any;
+  hasWon?: boolean;
+}) {
   const extractPlayer = (
     role: "top" | "mid" | "jng" | "adc" | "sup",
     team: "blue" | "red"
@@ -62,6 +65,7 @@ export default function matchHistory({ game }: { game: any }) {
   const [open, setOpen] = useState(0);
 
   const month = [
+    "",
     "January",
     "February",
     "March",
@@ -87,9 +91,9 @@ export default function matchHistory({ game }: { game: any }) {
       return game.data[0].Squadra;
     } else {
       if (game.data[0].Squadra === "red") {
-        return "red";
-      } else {
         return "blue";
+      } else {
+        return "red";
       }
     }
   };
@@ -111,7 +115,14 @@ export default function matchHistory({ game }: { game: any }) {
 
         <AccordionHeader
           onClick={() => handleOpen(game.IDPartita)}
-          className="border bg-[#0f0f0f] text-white grid grid-cols-8 hover:text-gray-300"
+          className={
+            "bg-[#0f0f0f] text-white grid grid-cols-8 hover:text-gray-300 " +
+            (hasWon === undefined
+              ? "border"
+              : hasWon
+              ? "border-l-8 border-green-600"
+              : "border-l-8 border-red-600")
+          }
         >
           <div className="pl-2 col-span-2 ">
             {game.data[0].DataPartita.split("T")[1].substr(0, 5)}
