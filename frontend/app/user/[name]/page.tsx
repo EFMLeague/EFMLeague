@@ -36,7 +36,7 @@ export default async function Page({
   const iconEloSoloQ = "../../img/elo/" + eloSoloQ.tier.toLowerCase() + ".png";
   const iconEloFlex = "../../img/elo/" + eloFlex.tier.toLowerCase() + ".png";
   const { data: users } = await supabase
-    .from("user_ordered_by_name")
+    .from("User")
     .select()
     .eq("puuid", userData.puuid);
 
@@ -89,7 +89,17 @@ export default async function Page({
     .select("*")
     .eq("idutente", users[0].id)
     .order("partitegiocate", { ascending: false });
-
+  const status = () => {
+    if (users[0].rank === 0) {
+      return "Padre fondatore";
+    }
+    if (users[0].rank === 1) {
+      return "Esperto partecipante";
+    }
+    if (users[0].rank === 2) {
+      return "Nuova recluta";
+    }
+  };
   if (
     !winnedMatch ||
     !playedMatch ||
@@ -130,6 +140,9 @@ export default async function Page({
           />
         </div>
         <div className="flex justify-center flex-wrap container mx-auto bg-white p-6">
+          <p className="text-center text-[1.4rem] italic bg-white">
+            ~{status()}~
+          </p>
           <div className="flex flex-col justify-center items-center basis-full">
             <div className="flex">
               <div className="">
@@ -156,6 +169,7 @@ export default async function Page({
               </div>
             </div>
           </div>
+
           <p className="basis-full text-[2rem] font-bold italic py-6">
             EFM League stats
           </p>
