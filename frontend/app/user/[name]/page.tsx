@@ -322,14 +322,15 @@ export default async function Page({
                       )}
                       typography={champ.partitegiocate}
                       colors={"blue"}
-                      barProps={
-                        (
-                          (((champ.partitevinte as any) * 100) /
-                            champ.partitegiocate) as any
-                        ).toFixed(2) <= 0.0 && champ.partitegiocate != 0
-                          ? "bg-red-500"
-                          : ""
-                      }
+                      // barProps={
+                      //   (
+                      //     (((champ.partitevinte as any) * 100) /
+                      //       champ.partitegiocate) as any
+                      //   ).toFixed(2) <= 0.0 && champ.partitegiocate != 0
+                      //     ? "bg-red-500"
+                      //     : ""
+                      // }
+                      barProps=""
                       percent={true}
                     />
                   </div>
