@@ -31,7 +31,7 @@ export default async function User() {
                 href={"./user/" + user.name}
               >
                 <div className="" key={user.id}>
-                  <div className="text-4xl font-bold text-center text-white bg-black">
+                  <div className="text-3xl font-bold text-center text-white bg-black">
                     {user.name}
                   </div>
                   <div>

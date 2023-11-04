@@ -314,12 +314,14 @@ export default async function Page({
                   </div>
                   <div className="col-span-1">
                     <ProgBar
-                      value={Number(
-                        (
-                          (champ.partitegiocate * 100) /
-                          champs_stats[0].partitegiocate
-                        ).toFixed(2)
-                      )}
+                      value={
+                        Number(
+                          (
+                            (champ.partitegiocate * 100) /
+                            champs_stats[0].partitegiocate
+                          ).toFixed(2)
+                        ) as number
+                      }
                       typography={champ.partitegiocate}
                       colors={"blue"}
                       // barProps={
