@@ -8,11 +8,11 @@ import { getUsersByPuuid } from "../utils/riot/getUsersByPuuid";
 
 export default async function WheelPage() {
   const supabase = createServerComponentClient({ cookies });
+
   const { data: dbUsers } = await supabase
     .from("user_ordered_by_name")
     .select("puuid,video_source,name")
     .neq("name", "FORESTIERO");
-
   if (!dbUsers) {
     return;
   }

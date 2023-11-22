@@ -31,7 +31,10 @@ export default function Ruota({
     blue: { TOP: "", JUNGLE: "", MID: "", ADC: "", SUPPORT: "" },
   });
   const [mustSpin, setMustSpin] = useState(false);
-  const [prizeNumber, setPrizeNumber] = useState(0);
+
+  const [prizeNumberUser, setPrizeNumberUser] = useState(0);
+  const [prizeNumberRole, setPrizeNumberRole] = useState(0);
+
   const [showModal, setShowModal] = useState({
     userSpinning: false,
     sideSpinning: false,
@@ -40,25 +43,30 @@ export default function Ruota({
 
   const handleSpinClick = () => {
     if (!mustSpin) {
-      const newPrizeNumber = Math.floor(Math.random() * data.length);
-      setPrizeNumber(newPrizeNumber);
+      const newPrizeNumberUser = Math.floor(Math.random() * data.length);
+      setPrizeNumberUser(newPrizeNumberUser);
+      const newPrizeNumberRole = Math.floor(Math.random() * data.length);
+      setPrizeNumberRole(newPrizeNumberRole);
       setMustSpin(true);
     }
   };
 
   const generateTeam = () => {
-    if (roles[prizeNumber].option.endsWith(" ")) {
-      const roleNoSpace = roles[prizeNumber].option.split(" ")[0];
+    if (roles[prizeNumberRole].option.endsWith(" ")) {
+      const roleNoSpace = roles[prizeNumberRole].option.split(" ")[0];
       setGeneratedTeam((generatedTeam) => ({
         ...generatedTeam,
-        red: { ...generatedTeam.red, [roleNoSpace]: data[prizeNumber].option },
+        red: {
+          ...generatedTeam.red,
+          [roleNoSpace]: data[prizeNumberUser].option,
+        },
       }));
     } else {
       setGeneratedTeam((generatedTeam) => ({
         ...generatedTeam,
         blue: {
           ...generatedTeam.blue,
-          [roles[prizeNumber].option]: data[prizeNumber].option,
+          [roles[prizeNumberRole].option]: data[prizeNumberUser].option,
         },
       }));
     }
@@ -67,10 +75,10 @@ export default function Ruota({
   const handleConfirm = () => {
     setShowModal((showModal) => ({ ...showModal, userSpinning: false }));
     setSelection((selection) =>
-      selection.filter((el) => el.name !== data[prizeNumber].option)
+      selection.filter((el) => el.name !== data[prizeNumberUser].option)
     );
     setRoles((roles) =>
-      roles.filter((el) => el.option !== roles[prizeNumber].option)
+      roles.filter((el) => el.option !== roles[prizeNumberRole].option)
     );
     generateTeam();
   };
@@ -80,7 +88,7 @@ export default function Ruota({
         <div className="flex overflow-hidden row-span-2 justify-center items-center ">
           <Wheel
             mustStartSpinning={mustSpin}
-            prizeNumber={prizeNumber}
+            prizeNumber={prizeNumberUser}
             data={data}
             spinDuration={0.5}
             backgroundColors={backgroundUser}
@@ -97,7 +105,7 @@ export default function Ruota({
         <div className="flex overflow-hidden row-span-2 justify-center items-center ">
           <Wheel
             mustStartSpinning={mustSpin}
-            prizeNumber={prizeNumber}
+            prizeNumber={prizeNumberRole}
             data={roles.length === 0 ? [{ option: "VUOTO" }] : roles}
             spinDuration={0.5}
             onStopSpinning={() => {
@@ -191,9 +199,9 @@ export default function Ruota({
       >
         <div className="text-[4rem] text-center my-4 ">
           <p>
-            <span className="font-bold">{roles[prizeNumber]?.option}</span>
+            <span className="font-bold">{roles[prizeNumberRole]?.option}</span>
             {": "}
-            {data[prizeNumber]?.option}
+            {data[prizeNumberUser]?.option}
           </p>
           <div className="flex justify-evenly w-full">
             <div
