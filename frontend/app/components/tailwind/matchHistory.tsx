@@ -43,7 +43,8 @@ export default function matchHistory({
       (el: { Ruolo: string; Squadra: string }) =>
         el.Ruolo === role && el.Squadra === team
     );
-    return <span>{p.NomeUtente}</span>;
+    if (!p) return <span>utente non trovato</span>;
+    return <span>{p.username}</span>;
   };
 
   const extractChamp = (
@@ -54,7 +55,11 @@ export default function matchHistory({
       (el: { Ruolo: string; Squadra: string }) =>
         el.Ruolo === role && el.Squadra === team
     );
-    if (p.ChampGiocato === null) p.ChampGiocato = "Aatrox";
+    if (!p) return "Aatrox";
+    // Check if ChampGiocato is undefined and assign a default value if needed
+    if (p.ChampGiocato === undefined) {
+      p.ChampGiocato = "Aatrox";
+    }
     return p.ChampGiocato;
   };
 
