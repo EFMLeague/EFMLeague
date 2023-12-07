@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Socket, io } from "socket.io-client";
 import Image from "next/image";
 
-const socket: Socket = io("http://localhost:3001", {
+const socket: Socket = io("https://backend-efmleague.onrender.com:3001", {
   path: "/draft/",
 });
 
