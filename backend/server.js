@@ -2,12 +2,12 @@
 const express = require("express");
 const http = require("http");
 const { Server } = require("socket.io");
+const cors = require("cors");
 
 const app = express();
 const server = http.createServer(app);
 // Il codice del tuo server Socket.IO
 const io = new Server(server, {
-  path: "/draft/",
   cors: {
     origin: "https://www.efmleague.com",
     methods: ["GET", "POST"],

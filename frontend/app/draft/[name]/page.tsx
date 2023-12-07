@@ -3,9 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Socket, io } from "socket.io-client";
 import Image from "next/image";
 
-const socket: Socket = io("https://backend-efmleague.onrender.com", {
-  path: "/draft/",
-});
+const socket: Socket = io("https://backend-efmleague.onrender.com", {});
 
 const url = window.location.href;
 const startIndex = url.indexOf("/draft/");
