@@ -14,7 +14,7 @@ const endIndex = url.indexOf("$");
 
 var room = url.substring(startIndex + 7, endIndex + 1);
 var passwordSide = url.substring(endIndex + 1);
-
+console.log(passwordSide);
 if (room.length) socket.emit("join_room", { room, passwordSide });
 
 export default function page() {
