@@ -4,7 +4,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "ddragon.leagueoflegends.com",
+        hostname: "**",
       },
     ],
   },

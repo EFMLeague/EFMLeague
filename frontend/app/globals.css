@@ -67,3 +67,9 @@
 .select-player {
   @apply p-2;
 }
+.pickImg {
+  @apply w-full h-full object-none object-center;
+}
+.banImg {
+  @apply w-full h-full object-cover object-center;
+}

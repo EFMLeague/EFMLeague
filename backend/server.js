@@ -7,13 +7,18 @@ const cors = require("cors");
 const app = express();
 const server = http.createServer(app);
 // Il codice del tuo server Socket.IO
+// const io = new Server(server, {
+//   cors: {
+//     origin: "localhost:3000",
+//     methods: ["GET", "POST"],
+//   },
+// });
 const io = new Server(server, {
   cors: {
     origin: "https://www.efmleague.com",
     methods: ["GET", "POST"],
   },
 });
-
 const generateRandomLink = () => {
   const characters =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
