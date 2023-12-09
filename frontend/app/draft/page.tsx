@@ -4,11 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Socket, io } from "socket.io-client";
 
-<<<<<<< HEAD
-const socket: Socket = io("https://backend-efmleague.onrender.com", {});
-=======
 const socket: Socket = io("http://localhost:3001", {});
->>>>>>> newDev
 const url = window.location.href;
 
 const Home = () => {

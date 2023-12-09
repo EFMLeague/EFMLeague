@@ -2,18 +2,12 @@
 import React, { useEffect, useState } from "react";
 import { Socket, io } from "socket.io-client";
 import Image from "next/image";
-<<<<<<< HEAD
-
-const socket: Socket = io("https://backend-efmleague.onrender.com", {});
-
-=======
 import champions from "../../../public/champions/champion-summary.json" assert { type: "json" };
 import PickImage from "@/app/components/tailwind/pickImage";
 import BanImage from "@/app/components/tailwind/banImage";
 import { Howl } from "howler";
 // const socket: Socket = io("http://localhost:3001", {});
 const socket: Socket = io("https://backend-efmleague.onrender.com", {});
->>>>>>> newDev
 const url = window.location.href;
 const startIndex = url.indexOf("/draft/");
 const endIndex = url.indexOf("$");
