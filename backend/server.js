@@ -8,6 +8,7 @@ const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
     origin: "https://www.efmleague.com",
+    // origin: "http://localhost:3000",
     methods: ["GET", "POST"],
   },
 });
@@ -219,7 +220,7 @@ function startTimer(room) {
 
       io.to(room.roomNumber).emit("message_received", room);
 
-      if (room.draftInfo.draftTurn.timer === 0) {
+      if (room.draftInfo.draftTurn.timer === -2) {
         handleDraftStatsUpdateNotConfirmed(room);
         clearInterval(roomTimers[room.roomNumber]);
         delete roomTimers[room.roomNumber];

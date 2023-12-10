@@ -22,6 +22,7 @@ export default function page() {
   const [filter, setFilter] = useState("");
   const [singleChampion, setSingleChampion] = useState("");
   const [selectedRole, setSelectedRole] = useState("");
+  const [block, setBlock] = useState(false);
 
   type Champion = {
     id: number;
@@ -110,6 +111,7 @@ export default function page() {
     }
   }
   useEffect(() => {
+    setBlock(false);
     const idChampion = idChamp();
     if ([0, 1, 2, 3, 4, 12, 13, 14, 15].includes(messageReceived.phase)) {
       play(
@@ -275,18 +277,19 @@ export default function page() {
       messageReceived.draftStats.redPick.includes(championName as string)
     );
   };
-  const imagePick = (champ: any, order: number) => {
+  const imagePick = (champ: string, order: number) => {
     if (order === messageReceived.phase) {
       if (checkPhaseImage() === true) {
-        return { name: singleChampion, active: true };
+        return { id: extractID(singleChampion), active: true };
       }
       if (checkPhaseImage() === false) {
-        return { name: messageReceived.message, active: true };
+        return { id: extractID(messageReceived.message), active: true };
       }
     }
     if (champ != undefined && order < messageReceived.phase) {
-      return { name: champ, active: false };
+      return { id: extractID(champ), active: false };
     }
+    return { id: undefined, active: false };
   };
 
   const handleSelectedRole = (role: React.SetStateAction<string>) => {
@@ -372,7 +375,13 @@ export default function page() {
                 onClick={() => handleSelectedRole("sup")}
               ></Image>
             </div>
-            <p> TIMER: {messageReceived.draftTurn.timer.toString()}</p>
+            <p>
+              {" "}
+              TIMER:{" "}
+              {Number(messageReceived.draftTurn.timer) > 0
+                ? messageReceived.draftTurn.timer
+                : "0"}
+            </p>
             <input
               type="text"
               placeholder="Filtra per nome"
@@ -398,7 +407,8 @@ export default function page() {
                     if (
                       checkPhaseImage() === true &&
                       messageReceived.started === "true" &&
-                      checkChampionPicked(champion.alias) === false
+                      checkChampionPicked(champion.alias) === false &&
+                      block === false
                     ) {
                       setSingleChamp(champion.alias);
                     }
@@ -415,6 +425,7 @@ export default function page() {
                     toggleReady();
                   } else {
                     if (checkPhaseImage() === true) {
+                      setBlock(true);
                       inviaChamp();
                     }
                   }
