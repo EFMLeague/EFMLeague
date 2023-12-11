@@ -417,25 +417,6 @@ export default function page() {
               ))}
             </div>
           </div>
-          <div className=" text-center">
-            <button
-              onClick={() => {
-                if (side != "spectator") {
-                  if (messageReceived.started === "false") {
-                    toggleReady();
-                  } else {
-                    if (checkPhaseImage() === true) {
-                      setBlock(true);
-                      inviaChamp();
-                    }
-                  }
-                }
-              }}
-              className="bg-blue-gray-300 p-4  hover:cursor-pointer"
-            >
-              {checkSideButton()}
-            </button>
-          </div>
         </div>
         <div className="basis-1/5 ">
           <PickImage
@@ -455,7 +436,7 @@ export default function page() {
           ></PickImage>
         </div>
       </div>
-      <div className="basis-full flex justify-between h-full ">
+      <div className="basis-full flex justify-between items-center h-full ">
         <div className="flex">
           <BanImage
             champ={imagePick(messageReceived.draftStats.banBlue[0], 0)}
@@ -473,6 +454,23 @@ export default function page() {
             champ={imagePick(messageReceived.draftStats.banBlue[4], 15)}
           ></BanImage>
         </div>
+        <button
+          className="bg-blue-gray-300 p-4 h-16 hover:cursor-pointer"
+          onClick={() => {
+            if (side != "spectator") {
+              if (messageReceived.started === "false") {
+                toggleReady();
+              } else {
+                if (checkPhaseImage() === true) {
+                  setBlock(true);
+                  inviaChamp();
+                }
+              }
+            }
+          }}
+        >
+          {checkSideButton()}
+        </button>
         <div className="flex">
           <BanImage
             champ={imagePick(messageReceived.draftStats.banRed[4], 14)}
