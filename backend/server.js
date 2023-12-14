@@ -37,7 +37,7 @@ const printRooms = (active) => {
 var activeRooms = [];
 
 app.use(express.static("public"));
-
+app.get("/ping", (req, res) => res.status(200).json({ message: "pong" }));
 io.on("connection", (socket) => {
   console.log(`User connected: ${socket.id}`);
   socket.on("create_room", (data) => {
