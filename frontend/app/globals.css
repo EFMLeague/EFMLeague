@@ -68,8 +68,22 @@
   @apply p-2;
 }
 .pickImg {
-  @apply w-full h-full object-none object-center;
+  background-size: 241%;
+  background-position: 52% 28%;
+  background-repeat: no-repeat;
+}
+.pickImgEmpty {
+  background-size: 100%;
+  background-position: 50% center;
 }
 .banImg {
-  @apply w-full h-full object-cover object-center;
+  background-size: 360%;
+  background-position: 51% 27%;
+  background-repeat: no-repeat;
+}
+
+.banImgEmpty {
+  background-size: 50%;
+  background-size: cover;
+  filter: grayscale(0) !important;
 }

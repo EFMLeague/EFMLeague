@@ -10,23 +10,24 @@ export default function BanImage({
   return (
     <div
       className={
-        "h-[100px] w-[100px] border-yellow-700 m-4 shadow-inner overflow-hidden " +
-        (champ?.active ? "border-t-8 border-yellow-800" : "")
+        "h-[90px] w-[90px] mx-4 shadow-inner overflow-hidden banImg border-black border-4 " +
+        (champ.id === undefined
+          ? "banImgEmpty"
+          : champ?.active
+          ? "border-r-4 border-yellow-800 h-[70%] transition-all duration-300 "
+          : "banImg")
       }
-    >
-      <img
-        src={
+      style={{
+        backgroundImage:
           champ.id === undefined
-            ? "https://draftlol.dawe.gg/rectangle.png"
-            : "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/" +
+            ? `url("https://draftlol.dawe.gg/rectangle.png")`
+            : `url("https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-splashes/` +
               champ.id +
-              ".png"
-        }
-        alt=""
-        width={100}
-        height={100}
-        className="banImg"
-      />
-    </div>
+              `/` +
+              champ.id +
+              `000.jpg")`,
+      }}
+      id={champ.id === undefined ? "-1" : champ.id.toString()}
+    ></div>
   );
 }

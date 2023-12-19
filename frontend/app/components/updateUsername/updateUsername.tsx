@@ -12,6 +12,7 @@ export default function UpdateUsername({ users }: { users: any }) {
   const [update, setUpdate] = useState<"updated" | "notUpdated" | "error">(
     "notUpdated"
   );
+
   const updateUsername = (users: any[]) => {
     users.forEach(async (element) => {
       const res = await supabase

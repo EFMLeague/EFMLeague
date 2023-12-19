@@ -297,9 +297,9 @@ export default function page() {
     else setSelectedRole(role);
   };
   return (
-    <div className=" overflow-hidden flex-wrap bg-blue-gray-800">
-      <div className="flex w-full">
-        <div className="basis-1/5 ">
+    <div className=" h-screen overflow-hidden flex-wrap bg-blue-gray-800 ">
+      <div className="flex w-full h-4/5 bg-lime-700">
+        <div className="basis-1/5 h-full flex shrink flex-col">
           <PickImage
             champ={imagePick(messageReceived.draftStats.bluePick[0], 6)}
           ></PickImage>
@@ -390,8 +390,8 @@ export default function page() {
               className="h-9 border border-black"
             />
           </div>
-          <div className="w-full h-[600px]  overflow-y-auto">
-            <div className="flex flex-wrap justify-center py-2 ">
+          <div className="w-full h-[70%]  overflow-y-auto">
+            <div className="flex flex-wrap justify-center py-2 min-w-[200px]">
               {championsFiltered.map((champion: any) => (
                 <Image
                   src={`https://ddragon.leagueoflegends.com/cdn/${version}/img/champion/${champion.alias}.png`}
@@ -399,7 +399,7 @@ export default function page() {
                   width={100}
                   height={100}
                   className={
-                    "h-[100px] hover:cursor-pointer m-1 " +
+                    "h-[80px] w-[80px] hover:cursor-pointer m-1 " +
                     (checkChampionPicked(champion.alias) ? "grayscale " : "")
                   }
                   key={champion}
@@ -418,7 +418,7 @@ export default function page() {
             </div>
           </div>
         </div>
-        <div className="basis-1/5 ">
+        <div className="basis-1/5 flex shrink flex-col">
           <PickImage
             champ={imagePick(messageReceived.draftStats.redPick[0], 7)}
           ></PickImage>
@@ -436,8 +436,8 @@ export default function page() {
           ></PickImage>
         </div>
       </div>
-      <div className="basis-full flex justify-between items-center h-full ">
-        <div className="flex">
+      <div className="flex justify-between items-start h-1/5 ">
+        <div className="flex h-full">
           <BanImage
             champ={imagePick(messageReceived.draftStats.banBlue[0], 0)}
           ></BanImage>
@@ -454,24 +454,26 @@ export default function page() {
             champ={imagePick(messageReceived.draftStats.banBlue[4], 15)}
           ></BanImage>
         </div>
-        <button
-          className="bg-blue-gray-300 p-4 h-16 hover:cursor-pointer"
-          onClick={() => {
-            if (side != "spectator") {
-              if (messageReceived.started === "false") {
-                toggleReady();
-              } else {
-                if (checkPhaseImage() === true) {
-                  setBlock(true);
-                  inviaChamp();
+        <div className=" h-full flex justify-center items-center">
+          <button
+            className="p-4 bg-orange-800 w-40 hover:cursor-pointer"
+            onClick={() => {
+              if (side != "spectator") {
+                if (messageReceived.started === "false") {
+                  toggleReady();
+                } else {
+                  if (checkPhaseImage() === true) {
+                    setBlock(true);
+                    inviaChamp();
+                  }
                 }
               }
-            }
-          }}
-        >
-          {checkSideButton()}
-        </button>
-        <div className="flex">
+            }}
+          >
+            {checkSideButton()}
+          </button>
+        </div>
+        <div className="flex h-full justify-center items-start">
           <BanImage
             champ={imagePick(messageReceived.draftStats.banRed[4], 14)}
           ></BanImage>

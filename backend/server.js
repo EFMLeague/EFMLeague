@@ -130,18 +130,16 @@ io.on("connection", (socket) => {
 
     if (room.draftInfo.started === "true") {
       if (data.confirm === "false") {
-        console.log("confirm=false");
         handleDraftInfoUpdate(room, data);
         io.to(room.roomNumber).emit("message_received", room);
       }
       if (data.confirm === "true") {
-        console.log("confirm=true");
         handleDraftInfoUpdate(room, data);
         handleDraftStatsUpdate(room, data);
         handlePhaseChange(room);
         io.to(room.roomNumber).emit("message_received", room);
-        await handleDraftPhases(room);
       }
+      await handleDraftPhases(room);
     }
   });
 
@@ -196,7 +194,6 @@ function handlePhaseChange(room) {
   if (roomTimers[room.roomNumber]) {
     clearInterval(roomTimers[room.roomNumber]);
     delete roomTimers[room.roomNumber];
-    io.to(room.roomNumber).emit("timer_end");
   }
 }
 
@@ -212,9 +209,14 @@ async function handleDraftPhases(room) {
 
     io.to(room.roomNumber).emit("message_received", room);
   }
+  if (room.draftInfo.phase === 20) {
+    clearInterval(roomTimers[room.roomNumber]);
+    console.log("draft finita");
+    console.log(room.draftInfo);
+  }
 }
 function startTimer(room) {
-  if (!roomTimers[room.roomNumber] && room.draftInfo.draftTurn.timer > 0) {
+  if (!roomTimers[room.roomNumber] && room.draftInfo.draftTurn.timer > -2) {
     roomTimers[room.roomNumber] = setInterval(() => {
       room.draftInfo.draftTurn.timer--;
 
@@ -224,7 +226,6 @@ function startTimer(room) {
         handleDraftStatsUpdateNotConfirmed(room);
         clearInterval(roomTimers[room.roomNumber]);
         delete roomTimers[room.roomNumber];
-        io.to(room.roomNumber).emit("timer_end");
         handlePhaseChange(room);
         io.to(room.roomNumber).emit("message_received", room);
       }
