@@ -2,7 +2,7 @@ import axios from "axios";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
-  const accessCode = req.nextUrl.searchParams.get("code");
+  const accessCode = req.nextUrl.searchParams.get("code") as string;
 
   const appCallbackUrl =
     "https://www.efmleague.com/api/auth/riot/oauth2-callback";
@@ -16,11 +16,11 @@ export async function GET(req: NextRequest) {
       headers: {
         Authorization:
           "Basic " +
-          btoa(
+          Buffer.from(
             process.env.RIOT_AUTH_CLIENT_ID +
               ":" +
               process.env.RIOT_AUTH_CLIENT_SECRET
-          ),
+          ).toString("base64"),
       },
     });
 
@@ -30,12 +30,24 @@ export async function GET(req: NextRequest) {
 
     // const data = await response.json();
     console.log("OK");
+    // console.log(tokens.data);
     console.log(tokens.data);
-    return NextResponse.json({ tokens }, { status: 200 });
+
+    return NextResponse.json({ tokens:tokens.data }, { status: 200 });
   } catch (error) {
     console.log("ERRORE");
     console.log(error);
+    console.log(
+      "Basic " +
+        Buffer.from(
+          process.env.RIOT_AUTH_CLIENT_ID +
+            ":" +
+            process.env.RIOT_AUTH_CLIENT_SECRET
+        ).toString("base64")
+    );
 
-    return NextResponse.json({ error }, { status: 500 });
+    // console.log(accessCode);
+
+    return NextResponse.json({ errore: error }, { status: 500 });
   }
 }
