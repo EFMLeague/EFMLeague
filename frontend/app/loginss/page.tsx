@@ -13,6 +13,6 @@ export default function Login() {
             + "&scope=openid";
 
   return (
-    <a href={"'"+link+"'"} className='text-2xl'>SIGN IN</a>
+    <a href={link} className='text-2xl'>SIGN IN</a>
   )
 }
