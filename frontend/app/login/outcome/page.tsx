@@ -14,7 +14,7 @@ export default function Outcome() {
       const api = "https://www.efmleague.com/api/auth/riot/oauth2-callback";
       const tokens = await axios.get(api, {
         params: {
-          code: accessCode,
+          code: accessCode as string,
         },
       });
 
