@@ -7,7 +7,7 @@ export async function GET(req: NextRequest) {
   const appCallbackUrl =
     "https://www.efmleague.com/login/outcome";
   const tokenUrl = "https://auth.riotgames.com/token";
-  try {
+  // try {
     const formData = new URLSearchParams();
     formData.append("grant_type", "authorization_code");
     formData.append("code", accessCode as string);
@@ -34,20 +34,20 @@ export async function GET(req: NextRequest) {
     console.log(tokens.data);
 
     return NextResponse.json({ tokens:tokens.data }, { status: 200 });
-  } catch (error) {
-    console.log("ERRORE");
-    console.log(error);
-    console.log(
-      "Basic " +
-        Buffer.from(
-          process.env.RIOT_AUTH_CLIENT_ID +
-            ":" +
-            process.env.RIOT_AUTH_CLIENT_SECRET
-        ).toString("base64")
-    );
+  // } catch (error) {
+  //   console.log("ERRORE");
+  //   console.log(error);
+  //   console.log(
+  //     "Basic " +
+  //       Buffer.from(
+  //         process.env.RIOT_AUTH_CLIENT_ID +
+  //           ":" +
+  //           process.env.RIOT_AUTH_CLIENT_SECRET
+  //       ).toString("base64")
+  //   );
 
-    // console.log(accessCode);
+  //   // console.log(accessCode);
 
-    return NextResponse.json({ errore: error }, { status: 500 });
-  }
+  //   return NextResponse.json({ errore: error }, { status: 500 });
+  // }
 }
