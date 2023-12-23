@@ -8,9 +8,11 @@ import SelectChamp from "../selectChamp/selectChamp";
 export default function FileReaderPage({
   users,
   allChamps,
+  drafts,
 }: {
   users: any;
   allChamps: any;
+  drafts: any;
 }) {
   const [fileContent, setFileContent] = useState<any>({});
   const [fileName, setFileName] = useState("");
@@ -18,9 +20,11 @@ export default function FileReaderPage({
   const [modeMatch, setModeMatch] = useState("standard");
   const [MVP, setMVP] = useState("");
   const supabase = createClientComponentClient<any>();
+  const [draftRoom, setDraftRoom] = useState("");
   const [update, setUpdate] = useState<"updated" | "notUpdated" | "error">(
     "notUpdated"
   );
+
   const [selectedChampions, setSelectedChampions] = useState({
     blue: {
       1: "",
@@ -52,13 +56,59 @@ export default function FileReaderPage({
         setFileName(file.name.split(".")[0]);
         // Salva la stringa nella variabile di stato
         setFileContent(JSON.parse(jsonString));
-
         // Puoi fare qualcos'altro con la stringa, ad esempio visualizzarla nella console
       } catch (error) {
         console.error("Errore durante la lettura del file:", error);
       }
     }
   }, []);
+
+  const findBans = async () => {
+    let playedChampsGame: string[] = [];
+    await fileContent.statsJson.forEach((element: { SKIN: string }) => {
+      playedChampsGame.push(element.SKIN);
+    });
+    let playedChampsDraft: string[] = [];
+    let playedChampsDraftRoom: string[] = [];
+    await drafts.forEach((element: any) => {
+      playedChampsDraft.push(element.pick_blue.concat(element.pick_red));
+      playedChampsDraftRoom.push(element.keyRoom);
+    });
+    let esito = {
+      accuratezza: 0,
+      maxAcc: 0,
+      maxInd: 0,
+    };
+    console.log(playedChampsGame);
+
+    for (let i = 0; i < playedChampsDraft.length; i++) {
+      for (let n = 0; n < 10; n++) {
+        if (
+          playedChampsDraft[i].includes(playedChampsGame[n]) ||
+          playedChampsDraft[i].includes("")
+        ) {
+          esito.accuratezza++;
+        }
+      }
+
+      if (esito.accuratezza > esito.maxAcc) {
+        esito.maxInd = i;
+        esito.maxAcc = esito.accuratezza;
+        esito.accuratezza = 0;
+      } else {
+        esito.accuratezza = 0;
+      }
+    }
+
+    if (esito.maxAcc < 8) {
+      console.log("nessuna draft corrisponde");
+    } else {
+      console.log(playedChampsDraft[esito.maxInd]);
+      console.log(playedChampsDraftRoom[esito.maxInd]);
+      setDraftRoom(playedChampsDraftRoom[esito.maxInd]);
+      extractDraft(playedChampsDraftRoom[esito.maxInd]);
+    }
+  };
 
   function millisToMinutesAndSeconds(millis: number) {
     var minutes = Math.floor(millis / 60000);
@@ -68,11 +118,49 @@ export default function FileReaderPage({
 
   const extractIdUser = (username: any) => {
     const user = users.find((element: any) => element.username === username);
-
     if (user) {
       return user.id;
     }
     return 31;
+  };
+
+  const extractDraft = (draftRoom: any) => {
+    const draft = drafts.find((element: any) => element.keyRoom === draftRoom);
+    if (draft) {
+      setSelectedChampions({
+        blue: {
+          1: draft.ban_blue[0],
+          2: draft.ban_blue[1],
+          3: draft.ban_blue[2],
+          4: draft.ban_blue[3],
+          5: draft.ban_blue[4],
+        },
+        red: {
+          1: draft.ban_red[0],
+          2: draft.ban_red[1],
+          3: draft.ban_red[2],
+          4: draft.ban_red[3],
+          5: draft.ban_red[4],
+        },
+      });
+    } else {
+      setSelectedChampions({
+        blue: {
+          1: "",
+          2: "",
+          3: "",
+          4: "",
+          5: "",
+        },
+        red: {
+          1: "",
+          2: "",
+          3: "",
+          4: "",
+          5: "",
+        },
+      });
+    }
   };
 
   const extractRole = (role: string) => {
@@ -95,7 +183,7 @@ export default function FileReaderPage({
     }
   };
 
-  const getInfoGame = async (
+  const setInfoGame = async (
     fileName: any,
     fileContent: any,
     matchName: string,
@@ -182,7 +270,7 @@ export default function FileReaderPage({
   const { getRootProps, getInputProps } = useDropzone({ onDrop });
 
   const insertData = () => {
-    getInfoGame(fileName, fileContent, matchName, MVP);
+    setInfoGame(fileName, fileContent, matchName, MVP);
   };
 
   return (
@@ -227,6 +315,23 @@ export default function FileReaderPage({
           </select>
         </div>
       </div>
+      <div className="flex justify-center items-center">
+        <label className="text-[2rem] font-bold text-black">Ban: </label>
+        <select
+          className="mt-2 mx-2"
+          required
+          onChange={(e) => {
+            extractDraft(e.target.value), setDraftRoom(e.target.value);
+          }}
+        >
+          <option value="">Select draft</option>
+          {drafts.map((draft: any) => (
+            <option value={draft.keyRoom} key={draft.keyRoom}>
+              {draft.keyRoom}
+            </option>
+          ))}
+        </select>
+      </div>
       <div className="m-4 flex justify-center items-center flex-col">
         <div {...getRootProps()} style={dropzoneStyles}>
           <input {...getInputProps()} />
@@ -254,6 +359,15 @@ export default function FileReaderPage({
             : update === "error"
             ? "qualcosa è andato storto"
             : "Inserisci partita"}
+        </button>
+
+        <button
+          className={
+            "border-4 font-bold border-black rounded-md p-4 my-5 hover:cursor-pointer bg-green-100 font-body hover:shadow-inner shadow-lg "
+          }
+          onClick={findBans}
+        >
+          cerca i ban
         </button>
       </div>
       <div className="flex justify-between flex-wrap">

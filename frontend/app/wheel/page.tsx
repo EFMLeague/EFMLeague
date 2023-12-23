@@ -24,7 +24,6 @@ export default async function WheelPage() {
         Wheel of Fortune
       </p>
       <FormWheel data={users} />
-      {/* <MatchHistory /> */}
     </div>
   );
 }

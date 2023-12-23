@@ -1,8 +1,9 @@
-const API = "https://euw1.api.riotgames.com/lol/summoner/v4/summoners/by-name/";
+const API =
+  "https://europe.api.riotgames.com/riot/account/v1/accounts/by-puuid/";
 
-export const getUserByName = async (name: string) => {
+export const getAccountByPuuid = async (puuid: string) => {
   try {
-    const response = await fetch(API + name, {
+    const response = await fetch(API + puuid, {
       headers: {
         "X-Riot-Token": process.env.RIOT_TOKEN as string,
         Accept: "application/json", // Specificare il tipo di risposta accettato

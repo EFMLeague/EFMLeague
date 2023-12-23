@@ -1,14 +1,21 @@
 const express = require("express");
 const http = require("http");
 const { Server } = require("socket.io");
+const { createClient } = require("@supabase/supabase-js");
+require("dotenv").config();
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+);
 
 const app = express();
 const server = http.createServer(app);
 // Il codice del tuo server Socket.IO
 const io = new Server(server, {
   cors: {
-    origin: "https://www.efmleague.com",
-    // origin: "http://localhost:3000",
+    // origin: "https://www.efmleague.com",
+    origin: "http://localhost:3000",
     methods: ["GET", "POST"],
   },
 });
@@ -40,7 +47,7 @@ app.use(express.static("public"));
 app.get("/ping", (req, res) => res.status(200).json({ message: "pong" }));
 io.on("connection", (socket) => {
   console.log(`User connected: ${socket.id}`);
-  socket.on("create_room", (data) => {
+  socket.on("create_room", async (data) => {
     console.log("creazione room richiesta");
     const newRooms = {
       roomNumber: generateRandomLink(),
@@ -199,20 +206,48 @@ function handlePhaseChange(room) {
 
 async function handleDraftPhases(room) {
   while (room.draftInfo.phase < 20) {
-    console.log("fase " + room.draftInfo.phase);
     startTimer(room);
-
     await waitForPhaseChangeOrTimeout(room);
-
     room.draftInfo.phase++;
     resetDraftInfoForNextPhase(room);
-
     io.to(room.roomNumber).emit("message_received", room);
   }
   if (room.draftInfo.phase === 20) {
     clearInterval(roomTimers[room.roomNumber]);
     console.log("draft finita");
     console.log(room.draftInfo);
+    const res = await supabase.from("Draft").insert({
+      keyRoom: room.roomNumber,
+      ban_red: [
+        room.draftInfo.draftStats.banRed[0],
+        room.draftInfo.draftStats.banRed[1],
+        room.draftInfo.draftStats.banRed[2],
+        room.draftInfo.draftStats.banRed[3],
+        room.draftInfo.draftStats.banRed[4],
+      ],
+      ban_blue: [
+        room.draftInfo.draftStats.banBlue[0],
+        room.draftInfo.draftStats.banBlue[1],
+        room.draftInfo.draftStats.banBlue[2],
+        room.draftInfo.draftStats.banBlue[3],
+        room.draftInfo.draftStats.banBlue[4],
+      ],
+      pick_red: [
+        room.draftInfo.draftStats.redPick[0],
+        room.draftInfo.draftStats.redPick[1],
+        room.draftInfo.draftStats.redPick[2],
+        room.draftInfo.draftStats.redPick[3],
+        room.draftInfo.draftStats.redPick[4],
+      ],
+      pick_blue: [
+        room.draftInfo.draftStats.bluePick[0],
+        room.draftInfo.draftStats.bluePick[1],
+        room.draftInfo.draftStats.bluePick[2],
+        room.draftInfo.draftStats.bluePick[3],
+        room.draftInfo.draftStats.bluePick[4],
+      ],
+    });
+    console.log(res);
   }
 }
 function startTimer(room) {

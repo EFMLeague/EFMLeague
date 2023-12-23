@@ -1,5 +1,4 @@
 import React from "react";
-
 import "../../globals.css";
 
 export default function BanImage({
@@ -10,12 +9,12 @@ export default function BanImage({
   return (
     <div
       className={
-        "h-[90px] w-[90px] mx-4 shadow-inner overflow-hidden banImg border-black border-4 " +
-        (champ.id === undefined
-          ? "banImgEmpty"
+        "relative h-[90px] w-[90px] mx-4 shadow-inner overflow-hidden banImg border-black border-2 " +
+        (champ.id === undefined && champ?.active
+          ? "banImgEmpty border-yellow-800"
           : champ?.active
-          ? "border-r-4 border-yellow-800 h-[70%] transition-all duration-300 "
-          : "banImg")
+          ? "border-yellow-800 h-[70%] transition-all duration-300 "
+          : "banImgEmpty")
       }
       style={{
         backgroundImage:
@@ -28,6 +27,10 @@ export default function BanImage({
               `000.jpg")`,
       }}
       id={champ.id === undefined ? "-1" : champ.id.toString()}
-    ></div>
+    >
+      {champ.id !== undefined && (
+        <div className="absolute inset-0 bg-gray-900 opacity-10"></div>
+      )}
+    </div>
   );
 }
