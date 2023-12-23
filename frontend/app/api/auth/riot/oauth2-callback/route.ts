@@ -5,7 +5,7 @@ export async function GET(req: NextRequest) {
   const accessCode = req.nextUrl.searchParams.get("code") as string;
 
   const appCallbackUrl =
-    "https://www.efmleague.com/api/auth/riot/oauth2-callback";
+    "https://www.efmleague.com/login/outcome";
   const tokenUrl = "https://auth.riotgames.com/token";
   try {
     const formData = new URLSearchParams();
