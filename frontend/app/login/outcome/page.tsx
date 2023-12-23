@@ -1,32 +1,41 @@
 "use client";
-import axios from "axios";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 
 export default function Outcome() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const accessCode = searchParams.get("code");
+  const url = "https://www.efmleague.com/api/auth/riot/oauth2-callback";
 
-  if (!accessCode) router.push("/login");
+  const searchParams = useSearchParams();
+  const code = searchParams.get("code");
+  const iss = searchParams.get("iss");
+  const session_state = searchParams.get("session_state");
 
   const getToken = async () => {
     try {
-      const api = "https://www.efmleague.com/api/auth/riot/oauth2-callback";
-      const tokens = await axios.get(api, {
-        params: {
-          code: accessCode as string,
-        },
-      });
-
-      console.log(tokens.data);
-      return tokens.data;
+      const res = await fetch(
+        url +
+          "?" +
+          new URLSearchParams({
+            code: code as string,
+            iss: iss as string,
+            session_state: session_state as string,
+          })
+      );
+      console.log(await res.json());
     } catch (error) {
       console.log(error);
-
-      return { error };
     }
   };
-  getToken();
 
-  return <div></div>;
+  useEffect(() => {
+    getToken();
+  },[]);
+
+  return (
+    <div className="text-white text-2xl mt-8">
+      {code}
+      {iss}
+      {session_state}
+    </div>
+  );
 }
