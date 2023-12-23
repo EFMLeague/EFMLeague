@@ -17,10 +17,9 @@ export default function Outcome() {
           code: accessCode,
         },
       });
-      if (tokens.data) {
-        console.log(tokens.data);
-        return tokens.data;
-      } else throw new Error("Errore nella richiesta");
+
+      console.log(tokens.data);
+      return tokens.data;
     } catch (error) {
       console.log(error);
 
