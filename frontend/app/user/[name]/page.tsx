@@ -90,13 +90,13 @@ export default async function Page({
     .eq("idutente", users[0].id)
     .order("partitegiocate", { ascending: false });
   const status = () => {
-    if (users[0].rank === 0) {
+    if (users[0].role === 0) {
       return "Padre fondatore";
     }
-    if (users[0].rank === 1) {
+    if (users[0].role === 1) {
       return "Esperto partecipante";
     }
-    if (users[0].rank === 2) {
+    if (users[0].role === 2) {
       return "Nuova recluta";
     }
   };

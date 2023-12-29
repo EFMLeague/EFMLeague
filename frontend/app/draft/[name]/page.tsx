@@ -247,6 +247,9 @@ export default function page() {
         if (side === "blue") return <p>waiting</p>;
         if (side === "red") return <p>pick</p>;
       }
+      if ([20].includes(messageReceived.phase)) {
+        return <p>Draft finita</p>;
+      }
     }
   };
   const inviaChamp = () => {
@@ -255,6 +258,7 @@ export default function page() {
     setMessageReceived(updatedMessageReceived);
     socket.emit("send_pick", updatedMessageReceived);
   };
+
   const checkPhaseImage = () => {
     if ([0, 2, 4, 6, 9, 10, 13, 15, 17, 18].includes(messageReceived.phase)) {
       if (side === "blue") {
@@ -269,6 +273,7 @@ export default function page() {
       } else return false;
     }
   };
+
   const checkChampionPicked = (championName: string) => {
     return (
       messageReceived.draftStats.banBlue.includes(championName as string) ||
@@ -277,19 +282,34 @@ export default function page() {
       messageReceived.draftStats.redPick.includes(championName as string)
     );
   };
+
   const imagePick = (champ: string, order: number) => {
     if (order === messageReceived.phase) {
       if (checkPhaseImage() === true) {
-        return { id: extractID(singleChampion), active: true };
+        const champ = singleChampion;
+        return {
+          id: extractID(singleChampion),
+          active: true,
+          champName: champ,
+        };
       }
       if (checkPhaseImage() === false) {
-        return { id: extractID(messageReceived.message), active: true };
+        const champ = messageReceived.message;
+        return {
+          id: extractID(messageReceived.message),
+          active: true,
+          champName: champ,
+        };
       }
     }
     if (champ != undefined && order < messageReceived.phase) {
-      return { id: extractID(champ), active: false };
+      return {
+        id: extractID(champ),
+        active: false,
+        champName: champ,
+      };
     }
-    return { id: undefined, active: false };
+    return { id: undefined, active: false, champName: "" };
   };
 
   const handleSelectedRole = (role: React.SetStateAction<string>) => {
@@ -297,8 +317,20 @@ export default function page() {
     else setSelectedRole(role);
   };
   return (
-    <div className=" h-screen overflow-hidden flex-wrap bg-blue-gray-800 ">
-      <div className="flex w-full h-4/5 bg-lime-700">
+    <div className="h-screen min-h-screen w-full absolute top-0 overflow-hidden flex-wrap bg-blue-gray-900">
+      <div className="my-4 w-full flex justify-between pt-14">
+        <div className="basis-1/3 bg-blue-900">
+          <p className="text-[2rem] px-2 font-bold text-white">
+            {messageReceived.draftNames.teamBlue}
+          </p>
+        </div>
+        <div className="basis-1/3 bg-red-900">
+          <p className="text-[2rem] text-end px-2 font-bold text-white">
+            {messageReceived.draftNames.teamRed}
+          </p>
+        </div>
+      </div>
+      <div className="flex w-full h-[75%] ">
         <div className="basis-1/5 h-full flex shrink flex-col">
           <PickImage
             champ={imagePick(messageReceived.draftStats.bluePick[0], 6)}
@@ -317,7 +349,7 @@ export default function page() {
           ></PickImage>
         </div>
         <div className="basis-3/5 ">
-          <div className="flex justify-between items-center">
+          <div className="flex justify-between items-center relative px-4">
             <div className="flex">
               <Image
                 src={"/img/roles/top.png"}
@@ -326,7 +358,9 @@ export default function page() {
                 height={100}
                 className={
                   "h-[48px] w-[48px] hover:cursor-pointer m-2 hover:brightness-100 " +
-                  (selectedRole === "top" ? "brightness-100" : "brightness-50")
+                  (selectedRole === "top"
+                    ? "brightness-100"
+                    : "brightness-[70%]")
                 }
                 onClick={() => handleSelectedRole("top")}
               ></Image>
@@ -337,7 +371,9 @@ export default function page() {
                 height={100}
                 className={
                   "h-[48px] w-[48px] hover:cursor-pointer m-2 hover:brightness-100 " +
-                  (selectedRole === "jng" ? "brightness-100" : "brightness-50")
+                  (selectedRole === "jng"
+                    ? "brightness-100"
+                    : "brightness-[70%]")
                 }
                 onClick={() => handleSelectedRole("jng")}
               ></Image>
@@ -348,7 +384,9 @@ export default function page() {
                 height={100}
                 className={
                   "h-[48px] w-[48px] hover:cursor-pointer m-2 hover:brightness-100 " +
-                  (selectedRole === "mid" ? "brightness-100" : "brightness-50")
+                  (selectedRole === "mid"
+                    ? "brightness-100"
+                    : "brightness-[70%]")
                 }
                 onClick={() => handleSelectedRole("mid")}
               ></Image>
@@ -359,7 +397,9 @@ export default function page() {
                 height={100}
                 className={
                   "h-[48px] w-[48px] hover:cursor-pointer m-2 hover:brightness-100 " +
-                  (selectedRole === "adc" ? "brightness-100" : "brightness-50")
+                  (selectedRole === "adc"
+                    ? "brightness-100"
+                    : "brightness-[70%]")
                 }
                 onClick={() => handleSelectedRole("adc")}
               ></Image>
@@ -370,28 +410,32 @@ export default function page() {
                 height={100}
                 className={
                   "h-[48px] w-[48px] hover:cursor-pointer m-2 hover:brightness-100 " +
-                  (selectedRole === "sup" ? "brightness-100" : "brightness-50")
+                  (selectedRole === "sup"
+                    ? "brightness-100"
+                    : "brightness-[70%]")
                 }
                 onClick={() => handleSelectedRole("sup")}
               ></Image>
             </div>
-            <p>
-              {" "}
-              TIMER:{" "}
-              {Number(messageReceived.draftTurn.timer) > 0
-                ? messageReceived.draftTurn.timer
-                : "0"}
+            <p className="text-white absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+              <span className="text-[4rem] font-bold">
+                {Number(messageReceived.draftTurn.timer) > 0
+                  ? messageReceived.draftTurn.timer
+                  : "0"}
+              </span>
             </p>
-            <input
-              type="text"
-              placeholder="Filtra per nome"
-              value={filter}
-              onChange={(e) => setFilter(e.target.value)}
-              className="h-9 border border-black"
-            />
+            <div>
+              <input
+                type="text"
+                placeholder="Filtra per nome"
+                value={filter}
+                onChange={(e) => setFilter(e.target.value)}
+                className="h-9 border border-black"
+              />
+            </div>
           </div>
-          <div className="w-full h-[70%]  overflow-y-auto">
-            <div className="flex flex-wrap justify-center py-2 min-w-[200px]">
+          <div className="w-full h-[70%]  overflow-y-auto border-b-4 border-black">
+            <div className="flex flex-wrap justify-center py-2 min-w-[200px] ">
               {championsFiltered.map((champion: any) => (
                 <Image
                   src={`https://ddragon.leagueoflegends.com/cdn/${version}/img/champion/${champion.alias}.png`}
@@ -418,7 +462,7 @@ export default function page() {
             </div>
           </div>
         </div>
-        <div className="basis-1/5 flex shrink flex-col">
+        <div className="basis-1/5 flex shrink flex-col items-end">
           <PickImage
             champ={imagePick(messageReceived.draftStats.redPick[0], 7)}
           ></PickImage>
@@ -436,7 +480,7 @@ export default function page() {
           ></PickImage>
         </div>
       </div>
-      <div className="flex justify-between items-start h-1/5 ">
+      <div className="flex justify-between items-center">
         <div className="flex h-full">
           <BanImage
             champ={imagePick(messageReceived.draftStats.banBlue[0], 0)}
@@ -454,7 +498,7 @@ export default function page() {
             champ={imagePick(messageReceived.draftStats.banBlue[4], 15)}
           ></BanImage>
         </div>
-        <div className=" h-full flex justify-center items-center">
+        <div className=" h-full flex justify-center items-center ">
           <button
             className="p-4 bg-orange-800 w-40 hover:cursor-pointer"
             onClick={() => {
@@ -473,7 +517,7 @@ export default function page() {
             {checkSideButton()}
           </button>
         </div>
-        <div className="flex h-full justify-center items-start">
+        <div className="flex h-full justify-center items-start ">
           <BanImage
             champ={imagePick(messageReceived.draftStats.banRed[4], 14)}
           ></BanImage>

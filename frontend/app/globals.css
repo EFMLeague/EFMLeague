@@ -75,6 +75,8 @@
 .pickImgEmpty {
   background-size: 100%;
   background-position: 50% center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 .banImg {
   background-size: 360%;
@@ -85,5 +87,6 @@
 .banImgEmpty {
   background-size: 50%;
   background-size: cover;
+  background-repeat: no-repeat;
   filter: grayscale(0) !important;
 }

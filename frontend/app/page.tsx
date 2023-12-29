@@ -1,8 +1,5 @@
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
-import Navbar from "./components/navbar/navbar";
-import { cookies } from "next/headers";
 import Image from "next/image";
-export default async function Home() {
+export default function Home() {
   return (
     <div className="">
       <div className="h-screen p-2">

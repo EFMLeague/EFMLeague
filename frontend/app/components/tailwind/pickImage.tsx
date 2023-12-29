@@ -5,17 +5,29 @@ import "../../globals.css";
 export default function PickImage({
   champ,
 }: {
-  champ: { id: number | undefined; active: boolean };
+  champ: {
+    id: number | undefined;
+    active: boolean;
+    champName: string;
+  };
 }) {
   return (
-    <div
+    <a
+      href={
+        "https://u.gg/lol/champions/" +
+        champ.champName.toLowerCase() +
+        "/counter"
+      }
+      target="_blank"
       className={
-        "h-[20%] w-[320px] border-black m-2 shadow-xl overflow-hidden  " +
-        (champ.id === undefined
-          ? " pickImgEmpty "
-          : champ?.active
+        "h-[20%] w-[320px] border-black m-1 overflow-hidden relative border-2 shadow-xl hover:cursor-pointer " +
+        (champ.id === undefined && champ?.active
+          ? " pickImgEmpty h-[70%] transition-all duration-300"
+          : champ?.active && champ.id
           ? "h-[70%] transition-all duration-300 pickImg"
-          : " pickImg ")
+          : champ.id
+          ? " pickImg "
+          : "pickImgEmpty")
       }
       style={{
         backgroundImage:
@@ -27,6 +39,10 @@ export default function PickImage({
               champ.id +
               `000.jpg")`,
       }}
-    ></div>
+    >
+      <p className="absolute right-2 bottom-0 text-gray-200">
+        {champ.champName}
+      </p>
+    </a>
   );
 }

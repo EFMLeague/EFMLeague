@@ -104,7 +104,12 @@ export default function Navbar() {
             </li>
             <li className="underline-link">
               <Link href="/addMatch" onClick={() => handleOpen()}>
-                ADMIN
+                ADDMATCH
+              </Link>
+            </li>
+            <li className="underline-link">
+              <Link href="/api/auth/signin" onClick={() => handleOpen()}>
+                LOGIN
               </Link>
             </li>
             <li>
