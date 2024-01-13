@@ -3,7 +3,7 @@ import React from "react";
 export default function Login() {
   const authorizeUrl = "https://auth.riotgames.com/authorize";
   const appCallbackUrl =
-    "https://www.efmleague.com/login/outcome";
+    "http://local.example.com/login/outcome";
   const clientID = "ad73d3e5-099f-4681-adb7-5036f0a6821d";
 
   const link =
