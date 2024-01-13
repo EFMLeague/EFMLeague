@@ -9,7 +9,7 @@ export async function GET(req: NextRequest) {
 
   const accessCode = req.nextUrl.searchParams.get("code") as string;
 
-  const appCallbackUrl = "http://local.example.com/login/outcome";
+  const appCallbackUrl = process.env.NEXT_PUBLIC_RIOT_CALLBACK_URL as string;
   const tokenUrl = "https://auth.riotgames.com/token";
   const formData = new URLSearchParams();
   formData.append("grant_type", "authorization_code");

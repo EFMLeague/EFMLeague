@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 
 export default function Outcome() {
   const [outcome, setOutcome] = useState(0);
-  const url = "http://local.example.com/api/auth/riot/oauth2-callback";
+  const url = process.env.NEXT_PUBLIC_RIOT_OAUTH2_CALLBACK;
 
   const searchParams = useSearchParams();
   const code = searchParams.get("code");

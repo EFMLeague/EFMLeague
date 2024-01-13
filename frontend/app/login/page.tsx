@@ -2,8 +2,7 @@ import React from "react";
 
 export default function Login() {
   const authorizeUrl = "https://auth.riotgames.com/authorize";
-  const appCallbackUrl =
-    "http://local.example.com/login/outcome";
+  const appCallbackUrl = process.env.NEXT_PUBLIC_RIOT_CALLBACK_URL as string;
   const clientID = "ad73d3e5-099f-4681-adb7-5036f0a6821d";
 
   const link =
