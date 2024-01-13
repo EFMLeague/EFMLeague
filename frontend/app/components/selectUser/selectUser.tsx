@@ -5,8 +5,10 @@ import Image from "next/image";
 export default function SelectUser({ users }: { users: any }) {
   const [filter, setFilter] = useState("");
   const usersFiltered = users.filter((user: any) =>
-    user.name.toLowerCase().includes(filter.toLowerCase())
+    user.dbName.toLowerCase().includes(filter.toLowerCase())
   );
+  console.log(users);
+
   return (
     <div>
       <p className="text-black bg-white p-1 m-2 font-bold text-5xl text-center">
@@ -25,12 +27,12 @@ export default function SelectUser({ users }: { users: any }) {
         {usersFiltered?.map((user: any, index: any) => (
           <a
             className="col-span-4 m-2 md:col-span-1"
-            href={"./user/" + user.name}
+            href={"./user/" + user.dbName}
             key={user.id}
           >
             <div className="">
               <div className="text-3xl font-bold text-center text-white bg-black">
-                {user.name}
+                {user.dbName}
               </div>
               <div>
                 {user.video_source ? (

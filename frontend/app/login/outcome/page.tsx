@@ -1,9 +1,10 @@
 "use client";
 import { useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function Outcome() {
-  const url = "https://www.efmleague.com/api/auth/riot/oauth2-callback";
+  const [outcome, setOutcome] = useState(0);
+  const url = process.env.NEXT_PUBLIC_RIOT_OAUTH2_CALLBACK;
 
   const searchParams = useSearchParams();
   const code = searchParams.get("code");
@@ -21,6 +22,7 @@ export default function Outcome() {
             session_state: session_state as string,
           })
       );
+      setOutcome(res.status);
       console.log(await res.json());
     } catch (error) {
       console.log(error);
@@ -29,13 +31,20 @@ export default function Outcome() {
 
   useEffect(() => {
     getToken();
-  },[]);
+  }, []);
 
-  return (
-    <div className="text-white text-2xl mt-8">
-      {code}
-      {iss}
-      {session_state}
-    </div>
-  );
+  if (outcome === 0)
+    return (
+      <div className="text-white text-2xl mt-8">
+        {code}
+        {iss}
+        {session_state}
+      </div>
+    );
+
+  if (outcome === 200)
+    return <div className="text-white text-2xl mt-8">Logged</div>;
+  if (outcome === 201)
+    return <div className="text-white text-2xl mt-8">Registered</div>;
+  return <div>Error</div>;
 }
