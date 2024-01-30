@@ -41,9 +41,11 @@ export async function GET(req: NextRequest) {
       .select()
       .eq("puuid", me.puuid);
 
-    if (users && users.length > 0)
+    if (users && users.length > 0) {
       // Esiste utente nel database
+      cookies().set("TOKENRIOT", tokens.access_token);
       return NextResponse.json({ token: tokens, me }, { status: 200 });
+    }
     // Non esiste utente nel database
     // Creazione
     else {
@@ -58,9 +60,9 @@ export async function GET(req: NextRequest) {
           username: me.gameName,
         })
         .select();
+
       return NextResponse.json({ token: tokens, me }, { status: 201 });
     }
-
   } catch (error) {
     return NextResponse.json({ error }, { status: 500 });
   }

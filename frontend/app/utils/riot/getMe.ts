@@ -7,6 +7,5 @@ export const getMe = async (token: string) => {
       Authorization: "Bearer " + token,
     },
   });
-
-  return await res.json()
+  return res.json();
 };

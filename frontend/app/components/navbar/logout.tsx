@@ -1,31 +1,59 @@
 "use client";
-import { Session } from "next-auth";
-import { getSession, signOut } from "next-auth/react";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 export default function Logout() {
-  const [session, setSession] = useState<Session | null>();
+  const [loading, setLoading] = useState(false);
+  const [session, setSession] = useState<any>({ undefined });
+
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch(
+        "http://local.example.com/api/auth/riot/getSession"
+      );
+      // Gestisci i dati res come necessario
+      const me = await res.json();
+      setSession(me.me);
+    } catch (error) {
+      setSession(undefined);
+      console.error("Errore durante il recupero dei dati:", error);
+    }
+    setLoading(false);
+  };
+
+  const deleteData = async () => {
+    try {
+      const res = await fetch("http://local.example.com/api/auth/riot/logOut");
+      if (res.status === 200) {
+        setSession(undefined);
+      }
+    } catch (error) {
+      console.error("Errore durante il recupero dei dati:", error);
+    }
+  };
+
   useEffect(() => {
-    (async function fetchSession() {
-      const session = await getSession();
-      setSession(session);
-    })();
+    fetchData();
   }, []);
 
-  if (session)
+  if (session === undefined) {
+    return <Link href="/login">LOGINz</Link>;
+  } else {
     return (
-      <div className="text-white text-sm text-center">
-        {session?.user ? (
-          <>
-            <p>Benvenuto {session.user.email?.split("@")[0]}</p>
-            <button onClick={() => signOut()}>Log out</button>
-          </>
+      <div className="text-white text-center">
+        {session.gameName != undefined && !loading ? (
+          <div onClick={deleteData}>LOGOUT</div>
         ) : (
-          <div className="flex">
-            <span className="mr-2">Verificando l&apos;accesso</span>
-          </div>
+          <button type="button" className="bg-indigo-500 ..." disabled>
+            <svg
+              className="animate-spin h-5 w-5 mr-3 ..."
+              viewBox="0 0 24 24"
+            ></svg>
+            Processing...
+          </button>
         )}
       </div>
     );
-  else return null;
+  }
 }
