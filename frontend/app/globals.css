@@ -90,3 +90,79 @@
   background-repeat: no-repeat;
   filter: grayscale(0) !important;
 }
+
+.backgroundTesto {
+  @apply w-full h-full;
+}
+.backgroundTesto p {
+  line-height: 55px;
+  letter-spacing: -2px;
+  text-shadow: 1px 1px 0 #000, -1px 1px 0 #000, -1px -1px 0 #000,
+    1px -1px 0 #000;
+  @apply text-[4rem] text-white;
+}
+
+.immagineBackground {
+  @apply absolute w-full h-full top-0 left-0 right-0 bottom-0;
+  background-image: url("https://placehold.co/1920x1080");
+  clip-path: polygon(63% 0, 100% 0, 100% 100%, 33% 100%);
+  z-index: 4;
+}
+
+.destra {
+  transform: translateX(-5%);
+  animation: slideinDestra infinite 100s linear;
+}
+
+.sinistra {
+  transform: translateX(-5%);
+  animation: slideinSinistra infinite 100s linear;
+}
+.TEXT-HERO-BLACK {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 6rem;
+  font-weight: bold;
+  text-shadow: 1px 1px 0 #000, -1px 1px 0 #000, -1px -1px 0 #000,
+    1px -1px 0 #000;
+  color: black; /* Colore fisso del testo */
+  z-index: 2;
+}
+.TEXT-HERO-WHITE {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 6rem;
+  font-weight: bold;
+
+  color: white; /* Colore fisso del testo */
+}
+
+@keyframes slideinDestra {
+  0% {
+    transform: translateX(-5%);
+  }
+
+  50% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-5%);
+  }
+}
+
+@keyframes slideinSinistra {
+  0% {
+    transform: translateX(-5%);
+  }
+
+  50% {
+    transform: translateX(-10%);
+  }
+  100% {
+    transform: translateX(-5%);
+  }
+}

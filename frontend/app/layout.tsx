@@ -52,8 +52,8 @@ export default function RootLayout({
             />
             <div className="overlay"></div>
           </div>
-          <Navbar />
         </div>
+        <Navbar />
 
         {children}
       </body>
