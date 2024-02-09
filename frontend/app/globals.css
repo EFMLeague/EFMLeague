@@ -107,6 +107,7 @@
   background-image: url("https://placehold.co/1920x1080");
   clip-path: polygon(63% 0, 100% 0, 100% 100%, 33% 100%);
   z-index: 4;
+  animation: slideTop-Bottom 300ms linear;
 }
 
 .destra {
@@ -130,6 +131,17 @@
   color: black; /* Colore fisso del testo */
   z-index: 2;
 }
+
+@keyframes slideTop-Bottom {
+  0% {
+    transform: translateX(100%);
+  }
+
+  100% {
+    transform: translateX(0%);
+  }
+}
+
 .TEXT-HERO-WHITE {
   position: absolute;
   top: 50%;
@@ -165,4 +177,14 @@
   100% {
     transform: translateX(-5%);
   }
+}
+
+.bordi-prova {
+  border-radius: 0% 19% 0% 21% / 0% 100% 0% 100%;
+}
+
+.prova-animazione {
+  position: absolute;
+  width: 100vw;
+  animation: provaAnimazione 2s linear;
 }
