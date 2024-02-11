@@ -7,7 +7,7 @@ export default function Team() {
     <div
       className={
         "bg-red-500 transition-all duration-500 overflow-hidden " +
-        (open ? " h-screen w-screen prova" : "h-32 w-full bordi-prova")
+        (open ? " h-screen w-screen absolute z-20 " : "h-32 w-96 bordi-prova")
       }
       onClick={() => {
         if (!open) setOpen(true);

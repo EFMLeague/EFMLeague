@@ -188,3 +188,55 @@
   width: 100vw;
   animation: provaAnimazione 2s linear;
 }
+
+.custom-animation-open {
+  animation: expand 0.5s ease forwards;
+}
+
+.custom-animation-close {
+  animation: contract 0.5s ease forwards;
+}
+
+@keyframes expand {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes contract {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(0);
+  }
+}
+
+.background-home {
+  background-image: url("../public/sfondo.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.background-community {
+  background-image: url("../public/img/sfondoyasuo.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.background-tournament {
+  background-image: url("../public/img/league.webp");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.background-lega {
+  background-image: url("../public/img/sfondo-trofeo.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}

@@ -43,7 +43,7 @@ export default function RootLayout({
     <html lang="en">
       <head></head>
       <body className={decaloType.className}>
-        <div className="pb-14">
+        <div className="">
           <div className="h-screen w-screen -z-10 fixed ">
             <img
               src="../img/banner.jpg"
@@ -53,7 +53,7 @@ export default function RootLayout({
             <div className="overlay"></div>
           </div>
         </div>
-        <Navbar />
+        {/* <Navbar /> */}
 
         {children}
       </body>

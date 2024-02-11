@@ -1,14 +1,13 @@
 "use client";
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 
 export default function Contatti() {
   const [open, setOpen] = useState(false);
-
   return (
     <div
       className={
-        "bg-green-500 transition-all duration-1000 overflow-hidden " +
-        (open ? " prova-animazione" : " h-32 w-full bordi-prova ")
+        "bg-green-500 transition-all duration-500 " +
+        (open ? " h-screen w-screen absolute z-20 " : "h-32 w-96 bordi-prova")
       }
       onClick={() => {
         if (!open) setOpen(true);
