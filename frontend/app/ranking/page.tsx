@@ -1,45 +1,23 @@
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import React from "react";
+import { RankingRow, computeRankings } from "./computeRankings";
+import { fetchAll } from "../utils/supabase/fetchAll";
 
 export default async function page() {
   const supabase = createServerComponentClient({ cookies });
-  const { data: users } = await supabase
-    .from("user_ordered_by_name")
-    .select()
-    .order("name", { ascending: true });
-  const { data: mostWinningPlayers } = await supabase
-    .from("most_winning_players")
-    .select();
-  const { data: mostLosingPlayers } = await supabase
-    .from("most_losing_players")
-    .select();
-  const { data: mostActivePlayer } = await supabase
-    .from("most_playing_players")
-    .select();
-  const { data: mostMvpPlayer } = await supabase
-    .from("classifica_mvp")
-    .select()
-    .neq("NomeUtente", "FORESTIERO");
 
-  const { data: mostWrPlayer } = await supabase
-    .from("win_rate_utenti")
-    .select()
-    .neq("NomeUtente", "FORESTIERO");
+  const [users, matches, plays] = await Promise.all([
+    fetchAll(supabase, "user", "id,name,warnings"),
+    fetchAll(supabase, "league_match", "id,date"),
+    fetchAll(
+      supabase,
+      "has_played_league_match",
+      "user_id,match_id,mvp,hasWon,score"
+    ),
+  ]);
 
-  const { data: warnings } = await supabase
-    .from("user_ordered_by_name")
-    .select()
-    .neq("name", "FORESTIERO")
-    .order("warnings", { ascending: false });
-
-  const { data: sola } = await supabase
-    .from("differenza_match_disputati_e_giocati")
-    .select();
-  const { data: mostPoints } = await supabase
-    .from("classifica_punteggi_giocatori")
-    .select();
-  const { data: match } = await supabase.from("Match").select();
+  const rankings = computeRankings(users, matches, plays);
 
   return (
     <div>
@@ -50,11 +28,11 @@ export default async function page() {
           </p>
           <div className="grid grid-cols-2 md:grid-cols-5 gap-y-10 py-10 text-3xl font-bold text-white">
             <div className="text-center mx-auto">
-              <p className="text-hero">{users?.length}</p>
+              <p className="text-hero">{rankings.subscribers}</p>
               <p className="text-base">Subscriber</p>
             </div>
             <div className="text-center mx-auto">
-              <p className="text-hero">{match?.length}</p>
+              <p className="text-hero">{rankings.gamesPlayed}</p>
               <p className="text-base">games played</p>
             </div>
             <div className="text-center mx-auto">
@@ -78,435 +56,148 @@ export default async function page() {
           <span className="text-blue-700">RANKINGS</span>
         </p>
         <div className="grid grid-cols-1 md:grid-cols-3 ">
-          <div className="bg-white grid grid-cols-6 text-black border-white-600 border-2 shadow-tableWhite rounded-md m-3">
-            <div className="col-span-6 border border-white-600 shadow-tableWhite">
-              <p className=" text-white-600 text-center font-bold uppercase text-[2rem]">
-                HIGHEST WIN RATE
-              </p>
-            </div>
-            {mostWrPlayer?.map((player, index) => (
-              <>
-                <div className="col-span-1 p-1 border-b border-r border-neutral-200">
-                  {index === 0 ? (
-                    <img
-                      src="../img/logo/medal_gold.png"
-                      className="h-8 mx-auto"
-                      alt=""
-                    />
-                  ) : (
-                    ""
-                  )}
-
-                  {index === 1 ? (
-                    <img
-                      src="../img/logo/medal_silver.png"
-                      className=" h-8 mx-auto"
-                      alt=""
-                    />
-                  ) : (
-                    ""
-                  )}
-                  {index === 2 ? (
-                    <img
-                      src="../img/logo/medal_bronze.png"
-                      className=" h-8 mx-auto"
-                      alt=""
-                    />
-                  ) : (
-                    ""
-                  )}
-                  {index > 2 ? index + 1 : ""}
-                </div>
-                <div className="col-span-4 p-1 border-b border-neutral-200 hover:bg-neutral-100">
-                  <a className="p-2" href={"./user/" + player.NomeUtente}>
-                    {player.NomeUtente}
-                  </a>
-                </div>
-                <div
-                  className={
-                    "col-span-1 p-1 font-bold border-b border-neutral-200 " +
-                    (player.WinRate >= 50
-                      ? "bg-green-200 overflow-hidden rounded-r-sm"
-                      : "bg-red-200 rounded-r-sm")
-                  }
-                >
-                  {parseFloat(player.WinRate).toFixed(2)}
-                </div>
-              </>
-            ))}
-          </div>
-          <div className="bg-white grid grid-cols-6 text-black border-green-600 border-2 shadow-tableGreen rounded-md  m-3">
-            <div className="col-span-6 border border-green-600 shadow-tableGreen">
-              <p className=" text-green-600 text-center font-bold uppercase text-[2rem]">
-                Most winning player
-              </p>
-            </div>
-
-            {mostWinningPlayers?.map((player, index) => (
-              <>
-                <div className="col-span-1 p-1 border-b border-r border-neutral-200">
-                  {index === 0 ? (
-                    <img
-                      src="../img/logo/medal_gold.png"
-                      className="h-8 mx-auto"
-                      alt=""
-                    />
-                  ) : (
-                    ""
-                  )}
-
-                  {index === 1 ? (
-                    <img
-                      src="../img/logo/medal_silver.png"
-                      className=" h-8 mx-auto"
-                      alt=""
-                    />
-                  ) : (
-                    ""
-                  )}
-                  {index === 2 ? (
-                    <img
-                      src="../img/logo/medal_bronze.png"
-                      className=" h-8 mx-auto"
-                      alt=""
-                    />
-                  ) : (
-                    ""
-                  )}
-                  {index > 2 ? index + 1 : ""}
-                </div>
-                <div className="col-span-4 p-1 border-b border-neutral-200 hover:bg-neutral-100">
-                  <a className="p-2" href={"./user/" + player.name}>
-                    {player.name}
-                  </a>
-                </div>
-                <div className="col-span-1 p-1 font-bold border-b border-neutral-200">
-                  {player.win}
-                </div>
-              </>
-            ))}
-          </div>
-
-          <div className="bg-white grid grid-cols-6 text-black border-black border-2 shadow-tableBlack rounded-md m-3">
-            <div className="col-span-6 border border-black shadow-tableBlack">
-              <p className=" text-black-600 text-center font-bold uppercase text-[2rem]">
-                TOP POINTS FARMER
-              </p>
-            </div>
-            {mostPoints?.map((player, index) => (
-              <>
-                <div className="col-span-1 p-1 border-b border-r border-neutral-200">
-                  {index === 0 ? (
-                    <img
-                      src="../img/logo/medal_gold.png"
-                      className="h-8 mx-auto"
-                      alt=""
-                    />
-                  ) : (
-                    ""
-                  )}
-
-                  {index === 1 ? (
-                    <img
-                      src="../img/logo/medal_silver.png"
-                      className=" h-8 mx-auto"
-                      alt=""
-                    />
-                  ) : (
-                    ""
-                  )}
-                  {index === 2 ? (
-                    <img
-                      src="../img/logo/medal_bronze.png"
-                      className=" h-8 mx-auto"
-                      alt=""
-                    />
-                  ) : (
-                    ""
-                  )}
-                  {index > 2 ? index + 1 : ""}
-                </div>
-                <div className="col-span-4 p-1 border-b border-neutral-200 hover:bg-neutral-100">
-                  <a className="p-2" href={"./user/" + player.NomeUtente}>
-                    {player.NomeUtente}
-                  </a>
-                </div>
-                <div className="col-span-1 p-1 font-bold border-b border-neutral-200 ">
-                  {player.Punteggio}
-                </div>
-              </>
-            ))}
-          </div>
-          <div className="bg-white grid grid-cols-6 text-black border-red-600 border-2 shadow-tableRed rounded-md  m-3">
-            <div className="col-span-6 border border-red-600 shadow-tableRed">
-              <p className=" text-red-600 text-center font-bold uppercase text-[2rem]">
-                Most losing player
-              </p>
-            </div>
-            {mostLosingPlayers?.map((player, index) => (
-              <>
-                <div className="col-span-1 p-1 border-b border-r border-neutral-200 ">
-                  {index === 0 ? (
-                    <img
-                      src="../img/logo/medal_gold.png"
-                      className="h-8 mx-auto"
-                      alt=""
-                    />
-                  ) : (
-                    ""
-                  )}
-
-                  {index === 1 ? (
-                    <img
-                      src="../img/logo/medal_silver.png"
-                      className=" h-8 mx-auto"
-                      alt=""
-                    />
-                  ) : (
-                    ""
-                  )}
-                  {index === 2 ? (
-                    <img
-                      src="../img/logo/medal_bronze.png"
-                      className=" h-8 mx-auto"
-                      alt=""
-                    />
-                  ) : (
-                    ""
-                  )}
-                  {index > 2 ? index + 1 : ""}
-                </div>
-                <div className="col-span-4 p-1 border-b border-neutral-200 hover:bg-neutral-100">
-                  <a className="p-2" href={"./user/" + player.name}>
-                    {player.name}
-                  </a>
-                </div>
-                <div className="col-span-1 p-1 font-bold border-b border-neutral-200">
-                  {player.lose}
-                </div>
-              </>
-            ))}
-          </div>
-          <div className="bg-white grid grid-cols-6 text-black border-blue-600 border-2 shadow-tableBlue rounded-md m-3">
-            <div className="col-span-6 border border-blue-600 shadow-tableBlue">
-              <p className=" text-blue-600 text-center font-bold uppercase text-[2rem]">
-                Most active player
-              </p>
-            </div>
-            {mostActivePlayer?.map((player, index) => (
-              <>
-                <div className="col-span-1 p-1 border-b border-r border-neutral-200">
-                  {index === 0 ? (
-                    <img
-                      src="../img/logo/medal_gold.png"
-                      className="h-8 mx-auto"
-                      alt=""
-                    />
-                  ) : (
-                    ""
-                  )}
-
-                  {index === 1 ? (
-                    <img
-                      src="../img/logo/medal_silver.png"
-                      className=" h-8 mx-auto"
-                      alt=""
-                    />
-                  ) : (
-                    ""
-                  )}
-                  {index === 2 ? (
-                    <img
-                      src="../img/logo/medal_bronze.png"
-                      className=" h-8 mx-auto"
-                      alt=""
-                    />
-                  ) : (
-                    ""
-                  )}
-                  {index > 2 ? index + 1 : ""}
-                </div>
-                <div className="col-span-4 p-1 border-b border-neutral-200 hover:bg-neutral-100">
-                  <a className="p-2" href={"./user/" + player.name}>
-                    {player.name}
-                  </a>
-                </div>
-                <div className="col-span-1 p-1 font-bold border-b border-neutral-200">
-                  {player.played}
-                </div>
-              </>
-            ))}
-          </div>
-
-          <div className="bg-white grid grid-cols-6 text-black border-purple-600 border-2 shadow-tablePurple rounded-md m-3">
-            <div className="col-span-6 border border-purple-600 shadow-tablePurple">
-              <p className=" text-purple-600 text-center font-bold uppercase text-[2rem]">
-                TROFEO PEPE
-              </p>
-            </div>
-            {warnings?.map((player, index) => (
-              <>
-                <div className="col-span-1 p-1 border-b border-r border-neutral-200">
-                  {index === 0 ? (
-                    <img
-                      src="../img/logo/medal_gold.png"
-                      className="h-8 mx-auto"
-                      alt=""
-                    />
-                  ) : (
-                    ""
-                  )}
-
-                  {index === 1 ? (
-                    <img
-                      src="../img/logo/medal_silver.png"
-                      className=" h-8 mx-auto"
-                      alt=""
-                    />
-                  ) : (
-                    ""
-                  )}
-                  {index === 2 ? (
-                    <img
-                      src="../img/logo/medal_bronze.png"
-                      className=" h-8 mx-auto"
-                      alt=""
-                    />
-                  ) : (
-                    ""
-                  )}
-                  {index > 2 ? index + 1 : ""}
-                </div>
-                <div className="col-span-4 p-1 border-b border-neutral-200 hover:bg-neutral-100">
-                  <a className="p-2" href={"./user/" + player.NomeUtente}>
-                    {player.name}
-                  </a>
-                </div>
-                <div className="col-span-1 p-1 font-bold border-b border-neutral-200 ">
-                  {player.warnings}
-                </div>
-              </>
-            ))}
-          </div>
-          <div className="bg-white grid grid-cols-6 text-black border-orange-600 border-2 shadow-tableOrange rounded-md m-3">
-            <div className="col-span-6 border border-orange-600 shadow-tableOrange">
-              <p className=" text-orange-600 text-center font-bold uppercase text-[2rem]">
-                KING OF SOLA
-              </p>
-            </div>
-            {sola?.map((player, index) => (
-              <>
-                <div className="col-span-1 p-1 border-b border-r border-neutral-200">
-                  {index === 0 ? (
-                    <img
-                      src="../img/logo/medal_gold.png"
-                      className="h-8 mx-auto"
-                      alt=""
-                    />
-                  ) : (
-                    ""
-                  )}
-
-                  {index === 1 ? (
-                    <img
-                      src="../img/logo/medal_silver.png"
-                      className=" h-8 mx-auto"
-                      alt=""
-                    />
-                  ) : (
-                    ""
-                  )}
-                  {index === 2 ? (
-                    <img
-                      src="../img/logo/medal_bronze.png"
-                      className=" h-8 mx-auto"
-                      alt=""
-                    />
-                  ) : (
-                    ""
-                  )}
-                  {index > 2 ? index + 1 : ""}
-                </div>
-                <div className="col-span-4 p-1 border-b border-neutral-200 hover:bg-neutral-100">
-                  <a className="p-2" href={"./user/" + player.NomeUtente}>
-                    {player.NomeUtente}
-                  </a>
-                </div>
-                <div className="col-span-1 p-1 font-bold border-b border-neutral-200 ">
-                  {player.Differenza}
-                </div>
-              </>
-            ))}
-          </div>
-          <div className="bg-white grid grid-cols-6 text-black border-yellow-600 border-2 shadow-tableYellow rounded-md m-3">
-            <div className="col-span-6 border border-yellow-600 shadow-tableYellow">
-              <p className=" text-yellow-600 text-center font-bold uppercase text-[2rem]">
-                Most MVP
-              </p>
-            </div>
-            {mostMvpPlayer?.map((player, index) => (
-              <>
-                <div className="col-span-1 p-1 border-b border-r border-neutral-200">
-                  {index === 0 ? (
-                    <img
-                      src="../img/logo/medal_gold.png"
-                      className="h-8 mx-auto"
-                      alt=""
-                    />
-                  ) : (
-                    ""
-                  )}
-
-                  {index === 1 ? (
-                    <img
-                      src="../img/logo/medal_silver.png"
-                      className=" h-8 mx-auto"
-                      alt=""
-                    />
-                  ) : (
-                    ""
-                  )}
-                  {index === 2 ? (
-                    <img
-                      src="../img/logo/medal_bronze.png"
-                      className=" h-8 mx-auto"
-                      alt=""
-                    />
-                  ) : (
-                    ""
-                  )}
-                  {index > 2 ? index + 1 : ""}
-                </div>
-                <div className="col-span-4 p-1 border-b border-neutral-200 hover:bg-neutral-100">
-                  <a className="p-2" href={"./user/" + player.name}>
-                    {player.NomeUtente}
-                  </a>
-                </div>
-                <div className="col-span-1 p-1 font-bold border-b border-neutral-200">
-                  {player.NumeroMVP}
-                </div>
-              </>
-            ))}
-          </div>
+          <RankingTable
+            title="HIGHEST WIN RATE"
+            border="border-white-600"
+            shadow="shadow-tableWhite"
+            text="text-white-600"
+            rows={rankings.winRate}
+            format={(value) => value.toFixed(2)}
+            valueClass={(value) =>
+              value >= 50
+                ? "bg-green-200 overflow-hidden rounded-r-sm"
+                : "bg-red-200 rounded-r-sm"
+            }
+          />
+          <RankingTable
+            title="Most winning player"
+            border="border-green-600"
+            shadow="shadow-tableGreen"
+            text="text-green-600"
+            rows={rankings.mostWinning}
+          />
+          <RankingTable
+            title="TOP POINTS FARMER"
+            border="border-black"
+            shadow="shadow-tableBlack"
+            text="text-black-600"
+            rows={rankings.mostPoints}
+          />
+          <RankingTable
+            title="Most losing player"
+            border="border-red-600"
+            shadow="shadow-tableRed"
+            text="text-red-600"
+            rows={rankings.mostLosing}
+          />
+          <RankingTable
+            title="Most active player"
+            border="border-blue-600"
+            shadow="shadow-tableBlue"
+            text="text-blue-600"
+            rows={rankings.mostActive}
+          />
+          <RankingTable
+            title="TROFEO PEPE"
+            border="border-purple-600"
+            shadow="shadow-tablePurple"
+            text="text-purple-600"
+            rows={rankings.warnings}
+          />
+          <RankingTable
+            title="KING OF SOLA"
+            border="border-orange-600"
+            shadow="shadow-tableOrange"
+            text="text-orange-600"
+            rows={rankings.sola}
+          />
+          <RankingTable
+            title="Most MVP"
+            border="border-yellow-600"
+            shadow="shadow-tableYellow"
+            text="text-yellow-600"
+            rows={rankings.mostMvp}
+          />
         </div>
       </div>
-      <p className="text-4xl font-bold text-white text-center py-10">
-        <span className="bg-white text-black p-2">HIGHEST WIN STREAK:</span>{" "}
-        <br />
-        <br />
-        <a href="./user/adoranteguardia">
-          <span className="bg-black border p-2 hover:bg-neutral-900">
-            adoranteguardia (<span className="">8</span>)
-          </span>
-        </a>
-        <br />
-        <br />
-        <a href="./user/MasonLuis">
-          <span className="bg-black border p-2 hover:bg-neutral-900">
-            MasonLuis (<span className="">8</span>)
-          </span>
-        </a>
-      </p>
+      {rankings.winStreak.names.length > 0 && (
+        <p className="text-4xl font-bold text-white text-center py-10">
+          <span className="bg-white text-black p-2">HIGHEST WIN STREAK:</span>
+          {rankings.winStreak.names.map((name) => (
+            <React.Fragment key={name}>
+              <br />
+              <br />
+              <a href={"./user/" + name}>
+                <span className="bg-black border p-2 hover:bg-neutral-900">
+                  {name} (<span className="">{rankings.winStreak.value}</span>)
+                </span>
+              </a>
+            </React.Fragment>
+          ))}
+        </p>
+      )}
+    </div>
+  );
+}
+
+const MEDALS = ["medal_gold", "medal_silver", "medal_bronze"];
+
+function RankingTable({
+  title,
+  border,
+  shadow,
+  text,
+  rows,
+  format = (value) => String(value),
+  valueClass = () => "",
+}: {
+  title: string;
+  border: string;
+  shadow: string;
+  text: string;
+  rows: RankingRow[];
+  format?: (value: number) => string;
+  valueClass?: (value: number) => string;
+}) {
+  return (
+    <div
+      className={`bg-white grid grid-cols-6 text-black ${border} border-2 ${shadow} rounded-md m-3`}
+    >
+      <div className={`col-span-6 border ${border} ${shadow}`}>
+        <p
+          className={` ${text} text-center font-bold uppercase text-[2rem]`}
+        >
+          {title}
+        </p>
+      </div>
+      {rows.map((player, index) => (
+        <React.Fragment key={player.name}>
+          <div className="col-span-1 p-1 border-b border-r border-neutral-200">
+            {index < MEDALS.length ? (
+              <img
+                src={`../img/logo/${MEDALS[index]}.png`}
+                className="h-8 mx-auto"
+                alt=""
+              />
+            ) : (
+              index + 1
+            )}
+          </div>
+          <div className="col-span-4 p-1 border-b border-neutral-200 hover:bg-neutral-100">
+            <a className="p-2" href={"./user/" + player.name}>
+              {player.name}
+            </a>
+          </div>
+          <div
+            className={
+              "col-span-1 p-1 font-bold border-b border-neutral-200 " +
+              valueClass(player.value)
+            }
+          >
+            {format(player.value)}
+          </div>
+        </React.Fragment>
+      ))}
     </div>
   );
 }

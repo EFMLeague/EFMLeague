@@ -7,7 +7,7 @@ import {
 } from "@material-tailwind/react";
 import Image from "next/image";
 
-const Icon = (id: any, open: any) => {
+const Icon = ({ id, open }: { id: number; open: number }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -28,6 +28,38 @@ const Icon = (id: any, open: any) => {
   );
 };
 
+type Role = "top" | "jng" | "mid" | "adc" | "sup";
+type Team = "blue" | "red";
+const ROLES: Role[] = ["top", "jng", "mid", "adc", "sup"];
+
+const ChampImage = ({ champ }: { champ: string | null }) =>
+  champ ? (
+    <Image
+      src={
+        "https://ddragon.leagueoflegends.com/cdn/13.20.1/img/champion/" +
+        champ +
+        ".png"
+      }
+      alt=""
+      width={52}
+      height={52}
+      className="h-14 w-14  rounded-full"
+    />
+  ) : (
+    // Campione non registrato per questa partita
+    <div className="h-14 w-14 rounded-full bg-neutral-200" />
+  );
+
+const RoleImage = ({ role }: { role: Role }) => (
+  <Image
+    src={`/img/roles/${role}.png`}
+    height={64}
+    width={64}
+    className="h-16"
+    alt=""
+  />
+);
+
 export default function matchHistory({
   game,
   hasWon,
@@ -35,37 +67,20 @@ export default function matchHistory({
   game: any;
   hasWon?: boolean;
 }) {
-  const extractPlayer = (
-    role: "top" | "mid" | "jng" | "adc" | "sup",
-    team: "blue" | "red"
-  ) => {
-    const p = game.data.find(
-      (el: { Ruolo: string; Squadra: string }) =>
-        el.Ruolo === role && el.Squadra === team
-    );
+  const players = game.data as any[];
+  const id: number = players[0].IDPartita;
+
+  const findPlayer = (role: Role, team: Team) =>
+    players.find((el) => el.Ruolo === role && el.Squadra === team);
+
+  const extractPlayer = (role: Role, team: Team) => {
+    const p = findPlayer(role, team);
     if (!p) return <span>utente non trovato</span>;
     return <span>{p.username}</span>;
   };
 
-  const extractChamp = (
-    role: "top" | "mid" | "jng" | "adc" | "sup",
-    team: "blue" | "red"
-  ) => {
-    const p = game.data.find(
-      (el: { Ruolo: string; Squadra: string }) =>
-        el.Ruolo === role && el.Squadra === team
-    );
-    if (!p) return "Aatrox";
-    // Check if ChampGiocato is undefined and assign a default value if needed
-    if (p.ChampGiocato === undefined) {
-      p.ChampGiocato = "Aatrox";
-    }
-    return p.ChampGiocato;
-  };
-
-  const extractMVP = game.data.map((el: { MVP: any; NomeUtente: any }) => {
-    if (el.MVP) return el.NomeUtente;
-  });
+  const extractChamp = (role: Role, team: Team): string | null =>
+    findPlayer(role, team)?.ChampGiocato ?? null;
 
   const [open, setOpen] = useState(0);
 
@@ -92,10 +107,10 @@ export default function matchHistory({
     return newDay + " " + nameMonth + " " + newYear;
   };
   const exractWinnerTeam = () => {
-    if (game.data[0].Vittoria === true) {
-      return game.data[0].Squadra;
+    if (players[0].Vittoria === true) {
+      return players[0].Squadra;
     } else {
-      if (game.data[0].Squadra === "red") {
+      if (players[0].Squadra === "red") {
         return "blue";
       } else {
         return "red";
@@ -103,23 +118,19 @@ export default function matchHistory({
     }
   };
 
-  const handleOpen = (value: React.SetStateAction<number>) =>
-    setOpen(open === value ? 0 : value);
+  const handleOpen = (value: number) => setOpen(open === value ? 0 : value);
 
   return (
     <div className="pt-2">
-      <Accordion
-        open={open === game.IDPartita}
-        icon={<Icon id={game.IDPartita} open={open} />}
-      >
+      <Accordion open={open === id} icon={<Icon id={id} open={open} />}>
         <div className=" flex">
           <p className="border bg-[#0f0f0f] text-white text-[1rem] hover:text-gray-300 p-1">
-            {getDate(game.data[0].DataPartita.split("T")[0])}
+            {getDate(players[0].DataPartita.split("T")[0])}
           </p>
         </div>
 
         <AccordionHeader
-          onClick={() => handleOpen(game.IDPartita)}
+          onClick={() => handleOpen(id)}
           className={
             "bg-[#0f0f0f] text-white grid grid-cols-8 hover:text-gray-300 " +
             (hasWon === undefined
@@ -130,7 +141,7 @@ export default function matchHistory({
           }
         >
           <div className="pl-2 col-span-2 ">
-            {game.data[0].DataPartita.split("T")[1].substr(0, 5)}
+            {players[0].DataPartita.split("T")[1].substr(0, 5)}
           </div>
 
           <div className="col-span-4 ">
@@ -171,121 +182,18 @@ export default function matchHistory({
                 TEAM BLUE
               </p>
               <div className="p-6">
-                <div className="grid grid-cols-3 place-items-center py-3">
-                  <Image
-                    src="/img/roles/top.png"
-                    height={64}
-                    width={64}
-                    className="h-16"
-                    alt=""
-                  />{" "}
-                  <p className="lg:text-[1.5rem] font-semibold text-black">
-                    {extractPlayer("top", "blue")}
-                  </p>
-                  <Image
-                    src={
-                      "https://ddragon.leagueoflegends.com/cdn/13.20.1/img/champion/" +
-                      extractChamp("top", "blue") +
-                      ".png"
-                    }
-                    alt=""
-                    width={52}
-                    height={52}
-                    className="h-14 w-14  rounded-full"
-                  />
-                </div>
-                <div className="grid grid-cols-3 place-items-center py-3">
-                  <Image
-                    src="/img/roles/jng.png"
-                    height={64}
-                    width={64}
-                    className="h-16"
-                    alt=""
-                  />{" "}
-                  <p className="lg:text-[1.5rem] font-semibold text-black">
-                    {extractPlayer("jng", "blue")}
-                  </p>
-                  <Image
-                    src={
-                      "https://ddragon.leagueoflegends.com/cdn/13.20.1/img/champion/" +
-                      extractChamp("jng", "blue") +
-                      ".png"
-                    }
-                    alt=""
-                    width={52}
-                    height={52}
-                    className="h-14 w-14  rounded-full"
-                  />
-                </div>
-                <div className="grid grid-cols-3 place-items-center py-3">
-                  <Image
-                    src="/img/roles/mid.png"
-                    height={64}
-                    width={64}
-                    className="h-16"
-                    alt=""
-                  />{" "}
-                  <p className="lg:text-[1.5rem] font-semibold text-black">
-                    {extractPlayer("mid", "blue")}
-                  </p>
-                  <Image
-                    src={
-                      "https://ddragon.leagueoflegends.com/cdn/13.20.1/img/champion/" +
-                      extractChamp("mid", "blue") +
-                      ".png"
-                    }
-                    alt=""
-                    width={52}
-                    height={52}
-                    className="h-14 w-14  rounded-full"
-                  />
-                </div>
-                <div className="grid grid-cols-3 place-items-center py-3">
-                  <Image
-                    src="/img/roles/adc.png"
-                    height={64}
-                    width={64}
-                    className="h-16"
-                    alt=""
-                  />{" "}
-                  <p className="lg:text-[1.5rem] font-semibold text-black">
-                    {extractPlayer("adc", "blue")}
-                  </p>
-                  <Image
-                    src={
-                      "https://ddragon.leagueoflegends.com/cdn/13.20.1/img/champion/" +
-                      extractChamp("adc", "blue") +
-                      ".png"
-                    }
-                    alt=""
-                    width={52}
-                    height={52}
-                    className="h-14 w-14  rounded-full"
-                  />
-                </div>
-                <div className="grid grid-cols-3 place-items-center py-3">
-                  <Image
-                    src="/img/roles/sup.png"
-                    height={64}
-                    width={64}
-                    className="h-16"
-                    alt=""
-                  />{" "}
-                  <p className="lg:text-[1.5rem] font-semibold text-black">
-                    {extractPlayer("sup", "blue")}
-                  </p>
-                  <Image
-                    src={
-                      "https://ddragon.leagueoflegends.com/cdn/13.20.1/img/champion/" +
-                      extractChamp("sup", "blue") +
-                      ".png"
-                    }
-                    alt=""
-                    width={52}
-                    height={52}
-                    className="h-14 w-14  rounded-full"
-                  />
-                </div>
+                {ROLES.map((role) => (
+                  <div
+                    key={role}
+                    className="grid grid-cols-3 place-items-center py-3"
+                  >
+                    <RoleImage role={role} />
+                    <p className="lg:text-[1.5rem] font-semibold text-black">
+                      {extractPlayer(role, "blue")}
+                    </p>
+                    <ChampImage champ={extractChamp(role, "blue")} />
+                  </div>
+                ))}
               </div>
             </div>
             <div className="bg-white border order-3 lg:order-2 border-black col-span-2 lg:col-span-1">
@@ -293,159 +201,20 @@ export default function matchHistory({
                 TEAM RED
               </p>
               <div className="p-6">
-                <div className="grid grid-cols-3 place-items-center py-3">
-                  <Image
-                    src={
-                      "https://ddragon.leagueoflegends.com/cdn/13.20.1/img/champion/" +
-                      extractChamp("top", "red") +
-                      ".png"
-                    }
-                    alt=""
-                    width={52}
-                    height={52}
-                    className="h-14 w-14  rounded-full"
-                  />
-                  <p className="lg:text-[1.5rem] font-semibold text-black">
-                    {extractPlayer("top", "red")}
-                  </p>
-                  <Image
-                    src="/img/roles/top.png"
-                    height={64}
-                    width={64}
-                    className="h-16"
-                    alt=""
-                  />{" "}
-                </div>
-                <div className="grid grid-cols-3 place-items-center py-3">
-                  <Image
-                    src={
-                      "https://ddragon.leagueoflegends.com/cdn/13.20.1/img/champion/" +
-                      extractChamp("jng", "red") +
-                      ".png"
-                    }
-                    alt=""
-                    width={52}
-                    height={52}
-                    className="h-14 w-14  rounded-full"
-                  />
-                  <p className="lg:text-[1.5rem] font-semibold text-black">
-                    {extractPlayer("jng", "red")}
-                  </p>
-                  <Image
-                    src="/img/roles/jng.png"
-                    height={64}
-                    width={64}
-                    className="h-16"
-                    alt=""
-                  />{" "}
-                </div>
-                <div className="grid grid-cols-3 place-items-center py-3">
-                  <Image
-                    src={
-                      "https://ddragon.leagueoflegends.com/cdn/13.20.1/img/champion/" +
-                      extractChamp("mid", "red") +
-                      ".png"
-                    }
-                    alt=""
-                    width={52}
-                    height={52}
-                    className="h-14 w-14  rounded-full"
-                  />
-                  <p className="lg:text-[1.5rem] font-semibold text-black">
-                    {extractPlayer("mid", "red")}
-                  </p>
-                  <Image
-                    src="/img/roles/mid.png"
-                    height={64}
-                    width={64}
-                    className="h-16"
-                    alt=""
-                  />{" "}
-                </div>
-                <div className="grid grid-cols-3 place-items-center py-3">
-                  <Image
-                    src={
-                      "https://ddragon.leagueoflegends.com/cdn/13.20.1/img/champion/" +
-                      extractChamp("adc", "red") +
-                      ".png"
-                    }
-                    alt=""
-                    width={52}
-                    height={52}
-                    className="h-14 w-14  rounded-full"
-                  />
-                  <p className="lg:text-[1.5rem] font-semibold text-black">
-                    {extractPlayer("adc", "red")}
-                  </p>
-                  <Image
-                    src="/img/roles/adc.png"
-                    height={64}
-                    width={64}
-                    className="h-16"
-                    alt=""
-                  />{" "}
-                </div>
-                <div className="grid grid-cols-3 place-items-center py-3">
-                  <Image
-                    src={
-                      "https://ddragon.leagueoflegends.com/cdn/13.20.1/img/champion/" +
-                      extractChamp("sup", "red") +
-                      ".png"
-                    }
-                    alt=""
-                    width={52}
-                    height={52}
-                    className="h-14 w-14  rounded-full"
-                  />
-                  <p className="lg:text-[1.5rem] font-semibold text-black">
-                    {extractPlayer("sup", "red")}
-                  </p>
-                  <Image
-                    src="/img/roles/sup.png"
-                    height={64}
-                    width={64}
-                    className="h-16"
-                    alt=""
-                  />{" "}
-                </div>
+                {ROLES.map((role) => (
+                  <div
+                    key={role}
+                    className="grid grid-cols-3 place-items-center py-3"
+                  >
+                    <ChampImage champ={extractChamp(role, "red")} />
+                    <p className="lg:text-[1.5rem] font-semibold text-black">
+                      {extractPlayer(role, "red")}
+                    </p>
+                    <RoleImage role={role} />
+                  </div>
+                ))}
               </div>
             </div>
-            {/* <div className="bg-white border order-2 lg:order-3 border-black col-span-2 lg:col-span-1">
-              <p className="bg-blue-400 text-white text-center text-[2rem] font-bold">
-                BAN
-              </p>
-              <div className="grid grid-cols-5 place-items-center p-2">
-                <Image
-                  src={
-                    "https://ddragon.leagueoflegends.com/cdn/13.20.1/img/champion/" +
-                    extractChamp("top", "red") +
-                    ".png"
-                  }
-                  alt=""
-                  width={52}
-                  height={52}
-                  className="h-14 w-14  rounded-full"
-                />
-              </div>
-            </div>
-            <div className="bg-white border order-4 lg:order-4 border-black col-span-2 lg:col-span-1">
-              <p className="bg-red-400 text-white text-center text-[2rem] font-bold">
-                BAN
-              </p>
-              <div className="grid grid-cols-5 place-items-center p-2">
-                <Image
-                  src={
-                    "https://ddragon.leagueoflegends.com/cdn/13.20.1/img/champion/" +
-                    extractChamp("top", "red") +
-                    ".png"
-                  }
-                  alt=""
-                  width={52}
-                  height={52}
-                  className="h-14 w-14  rounded-full"
-                />
-              </div>
-            </div> */}
           </div>
         </AccordionBody>
       </Accordion>

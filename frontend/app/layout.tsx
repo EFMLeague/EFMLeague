@@ -53,9 +53,10 @@ export default function RootLayout({
             <div className="overlay"></div>
           </div>
         </div>
-        {/* <Navbar /> */}
+        <Navbar />
 
-        {children}
+        {/* La navbar è fixed e alta h-16: il contenuto parte sotto */}
+        <div className="pt-16">{children}</div>
       </body>
     </html>
   );

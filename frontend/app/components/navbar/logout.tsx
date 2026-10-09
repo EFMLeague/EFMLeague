@@ -9,9 +9,7 @@ export default function Logout() {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const res = await fetch(
-        "http://local.example.com/api/auth/riot/getSession"
-      );
+      const res = await fetch("/api/auth/riot/getSession");
       // Gestisci i dati res come necessario
       const me = await res.json();
       setSession(me.me);
@@ -24,7 +22,7 @@ export default function Logout() {
 
   const deleteData = async () => {
     try {
-      const res = await fetch("http://local.example.com/api/auth/riot/logOut");
+      const res = await fetch("/api/auth/riot/logOut");
       if (res.status === 200) {
         setSession(undefined);
       }
@@ -38,7 +36,7 @@ export default function Logout() {
   }, []);
 
   if (session === undefined) {
-    return <Link href="/login">LOGINz</Link>;
+    return <Link href="/login">LOGIN</Link>;
   } else {
     return (
       <div className="text-white text-center">

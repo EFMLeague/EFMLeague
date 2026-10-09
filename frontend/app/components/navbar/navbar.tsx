@@ -1,9 +1,10 @@
 "use client";
 import React, { Dispatch, SetStateAction } from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 // import "../assets/css/navbar.css";
 import Link from "next/link";
 import Logout from "./logout";
+import UISwitch from "../uiSwitch/UISwitch";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -25,10 +26,10 @@ export default function Navbar() {
     }
   };
 
-  if (typeof window !== "undefined") {
-    // Client-side-only code
+  useEffect(() => {
     window.addEventListener("scroll", handleColorChange);
-  }
+    return () => window.removeEventListener("scroll", handleColorChange);
+  }, []);
 
   return (
     <nav
@@ -109,6 +110,14 @@ export default function Navbar() {
             </li>
             <li>
               <Logout />
+            </li>
+            <li className="lg:ml-4">
+              <UISwitch
+                className="inline-flex border border-white rounded-full overflow-hidden text-base"
+                optionClassName="px-3 py-1"
+                activeClassName="bg-white text-black"
+                onSwitch={() => setIsOpen(false)}
+              />
             </li>
           </ul>
         </div>

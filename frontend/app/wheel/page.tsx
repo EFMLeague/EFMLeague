@@ -1,22 +1,17 @@
-// Assicurati che il percorso sia corretto
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import FormWheel from "../components/wheel/formWheel";
-import MatchHistory from "../components/tailwind/matchHistory";
 import React from "react";
-import { getUsersByPuuid } from "../utils/riot/getUsersByPuuid";
 
 export default async function WheelPage() {
   const supabase = createServerComponentClient({ cookies });
 
-  const { data: dbUsers } = await supabase
-    .from("user_ordered_by_name")
-    .select("puuid,video_source,name")
-    .neq("name", "FORESTIERO");
-  if (!dbUsers) {
-    return;
-  }
-  const users = await getUsersByPuuid(dbUsers);
+  const { data: users, error } = await supabase
+    .from("user")
+    .select("id,name,banner_source")
+    .neq("name", "FORESTIERO")
+    .order("name");
+  if (error) throw new Error(`Errore lettura user: ${error.message}`);
 
   return (
     <div className="container mx-auto">

@@ -45,7 +45,7 @@ export default function Ruota({
     if (!mustSpin) {
       const newPrizeNumberUser = Math.floor(Math.random() * data.length);
       setPrizeNumberUser(newPrizeNumberUser);
-      const newPrizeNumberRole = Math.floor(Math.random() * data.length);
+      const newPrizeNumberRole = Math.floor(Math.random() * roles.length);
       setPrizeNumberRole(newPrizeNumberRole);
       setMustSpin(true);
     }
@@ -85,7 +85,8 @@ export default function Ruota({
   return (
     <>
       <div className="grid grid-rows-2 grid-flow-row md:grid-flow-col ">
-        <div className="flex overflow-hidden row-span-2 justify-center items-center ">
+        {/* Ruote concentriche: giocatori fuori, ruoli dentro */}
+        <div className="relative flex overflow-hidden row-span-2 justify-center items-center">
           <Wheel
             mustStartSpinning={mustSpin}
             prizeNumber={prizeNumberUser}
@@ -99,23 +100,29 @@ export default function Ruota({
                 userSpinning: true,
               }));
             }}
+            innerRadius={70}
+            perpendicularText={true}
+            textDistance={90}
           />
-        </div>
 
-        <div className="flex overflow-hidden row-span-2 justify-center items-center ">
-          <Wheel
-            mustStartSpinning={mustSpin}
-            prizeNumber={prizeNumberRole}
-            data={roles.length === 0 ? [{ option: "VUOTO" }] : roles}
-            spinDuration={0.5}
-            onStopSpinning={() => {
-              setMustSpin(false);
-              setShowModal((showModal) => ({
-                ...showModal,
-                userSpinning: true,
-              }));
-            }}
-          />
+          <div className="absolute inset-0 flex justify-center items-center scale-75 z-10">
+            <Wheel
+              mustStartSpinning={mustSpin}
+              prizeNumber={prizeNumberRole}
+              data={roles.length === 0 ? [{ option: "VUOTO" }] : roles}
+              spinDuration={0.5}
+              onStopSpinning={() => {
+                setMustSpin(false);
+                setShowModal((showModal) => ({
+                  ...showModal,
+                  userSpinning: true,
+                }));
+              }}
+              innerRadius={80}
+              perpendicularText={true}
+              textDistance={90}
+            />
+          </div>
         </div>
 
         <div className="bg-white min-w-[300px]">
