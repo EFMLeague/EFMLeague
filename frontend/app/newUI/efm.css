@@ -8,6 +8,8 @@
 */
 
 .efm {
+  --f-display: "Barlow Condensed";
+  --f-body: "Barlow";
   --bg: #0b0b12;
   --bg-2: #101019;
   --surface: #15141f;

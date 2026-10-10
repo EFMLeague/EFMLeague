@@ -1,26 +1,18 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Barlow, Barlow_Condensed } from "next/font/google";
 import Nav from "./components/Nav";
-import "./efm.css";
-
+// Font self-hosted (niente download da Google Fonts durante la build)
 // Display: grottesco condensato corsivo e nero, come le scritte dei video
 // di presentazione della lega
-const display = Barlow_Condensed({
-  subsets: ["latin", "latin-ext"],
-  weight: ["700", "800", "900"],
-  style: ["italic"],
-  variable: "--f-display",
-  display: "swap",
-});
-
+import "@fontsource/barlow-condensed/700-italic.css";
+import "@fontsource/barlow-condensed/800-italic.css";
+import "@fontsource/barlow-condensed/900-italic.css";
 // Testo e interfaccia: sans da lavoro con cifre tabellari
-const barlow = Barlow({
-  subsets: ["latin", "latin-ext"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--f-body",
-  display: "swap",
-});
+import "@fontsource/barlow/400.css";
+import "@fontsource/barlow/500.css";
+import "@fontsource/barlow/600.css";
+import "@fontsource/barlow/700.css";
+import "./efm.css";
 
 export const metadata: Metadata = {
   title: "EFM League",
@@ -34,7 +26,7 @@ export default function NewUILayout({
   children: React.ReactNode;
 }) {
   return (
-    <div lang="it" className={`efm ${display.variable} ${barlow.variable}`}>
+    <div lang="it" className="efm">
       <Nav />
       <main className="efm-main">{children}</main>
       <footer className="efm-foot">
