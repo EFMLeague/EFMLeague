@@ -1,6 +1,6 @@
 import Link from "next/link";
-import Board from "../components/Board";
-import { Arrow } from "../components/Marks";
+import { LuFlame } from "react-icons/lu";
+import Leaderboard from "../components/Leaderboard";
 import { loadPlayers, loadRankings, profileHref } from "../lib/league";
 
 export const revalidate = 0;
@@ -16,37 +16,39 @@ export default async function Classifiche() {
 
   return (
     <>
-      <section className="pv-wrap pv-section" style={{ paddingTop: "clamp(2.2rem, 5vw, 4rem)" }}>
-        <div className="pv-section-head">
-          <h1 className="pv-display pv-h1">Classifiche</h1>
-          <p className="pv-lede">
-            {rankings.gamesPlayed} partite, {rankings.subscribers} giocatori. In
-            ogni scheda il primo è segnato a matita e la riga sotto ogni nome è lunga
-            quanto il suo numero.
-          </p>
-        </div>
+      <header className="efm-wrap efm-page-head">
+        <h1 className="efm-display efm-h1">Classifiche</h1>
+        <p className="efm-lede">
+          {rankings.gamesPlayed} partite e {rankings.subscribers} giocatori.
+          Quelle serie e quelle che pesano di più: King of Sola e Trofeo Pepe
+          compresi.
+        </p>
+      </header>
 
+      <section className="efm-wrap" aria-label="Schede di classifica">
         {streak.names.length > 0 && (
-          <div className="pv-streak">
-            <Arrow className="pv-streak__arrow" />
-            <p className="pv-display">
-              Serie più lunga: {streak.value} vittorie di fila
-            </p>
-            <p className="pv-streak__names">
-              {streak.names.map((name, i) => (
-                <span key={name}>
-                  {i > 0 && " · "}
-                  <Link href={profileHref(name)}>{name}</Link>
-                </span>
-              ))}
+          <div className="efm-streak">
+            <span className="efm-streak__icon">
+              <LuFlame aria-hidden />
+            </span>
+            <p>
+              <strong>Serie più lunga: {streak.value} vittorie di fila</strong>
+              <span>
+                {streak.names.map((name, i) => (
+                  <span key={name}>
+                    {i > 0 && " · "}
+                    <Link href={profileHref(name)} className="efm-name-link">
+                      {name}
+                    </Link>
+                  </span>
+                ))}
+              </span>
             </p>
           </div>
         )}
-      </section>
 
-      <section className="pv-wrap" aria-label="Schede di classifica">
-        <div className="pv-boards">
-          <Board
+        <div className="efm-boards">
+          <Leaderboard
             title="Win rate"
             note="Partite vinte su giocate"
             rows={rankings.winRate}
@@ -56,21 +58,21 @@ export default async function Classifiche() {
             max={100}
             expandable
           />
-          <Board
+          <Leaderboard
             title="Più vittorie"
             note="Partite vinte in totale"
             rows={rankings.mostWinning}
             players={byName}
             expandable
           />
-          <Board
+          <Leaderboard
             title="Più MVP"
             note="Volte migliore in campo"
             rows={rankings.mostMvp}
             players={byName}
             expandable
           />
-          <Board
+          <Leaderboard
             title="Più presenze"
             note="Partite giocate"
             rows={rankings.mostActive}
@@ -78,24 +80,22 @@ export default async function Classifiche() {
             max={rankings.gamesPlayed}
             expandable
           />
-          <Board
+          <Leaderboard
             title="Più sconfitte"
             note="Partite perse in totale"
             rows={rankings.mostLosing}
             players={byName}
-            leaderMark="cross"
             expandable
           />
-          <Board
+          <Leaderboard
             title="King of Sola"
             note="Partite saltate"
             rows={rankings.sola}
             players={byName}
-            leaderMark="dim"
             max={rankings.gamesPlayed}
             expandable
           />
-          <Board
+          <Leaderboard
             title="Trofeo Pepe"
             note="Ammonizioni ricevute"
             rows={rankings.warnings.filter((r) => r.value > 0)}
@@ -103,7 +103,7 @@ export default async function Classifiche() {
             expandable
           />
           {hasPoints && (
-            <Board
+            <Leaderboard
               title="Più punti"
               note="Punteggio accumulato"
               rows={rankings.mostPoints}

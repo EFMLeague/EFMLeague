@@ -1,33 +1,34 @@
 import Link from "next/link";
-import Board from "./components/Board";
-import GameStrip from "./components/GameStrip";
-import { DownloadIcon, EdgeArrow } from "./components/Marks";
-import Projector from "./components/Projector";
-import Shot from "./components/Shot";
+import { LuArrowRight, LuDownload, LuFileText } from "react-icons/lu";
+import Leaderboard from "./components/Leaderboard";
+import MatchCard from "./components/MatchCard";
+import PlayerCard from "./components/PlayerCard";
+import VideoPanel from "./components/VideoPanel";
+import WatchButton from "./components/WatchButton";
 import {
   Player,
+  STATUS_LABEL,
   formatMonth,
   frameSrc,
   loadGames,
   loadPlayers,
   loadRankings,
-  pad,
   profileHref,
   videoSrc,
 } from "./lib/league";
 
 export const revalidate = 0;
 
-const ATTACHMENTS = [
+const DOCS = [
   {
     href: "/pdf/regolamento.pdf",
     title: "Regolamento",
-    note: "Le regole della lega, PDF",
+    note: "Le regole della lega · PDF",
   },
   {
     href: "/pdf/organigramma.pdf",
     title: "Organigramma",
-    note: "Chi faceva cosa nello staff, PDF",
+    note: "Chi faceva cosa nello staff · PDF",
   },
 ];
 
@@ -41,156 +42,90 @@ export default async function Home() {
   const byName = new Map(players.map((p) => [p.name, p]));
   const byId = new Map(players.map((p) => [p.id, p]));
 
-  // Le pose del rullino: chi ha giocato di più, il re degli MVP in testa
   const mvpKing = rankings.mostMvp[0];
-  const order = [
-    ...(mvpKing ? [mvpKing.name] : []),
-    ...rankings.mostActive
-      .map((r) => r.name)
-      .filter((name) => name !== mvpKing?.name),
-  ]
-    .map((name) => byName.get(name))
-    .filter((p): p is Player => Boolean(p));
-  const stripA = order.slice(0, 9);
-  const stripB = order.slice(9, 18);
-
   const first = games[games.length - 1];
   const last = games[0];
-  const streak = rankings.winStreak;
 
-  const shot = (player: Player, index: number, eager: boolean) => (
-    <Shot
-      key={player.name}
-      src={frameSrc(player)}
-      blank={player.name.slice(0, 2)}
-      alt={player.name}
-      href={profileHref(player.name)}
-      video={videoSrc(player.name)}
-      number={pad(index + 1)}
-      label={player.name}
-      mark={index === 0 && mvpKing ? "ring" : null}
-      markTitle={index === 0 ? "Re degli MVP" : undefined}
-      eager={eager}
-    />
-  );
+  // In vetrina chi ha giocato di più
+  const featured = rankings.mostActive
+    .map((r) => byName.get(r.name))
+    .filter((p): p is Player => Boolean(p))
+    .slice(0, 12);
+
+  const season =
+    first && last
+      ? `${formatMonth(first.date).split(" ")[0]} – ${formatMonth(last.date)}`
+      : null;
 
   return (
     <>
-      <section className="pv-wrap pv-hero">
-        <div className="pv-hero__title">
-          <div>
-            <h1 className="pv-display pv-h1">
-              EFM
-              <br />
-              League
+      <section className="efm-hero">
+        <div className="efm-wrap efm-hero__inner">
+          <div className="efm-hero__copy">
+            <h1 className="efm-display efm-hero__title">
+              <span>EFM</span>
+              <span>League</span>
             </h1>
-            <p className="pv-mono pv-hero__edgeline">
-              EFM 2023 <EdgeArrow /> Archivio <EdgeArrow /> {games.length} pose
+            <p className="efm-lede">
+              La nostra lega di partite personalizzate 5 contro 5. Qui c&apos;è
+              tutto: le partite, le classifiche, gli MVP e le ammonizioni
+              {season ? `, da ${season}` : ""}.
             </p>
+            <dl className="efm-facts">
+              <div>
+                <dt>Partite</dt>
+                <dd>{games.length}</dd>
+              </div>
+              <div>
+                <dt>Giocatori</dt>
+                <dd>{rankings.subscribers}</dd>
+              </div>
+              {mvpKing && (
+                <div className="is-gold">
+                  <dt>Re degli MVP · {mvpKing.value}</dt>
+                  <dd>
+                    <Link href={profileHref(mvpKing.name)}>{mvpKing.name}</Link>
+                  </dd>
+                </div>
+              )}
+            </dl>
+            <div className="efm-actions">
+              <WatchButton label="Guarda la presentazione" />
+              <Link href="/newUI/ranking" className="efm-btn efm-btn--secondary efm-btn--big">
+                Classifiche
+              </Link>
+            </div>
           </div>
-          <p className="pv-lede">
-            L&apos;archivio della nostra lega di partite personalizzate:{" "}
-            {games.length} partite e {rankings.subscribers} giocatori, sviluppati
-            e stampati a contatto. Ogni posa è un giocatore, ogni striscia una
-            partita.
-          </p>
+          <VideoPanel
+            src="/video/IntroPresentazione.mp4"
+            poster="/img/screenshots/frame_intro.jpg"
+            title="Video di presentazione della EFM League"
+            listen
+          />
         </div>
-        <table className="pv-log">
-          <caption className="pv-mono">Registro del rullino</caption>
-          <tbody>
-            <tr>
-              <th scope="row">Stagione</th>
-              <td>Prima e unica</td>
-            </tr>
-            {first && last && (
-              <tr>
-                <th scope="row">Sviluppo</th>
-                <td>
-                  Da {formatMonth(first.date).split(" ")[0]} a{" "}
-                  {formatMonth(last.date)}
-                </td>
-              </tr>
-            )}
-            <tr>
-              <th scope="row">Giocatori</th>
-              <td className="pv-num">{rankings.subscribers}</td>
-            </tr>
-            <tr>
-              <th scope="row">Pose</th>
-              <td className="pv-num">
-                {games.length} partite <small>· 10 giocatori l&apos;una</small>
-              </td>
-            </tr>
-            {mvpKing && (
-              <tr>
-                <th scope="row">Re degli MVP</th>
-                <td>
-                  <Link href={profileHref(mvpKing.name)}>{mvpKing.name}</Link>
-                  <small>{mvpKing.value} MVP</small>
-                </td>
-              </tr>
-            )}
-            {streak.names.length > 0 && (
-              <tr>
-                <th scope="row">Serie più lunga</th>
-                <td>
-                  {streak.names.map((name, i) => (
-                    <span key={name}>
-                      {i > 0 && ", "}
-                      <Link href={profileHref(name)}>{name}</Link>
-                    </span>
-                  ))}
-                  <small>{streak.value} vittorie di fila</small>
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
       </section>
-
-      <section aria-label="La rosa sul rullino" className="pv-hero-strips">
-        <div className="pv-strip">
-          {stripA.map((p, i) => shot(p, i, true))}
-        </div>
-        {stripB.length > 0 && (
-          <div className="pv-strip">
-            {stripB.map((p, i) => shot(p, i + stripA.length, false))}
-          </div>
-        )}
-      </section>
-      <div className="pv-wrap pv-hint">
-        <span className="pv-marker pv-hint--hover">
-          passaci sopra: chi ha il video si anima
-        </span>
-        <span className="pv-marker pv-hint--touch">
-          tocca una posa per aprire il giocatore
-        </span>
-        <Link href="/newUI/user" className="pv-mono">
-          Tutta la rosa ({players.length})
-        </Link>
-      </div>
 
       {last && (
-        <section className="pv-wrap pv-section">
-          <div className="pv-section-head">
-            <h2 className="pv-display pv-h2">L&apos;ultima posa</h2>
-            <Link href="/newUI/match" className="pv-mono">
-              Tutto lo storico, {games.length} partite
+        <section className="efm-wrap efm-section" id="ultima-partita">
+          <div className="efm-section-head">
+            <h2 className="efm-display efm-h2">Ultima partita</h2>
+            <Link href="/newUI/match" className="efm-link">
+              Tutte le {games.length} partite <LuArrowRight aria-hidden />
             </Link>
           </div>
-          <GameStrip game={last} number={games.length} players={byId} />
+          <MatchCard game={last} number={games.length} players={byId} />
         </section>
       )}
 
-      <section className="pv-wrap pv-section">
-        <div className="pv-section-head">
-          <h2 className="pv-display pv-h2">Segnati a matita</h2>
-          <Link href="/newUI/ranking" className="pv-mono">
-            Tutte le classifiche
+      <section className="efm-wrap efm-section">
+        <div className="efm-section-head">
+          <h2 className="efm-display efm-h2">Classifiche</h2>
+          <Link href="/newUI/ranking" className="efm-link">
+            Tutte le classifiche <LuArrowRight aria-hidden />
           </Link>
         </div>
-        <div className="pv-boards">
-          <Board
+        <div className="efm-boards">
+          <Leaderboard
             title="Win rate"
             note="Partite vinte su giocate"
             rows={rankings.winRate}
@@ -199,13 +134,13 @@ export default async function Home() {
             threshold={50}
             max={100}
           />
-          <Board
+          <Leaderboard
             title="Più MVP"
             note="Volte migliore in campo"
             rows={rankings.mostMvp}
             players={byName}
           />
-          <Board
+          <Leaderboard
             title="Trofeo Pepe"
             note="Ammonizioni ricevute"
             rows={rankings.warnings.filter((r) => r.value > 0)}
@@ -214,36 +149,44 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="pv-wrap pv-section pv-screen">
-        <div className="pv-screen__film">
-          <Projector
-            src="/video/IntroPresentazione.mp4"
-            poster="/img/screenshots/frame_intro.jpg"
-            label="Guarda il filmato"
-          />
+      <section className="efm-wrap efm-section">
+        <div className="efm-section-head">
+          <h2 className="efm-display efm-h2">La rosa</h2>
+          <Link href="/newUI/user" className="efm-link">
+            Tutti i {players.length} giocatori <LuArrowRight aria-hidden />
+          </Link>
         </div>
-        <div>
-          <h2 className="pv-display pv-h2">La presentazione</h2>
-          <p className="pv-lede" style={{ marginTop: "1.2rem" }}>
-            Il filmato con cui la lega ha presentato i suoi giocatori. Le singole
-            presentazioni si animano sulle pose della rosa e nei profili.
-          </p>
-          <h3 className="pv-h3" style={{ marginTop: "3rem", marginBottom: "0.9rem" }}>
-            Allegati
-          </h3>
-          <ul className="pv-sleeves">
-            {ATTACHMENTS.map((a) => (
-              <li key={a.href}>
-                <a href={a.href} download>
-                  <span>
-                    <span className="pv-h3">{a.title}</span>
-                    <p className="pv-mono">{a.note}</p>
-                  </span>
-                  <DownloadIcon />
-                </a>
-              </li>
-            ))}
-          </ul>
+        <div className="efm-players">
+          {featured.map((p) => (
+            <PlayerCard
+              key={p.name}
+              name={p.name}
+              src={frameSrc(p)}
+              video={videoSrc(p.name)}
+              status={STATUS_LABEL[p.role]}
+              href={profileHref(p.name)}
+            />
+          ))}
+        </div>
+      </section>
+
+      <section className="efm-wrap efm-section">
+        <div className="efm-section-head">
+          <h2 className="efm-display efm-h2">Documenti della lega</h2>
+        </div>
+        <div className="efm-docs">
+          {DOCS.map((d) => (
+            <a key={d.href} href={d.href} download className="efm-doc">
+              <span className="efm-doc__icon">
+                <LuFileText aria-hidden />
+              </span>
+              <span>
+                <strong>{d.title}</strong>
+                <span>{d.note}</span>
+              </span>
+              <LuDownload aria-label="Scarica" />
+            </a>
+          ))}
         </div>
       </section>
     </>

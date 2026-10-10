@@ -1,15 +1,18 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { LuArrowRight, LuChevronDown, LuCrown } from "react-icons/lu";
 import { fetchAll } from "@/app/utils/supabase/fetchAll";
 import { getLoLVersion } from "@/app/utils/riot/getLoLVersion";
 import { getUserByPuuid } from "@/app/utils/riot/getUserByPuuid";
 import { getUserEloFlex } from "@/app/utils/riot/getUserEloFlex";
 import { getUserEloSoloQ } from "@/app/utils/riot/getUserEloSoloQ";
-import GameStrip from "../../components/GameStrip";
-import { Chevron, CrossGlyph, RingGlyph } from "../../components/Marks";
-import Shot from "../../components/Shot";
+import Avatar from "../../components/Avatar";
+import VideoPanel from "../../components/VideoPanel";
 import {
+  Appearance,
+  Game,
   PLACEHOLDER_USER,
+  Player,
   ROLES,
   ROLE_LABEL,
   STATUS_LABEL,
@@ -23,7 +26,6 @@ import {
   supabaseServer,
   videoSrc,
 } from "../../lib/league";
-import Print from "./Print";
 
 export const revalidate = 0;
 
@@ -42,6 +44,85 @@ const safe = async <T,>(fn: () => Promise<T>, fallback: T): Promise<T> => {
 const TIER_LABEL: Record<string, string> = {
   UNRANKED: "Senza classifica",
 };
+
+const titleCase = (s: string) => s.charAt(0) + s.slice(1).toLowerCase();
+
+// Una riga della cronologia, come nel client: esito, campione e ruolo,
+// partita, e le due squadre in miniatura.
+function HistoryRow({
+  game,
+  me,
+  number,
+  player,
+}: {
+  game: Game;
+  me: Appearance;
+  number: number;
+  player: Player;
+}) {
+  const champ = champSrc(me.ChampGiocato);
+  const team = (side: "blue" | "red") =>
+    ROLES.map((role) => game.players.find((p) => p.Squadra === side && p.Ruolo === role));
+  return (
+    <li className={"efm-hrow " + (me.Vittoria ? "is-win" : "is-loss")}>
+      <div className="efm-hrow__result">
+        <strong>{me.Vittoria ? "Vittoria" : "Sconfitta"}</strong>
+        <span>{formatDate(game.date)}</span>
+      </div>
+      <div className="efm-hrow__champ">
+        {champ ? (
+          <img src={champ} alt={me.ChampGiocato ?? ""} width={56} height={56} loading="lazy" />
+        ) : (
+          <Avatar player={player} size={56} />
+        )}
+        <img
+          className="efm-hrow__role"
+          src={`/img/roles/${me.Ruolo}.png`}
+          alt={ROLE_LABEL[me.Ruolo]}
+          title={ROLE_LABEL[me.Ruolo]}
+          width={24}
+          height={24}
+        />
+      </div>
+      <div className="efm-hrow__info">
+        <Link href={`/newUI/match#partita-${number}`} className="efm-name-link">
+          Partita {pad(number, 3)} · {game.name}
+        </Link>
+        <span>
+          {me.ChampGiocato ?? "Campione non segnato"} · {ROLE_LABEL[me.Ruolo]}
+          {me.MVP && (
+            <>
+              {" · "}
+              <span className="efm-mvp">
+                <LuCrown aria-hidden /> MVP
+              </span>
+            </>
+          )}
+        </span>
+      </div>
+      <div className="efm-hrow__teams" aria-hidden>
+        {(["blue", "red"] as const).flatMap((side) =>
+          team(side).map((row, i) => {
+            const src = champSrc(row?.ChampGiocato ?? null);
+            const mine = row?.IDGiocatore === me.IDGiocatore;
+            return src ? (
+              <img
+                key={side + i}
+                src={src}
+                alt=""
+                title={row?.username}
+                className={mine ? "is-me" : undefined}
+                loading="lazy"
+              />
+            ) : (
+              <i key={side + i} title={row?.username} className={mine ? "is-me" : undefined} />
+            );
+          })
+        )}
+      </div>
+    </li>
+  );
+}
 
 export default async function Profilo({
   params: { name },
@@ -87,7 +168,7 @@ export default async function Profilo({
     : [];
 
   const byId = new Map(players.map((p) => [p.id, p]));
-  const me = byId.get(user.id) ?? {
+  const me: Player = byId.get(user.id) ?? {
     id: user.id,
     name: user.name,
     role: user.role,
@@ -95,7 +176,7 @@ export default async function Profilo({
     hasFrame: Boolean(user.banner_source),
   };
 
-  // Numero di posa globale: ordine cronologico di tutte le partite
+  // Numerazione globale: ordine cronologico di tutte le partite
   const numberOf = new Map(
     allMatches
       .slice()
@@ -103,6 +184,7 @@ export default async function Profilo({
       .map((m, i) => [m.id, i + 1])
   );
 
+  // già dalla più recente
   const appearances = games.map((g) => ({
     game: g,
     me: g.players.find((p) => p.IDGiocatore === user.id)!,
@@ -125,6 +207,8 @@ export default async function Profilo({
   }
   const totalMatches = allMatches.length;
   const warnings = user.warnings ?? 0;
+  const winRate = percent(wins, played);
+  const form = appearances.slice(0, 10);
 
   const roles = ROLES.map((role) => {
     const list = appearances.filter((a) => a.me.Ruolo === role);
@@ -153,223 +237,267 @@ export default async function Profilo({
   const elo = (label: string, value: Elo) => {
     const tier = (value.tier || "UNRANKED").toLowerCase();
     return (
-      <span className="pv-elo">
-        <img src={`/img/elo/${tier}.png`} alt="" width={44} height={44} />
-        <span className="pv-mono">
+      <span className="efm-elo">
+        <img src={`/img/elo/${tier}.png`} alt="" width={36} height={36} />
+        <span>
           {label}
           <strong>
-            {TIER_LABEL[value.tier] ?? value.tier} {value.rank?.trim()}
+            {TIER_LABEL[value.tier] ?? titleCase(value.tier)} {value.rank?.trim()}
           </strong>
         </span>
       </span>
     );
   };
 
-  // già dalla più recente: le ultime in vista, le altre a richiesta
-  const RECENT = 8;
+  const frame = frameSrc(me);
+  // lo splash del campione più giocato fa da sfondo alla testata
+  const splash = champs[0]
+    ? `https://ddragon.leagueoflegends.com/cdn/img/champion/splash/${champs[0].champ}_0.jpg`
+    : null;
+  const video = videoSrc(user.name);
+  const RECENT = 10;
   const recent = appearances.slice(0, RECENT);
   const older = appearances.slice(RECENT);
 
+  const wr = (value: number, playedCount: number) => (
+    <span className={"efm-wr" + (playedCount && value < 50 ? " is-low" : "")}>
+      <span>{playedCount ? value.toFixed(0) + "%" : "—"}</span>
+      <span className="efm-bar" aria-hidden>
+        <span style={{ width: `${playedCount ? value : 0}%` }} />
+      </span>
+    </span>
+  );
+
   return (
     <>
-      <section className="pv-wrap pv-profile">
-        <Print
-          name={user.name}
-          src={frameSrc(me)}
-          video={videoSrc(user.name)}
-          caption={STATUS_LABEL[user.role] ?? ""}
-        />
-        <div>
-          <h1
-            className="pv-display pv-h1 pv-profile__name"
-            style={{
-              // i nomi lunghi si stringono invece di andare a capo
-              fontSize: `clamp(2.2rem, ${Math.min(
-                11,
-                150 / Math.max(user.name.length, 1)
-              ).toFixed(2)}vw, 6rem)`,
-            }}
-          >
-            {user.name}
-          </h1>
-          <div className="pv-profile__status">
-            {iconSrc && (
-              <img
-                src={iconSrc}
-                alt="Icona evocatore"
-                width={44}
-                height={44}
-                style={{ background: "var(--film)" }}
-              />
-            )}
-            {elo("SoloQ", soloQ)}
-            {elo("Flex", flex)}
-          </div>
-
-          <table className="pv-log">
-            <caption className="pv-mono">Registro del giocatore</caption>
-            <tbody>
-              <tr>
-                <th scope="row">Presenze</th>
-                <td className="pv-num">
-                  {played} <small>su {totalMatches} partite</small>
-                </td>
-              </tr>
-              <tr>
-                <th scope="row">Vittorie</th>
-                <td className="pv-num">
-                  {wins}{" "}
-                  <small>
-                    win rate {percent(wins, played).toFixed(1)}% · sconfitte{" "}
-                    {played - wins}
-                  </small>
-                </td>
-              </tr>
-              <tr>
-                <th scope="row">MVP</th>
-                <td className="pv-num">{mvp}</td>
-              </tr>
-              <tr>
-                <th scope="row">Serie migliore</th>
-                <td className="pv-num">
-                  {bestStreak} <small>vittorie di fila</small>
-                </td>
-              </tr>
-              <tr>
-                <th scope="row">Ammonizioni</th>
-                <td className="pv-num">
-                  {warnings}{" "}
-                  <small>punti lega {wins - Math.round(warnings / 2)}</small>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      <section className="pv-wrap pv-section">
-        <div className="pv-section-head">
-          <h2 className="pv-display pv-h2">Il rullino</h2>
-          <p className="pv-mono pv-status">
-            Una posa per partita giocata, in ordine
-          </p>
-        </div>
-        {played === 0 ? (
-          <p className="pv-empty">
-            <span className="pv-marker">rullino vergine</span>
-            {user.name} non ha giocato nessuna partita della lega.
-          </p>
+      <section className="efm-profile-hero">
+        {splash ? (
+          <div
+            className="efm-profile-hero__bg is-splash"
+            style={{ backgroundImage: `url("${splash}")` }}
+            aria-hidden
+          />
         ) : (
-          <>
-            <div className="pv-strip pv-strip--sheet pv-roll">
-              {chrono.map(({ game, me: row }) => {
-                const n = numberOf.get(game.id) ?? 0;
-                return (
-                  <Shot
-                    key={game.id}
-                    src={champSrc(row.ChampGiocato) ?? frameSrc(me)}
-                    blank={user.name.slice(0, 2)}
-                    alt={`Posa ${n}, ${formatDate(game.date)}: ${
-                      row.Vittoria ? "vinta" : "persa"
-                    }${row.MVP ? ", MVP" : ""}${
-                      row.ChampGiocato ? `, ${row.ChampGiocato}` : ""
-                    }`}
-                    href={`/newUI/match#posa-${n}`}
-                    number={pad(n, 3)}
-                    mark={row.MVP ? "ring" : row.Vittoria ? null : "cross"}
-                    className={!row.Vittoria && row.MVP ? "is-dim" : ""}
-                  />
-                );
-              })}
-            </div>
-            <div className="pv-legend pv-mono">
-              <span>
-                <RingGlyph /> MVP
-              </span>
-              <span>
-                <CrossGlyph /> Sconfitta
-              </span>
-              <span>Posa chiara: vittoria</span>
-            </div>
-          </>
+          frame && (
+            <div
+              className="efm-profile-hero__bg"
+              style={{ backgroundImage: `url("${frame}")` }}
+              aria-hidden
+            />
+          )
         )}
+        <div className="efm-wrap efm-profile-hero__inner">
+          {video && frame ? (
+            <VideoPanel
+              src={video}
+              poster={frame}
+              title={`Video di presentazione di ${user.name}`}
+              className="efm-portrait"
+              autoPlay={false}
+              progress={false}
+            />
+          ) : (
+            <div className="efm-portrait">
+              {frame ? (
+                <img src={frame} alt={`Presentazione di ${user.name}`} />
+              ) : (
+                <div className="efm-pcard__blank" aria-hidden>
+                  {user.name.slice(0, 2)}
+                </div>
+              )}
+            </div>
+          )}
+
+          <div>
+            <h1 className="efm-display efm-profile__name">{user.name}</h1>
+            <div className="efm-profile__meta">
+              <span className="efm-badge efm-badge--plain">
+                {STATUS_LABEL[user.role] ?? "Giocatore"}
+              </span>
+              {iconSrc && (
+                <img
+                  className="efm-summoner"
+                  src={iconSrc}
+                  alt="Icona evocatore"
+                  width={44}
+                  height={44}
+                />
+              )}
+              {elo("SoloQ", soloQ)}
+              {elo("Flex", flex)}
+            </div>
+
+            <dl className="efm-stats">
+              <div className="efm-stat">
+                <dt>Presenze</dt>
+                <dd>
+                  {played}
+                  <small>su {totalMatches} partite</small>
+                </dd>
+              </div>
+              <div className="efm-stat">
+                <dt>Win rate</dt>
+                <dd>
+                  {played ? winRate.toFixed(1) + "%" : "—"}
+                  <small>
+                    {wins} V · {played - wins} S
+                  </small>
+                </dd>
+              </div>
+              <div className="efm-stat is-gold">
+                <dt>MVP</dt>
+                <dd>
+                  {mvp}
+                  <small>
+                    {played ? percent(mvp, played).toFixed(0) + "% delle partite" : "—"}
+                  </small>
+                </dd>
+              </div>
+              <div className="efm-stat">
+                <dt>Serie migliore</dt>
+                <dd>
+                  {bestStreak}
+                  <small>vittorie di fila</small>
+                </dd>
+              </div>
+              <div className="efm-stat">
+                <dt>Ammonizioni</dt>
+                <dd>
+                  {warnings}
+                  <small>punti lega {wins - Math.round(warnings / 2)}</small>
+                </dd>
+              </div>
+            </dl>
+
+            {form.length > 0 && (
+              <div className="efm-form">
+                <span className="efm-label">Forma</span>
+                <ol aria-label="Ultime partite, dalla più recente">
+                  {form.map(({ game, me: row }) => (
+                    <li
+                      key={game.id}
+                      className={row.Vittoria ? "is-win" : "is-loss"}
+                      title={`${row.Vittoria ? "Vittoria" : "Sconfitta"} · ${formatDate(game.date)}`}
+                    >
+                      {row.Vittoria ? "V" : "S"}
+                    </li>
+                  ))}
+                </ol>
+              </div>
+            )}
+          </div>
+        </div>
       </section>
 
-      {played > 0 && (
-        <section className="pv-wrap pv-section pv-cols">
-          <div>
-            <h2 className="pv-display pv-h2" style={{ marginBottom: "1.4rem" }}>
-              Ruoli
-            </h2>
-            <table className="pv-table">
-              <thead>
-                <tr>
-                  <th scope="col">Ruolo</th>
-                  <th scope="col" className="pv-num">
-                    Giocate
-                  </th>
-                  <th scope="col">Win rate</th>
-                </tr>
-              </thead>
-              <tbody>
-                {roles.map((r) => (
-                  <tr key={r.role}>
-                    <td>
-                      <span className="pv-cellname">
-                        <img
-                          src={`/img/roles/${r.role}.png`}
-                          alt=""
-                          width={32}
-                          height={32}
-                          style={{ background: "transparent", filter: "brightness(0.15)" }}
-                        />
-                        {ROLE_LABEL[r.role]}
-                      </span>
-                    </td>
-                    <td className="pv-num">{r.played}</td>
-                    <td>
-                      <span className="pv-mono">
-                        {r.played ? r.winRate.toFixed(0) + "%" : "—"}
-                      </span>
-                      <span className="pv-measure" aria-hidden>
-                        <span style={{ width: `${r.winRate}%` }} />
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+      {played === 0 ? (
+        <section className="efm-wrap efm-section">
+          <div className="efm-card efm-empty">
+            <strong>Nessuna partita giocata</strong>
+            {user.name} è nella rosa ma non ha giocato partite della lega.
           </div>
-          <div>
-            <h2 className="pv-display pv-h2" style={{ marginBottom: "1.4rem" }}>
-              Campioni
-            </h2>
-            {champs.length === 0 ? (
-              <p className="pv-status">
-                Nessun campione registrato per le sue partite: nelle prime serate
-                della lega i campioni non venivano segnati.
-              </p>
-            ) : (
-              <table className="pv-table">
+        </section>
+      ) : (
+        <>
+          <section className="efm-wrap efm-section">
+            <div className="efm-section-head">
+              <h2 className="efm-display efm-h2">Cronologia</h2>
+              <Link href="/newUI/match" className="efm-link">
+                Tutte le partite <LuArrowRight aria-hidden />
+              </Link>
+            </div>
+            <ol className="efm-history">
+              {recent.map(({ game, me: row }) => (
+                <HistoryRow
+                  key={game.id}
+                  game={game}
+                  me={row}
+                  number={numberOf.get(game.id) ?? 0}
+                  player={me}
+                />
+              ))}
+            </ol>
+            {older.length > 0 && (
+              <details className="efm-more efm-card" style={{ marginTop: "0.75rem" }}>
+                <summary>
+                  Altre {older.length} partite <LuChevronDown aria-hidden />
+                </summary>
+                <ol className="efm-history" style={{ padding: "0.75rem" }}>
+                  {older.map(({ game, me: row }) => (
+                    <HistoryRow
+                      key={game.id}
+                      game={game}
+                      me={row}
+                      number={numberOf.get(game.id) ?? 0}
+                      player={me}
+                    />
+                  ))}
+                </ol>
+              </details>
+            )}
+          </section>
+
+          <section className="efm-wrap efm-section efm-cols">
+            <div className="efm-card efm-table-card">
+              <h2 className="efm-display efm-h2">Ruoli</h2>
+              <table className="efm-table">
                 <thead>
                   <tr>
-                    <th scope="col">Campione</th>
-                    <th scope="col" className="pv-num">
+                    <th scope="col">Ruolo</th>
+                    <th scope="col" className="efm-num">
                       Giocate
-                    </th>
-                    <th scope="col" className="pv-num">
-                      Vinte
                     </th>
                     <th scope="col">Win rate</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {champs.map((c) => {
-                    const wr = percent(c.wins, c.played);
-                    return (
+                  {roles.map((r) => (
+                    <tr key={r.role}>
+                      <td>
+                        <span className="efm-cell">
+                          <img
+                            className="is-role"
+                            src={`/img/roles/${r.role}.png`}
+                            alt=""
+                            width={24}
+                            height={24}
+                          />
+                          {ROLE_LABEL[r.role]}
+                        </span>
+                      </td>
+                      <td className="efm-num">{r.played}</td>
+                      <td>{wr(r.winRate, r.played)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <div className="efm-card efm-table-card">
+              <h2 className="efm-display efm-h2">Campioni</h2>
+              {champs.length === 0 ? (
+                <p className="efm-empty">
+                  Nessun campione registrato: nelle prime serate della lega i
+                  campioni non venivano segnati.
+                </p>
+              ) : (
+                <table className="efm-table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Campione</th>
+                      <th scope="col" className="efm-num">
+                        Giocate
+                      </th>
+                      <th scope="col" className="efm-num">
+                        Vinte
+                      </th>
+                      <th scope="col">Win rate</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {champs.map((c) => (
                       <tr key={c.champ}>
                         <td>
-                          <span className="pv-cellname">
+                          <span className="efm-cell">
                             <img
                               src={champSrc(c.champ) ?? ""}
                               alt=""
@@ -380,56 +508,17 @@ export default async function Profilo({
                             {c.champ}
                           </span>
                         </td>
-                        <td className="pv-num">{c.played}</td>
-                        <td className="pv-num">{c.wins}</td>
-                        <td>
-                          <span className="pv-mono">{wr.toFixed(0)}%</span>
-                          <span className="pv-measure" aria-hidden>
-                            <span style={{ width: `${wr}%` }} />
-                          </span>
-                        </td>
+                        <td className="efm-num">{c.played}</td>
+                        <td className="efm-num">{c.wins}</td>
+                        <td>{wr(percent(c.wins, c.played), c.played)}</td>
                       </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            )}
-          </div>
-        </section>
-      )}
-
-      {played > 0 && (
-        <section className="pv-wrap pv-section">
-          <div className="pv-section-head">
-            <h2 className="pv-display pv-h2">Ultime partite</h2>
-            <Link href="/newUI/match" className="pv-mono">
-              Tutto lo storico
-            </Link>
-          </div>
-          {recent.map(({ game }) => (
-            <GameStrip
-              key={game.id}
-              game={game}
-              number={numberOf.get(game.id) ?? 0}
-              players={byId}
-            />
-          ))}
-          {older.length > 0 && (
-            <details className="pv-more">
-              <summary className="pv-mono">
-                Altre {older.length} partite <Chevron />
-              </summary>
-              {older.map(({ game }) => (
-                <GameStrip
-                  key={game.id}
-                  game={game}
-                  number={numberOf.get(game.id) ?? 0}
-                  players={byId}
-                />
-              ))}
-            </details>
-          )}
-        </section>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+            </div>
+          </section>
+        </>
       )}
     </>
   );

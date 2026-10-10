@@ -1,33 +1,29 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Archivo, Martian_Mono, Permanent_Marker } from "next/font/google";
-import EdgeNav from "./components/EdgeNav";
-import { WaxFilter } from "./components/Marks";
-import "./provino.css";
+import { Barlow, Barlow_Condensed } from "next/font/google";
+import Nav from "./components/Nav";
+import "./efm.css";
 
-const archivo = Archivo({
+// Display: grottesco condensato corsivo e nero, come le scritte dei video
+// di presentazione della lega
+const display = Barlow_Condensed({
   subsets: ["latin", "latin-ext"],
-  axes: ["wdth"],
+  weight: ["700", "800", "900"],
+  style: ["italic"],
   variable: "--f-display",
   display: "swap",
 });
 
-const martian = Martian_Mono({
+// Testo e interfaccia: sans da lavoro con cifre tabellari
+const barlow = Barlow({
   subsets: ["latin", "latin-ext"],
-  axes: ["wdth"],
-  variable: "--f-mono",
-  display: "swap",
-});
-
-const marker = Permanent_Marker({
-  subsets: ["latin"],
-  weight: "400",
-  variable: "--f-marker",
+  weight: ["400", "500", "600", "700"],
+  variable: "--f-body",
   display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "EFM League — Archivio",
+  title: "EFM League",
   description:
     "L'archivio della EFM League: giocatori, partite e classifiche della lega tra amici.",
 };
@@ -38,21 +34,17 @@ export default function NewUILayout({
   children: React.ReactNode;
 }) {
   return (
-    <div
-      lang="it"
-      className={`pv ${archivo.variable} ${martian.variable} ${marker.variable}`}
-      style={{ ["--f-body" as string]: "var(--f-display)" }}
-    >
-      <WaxFilter />
-      <EdgeNav />
-      <main className="pv-main">{children}</main>
-      <footer className="pv-band pv-foot">
-        <div className="pv-wrap pv-foot__inner pv-mono">
-          <span>Fine rullino · EFM League · Stagione 1 · 2023</span>
-          <span>
-            Di Francesco Nicolò e Stefano Piccoli ·{" "}
-            <Link href="/">Vecchia versione del sito</Link>
-          </span>
+    <div lang="it" className={`efm ${display.variable} ${barlow.variable}`}>
+      <Nav />
+      <main className="efm-main">{children}</main>
+      <footer className="efm-foot">
+        <div className="efm-wrap efm-foot__inner">
+          <Link href="/newUI" className="efm-brand">
+            <img src="/img/logo/Logocentrato.png" alt="" width={28} height={28} />
+            <span>EFM League</span>
+          </Link>
+          <span>Stagione 1 · 2023 · Di Francesco Nicolò e Stefano Piccoli</span>
+          <Link href="/">Vecchia versione del sito</Link>
         </div>
       </footer>
     </div>

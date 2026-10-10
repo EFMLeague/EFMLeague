@@ -40,6 +40,8 @@ EFM League è stata una lega privata di partite personalizzate 5v5 di League of 
 - Lingua: italiano. I termini di gioco (MVP, win rate, SoloQ, Flex, ruoli) restano come li usano i giocatori.
 - Tono: tra amici, goliardico; i nomi delle classifiche interne ("Trofeo Pepe", "King of Sola") fanno parte della lega.
 - Ruoli dei giocatori: "Padre fondatore", "Esperto partecipante", "Nuova recluta".
+- Direzione visiva scelta (ott 2026): la convenzione delle dashboard esports/LoL, eseguita bene, non un mondo metaforico. Riferimenti di qualità: client di League of Legends, lolesports.com, Mobalytics/Blitz.gg. Niente concetti forzati (la metafora della pellicola è stata rifiutata).
+- Firma del brand EFM dai video di presentazione: nero gessato, pennellate e schizzi blu/rossi, logo bianco. Blu e rosso sono i colori di squadra; la texture vive in testata e attorno ai video.
 
 ## Evidence on Hand
 

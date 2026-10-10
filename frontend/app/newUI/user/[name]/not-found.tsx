@@ -2,14 +2,14 @@ import Link from "next/link";
 
 export default function GiocatoreNonTrovato() {
   return (
-    <section className="pv-wrap pv-section">
-      <h1 className="pv-display pv-h1">Posa mancante</h1>
-      <p className="pv-lede" style={{ marginTop: "1.2rem" }}>
-        Nessun giocatore con questo nome nell&apos;archivio della lega. Forse ha
-        cambiato nome: cercalo nella rosa.
+    <section className="efm-wrap efm-page-head">
+      <h1 className="efm-display efm-h1">Giocatore non trovato</h1>
+      <p className="efm-lede">
+        Nessun giocatore con questo nome nella lega. Forse ha cambiato nome:
+        cercalo nella rosa.
       </p>
       <p style={{ marginTop: "2rem" }}>
-        <Link href="/newUI/user" className="pv-btn">
+        <Link href="/newUI/user" className="efm-btn efm-btn--primary">
           Apri la rosa
         </Link>
       </p>

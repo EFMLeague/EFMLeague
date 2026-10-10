@@ -149,11 +149,6 @@ export const percent = (part: number, total: number) =>
 
 // ---- Asset ----
 
-export const frameSrc = (player: { name: string; hasFrame: boolean }) =>
-  player.hasFrame
-    ? "/img/screenshots/frame_" + encodeURIComponent(player.name) + ".jpg"
-    : null;
-
 // I file video non seguono sempre il nome utente
 const VIDEO_FILE: Record<string, string> = {
   adoranteguardia: "Presentazioneadoranteguardia.mp4",

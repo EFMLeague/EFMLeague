@@ -1,9 +1,10 @@
 "use client";
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { Ring } from "../components/Marks";
+import { LuCheck, LuRotateCcw, LuShuffle } from "react-icons/lu";
+import Avatar from "../components/Avatar";
 import { ROLES, ROLE_LABEL, Role, Side } from "../lib/shared";
 
-type Candidate = { name: string; src: string | null };
+type Candidate = { name: string; hasFrame: boolean };
 type Slot = { side: Side; role: Role };
 type Teams = Record<Side, Record<Role, string | null>>;
 
@@ -22,25 +23,22 @@ const emptyTeams = (): Teams => ({
 
 const slotKey = (s: Slot) => s.side + "-" + s.role;
 
-// Porta l'elemento index-esimo della pista al centro del quadro
+// Porta l'elemento index-esimo del rullo sotto l'indicatore centrale
 const centerOffset = (track: HTMLElement, index: number) => {
   const item = track.children[index] as HTMLElement | undefined;
-  const gate = track.parentElement;
-  if (!item || !gate) return 0;
-  return gate.clientWidth / 2 - (item.offsetLeft + item.offsetWidth / 2);
+  const reel = track.parentElement;
+  if (!item || !reel) return 0;
+  return reel.clientWidth / 2 - (item.offsetLeft + item.offsetWidth / 2);
 };
 
-function useTrack<T>(items: T[], key: string) {
+function useReel<T>(items: T[], key: string) {
   const ref = useRef<HTMLDivElement>(null);
-  // a riposo la pista mostra il primo elemento del secondo giro
+  // a riposo il rullo mostra il primo elemento del secondo giro
   useLayoutEffect(() => {
     const track = ref.current;
     if (!track) return;
     track.getAnimations().forEach((a) => a.cancel());
-    track.style.transform = `translateX(${centerOffset(
-      track,
-      items.length
-    )}px)`;
+    track.style.transform = `translateX(${centerOffset(track, items.length)}px)`;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [key]);
 
@@ -60,7 +58,7 @@ function useTrack<T>(items: T[], key: string) {
       const anim = track.animate(
         [
           { transform: from, filter: "blur(0px)" },
-          { transform: from, filter: "blur(2px)", offset: 0.08 },
+          { transform: from, filter: "blur(1.5px)", offset: 0.06 },
           { transform: to, filter: "blur(0px)" },
         ],
         { duration, easing: "cubic-bezier(0.12, 0.7, 0.08, 1)" }
@@ -78,6 +76,7 @@ export default function Sorteggio({ players }: { players: Candidate[] }) {
   const [selected, setSelected] = useState<string[]>([]);
   const [teams, setTeams] = useState<Teams>(emptyTeams);
   const [spinning, setSpinning] = useState(false);
+  const [last, setLast] = useState<string | null>(null);
   const [result, setResult] = useState<{ name: string; slot: Slot } | null>(
     null
   );
@@ -91,8 +90,8 @@ export default function Sorteggio({ players }: { players: Candidate[] }) {
   const slots = ALL_SLOTS.filter((s) => !teams[s.side][s.role]);
   const done = assigned.size > 0 && (pool.length === 0 || slots.length === 0);
 
-  const playerTrack = useTrack(pool, pool.join("|"));
-  const slotTrack = useTrack(slots, slots.map(slotKey).join("|"));
+  const playerReel = useReel(pool, pool.join("|"));
+  const slotReel = useReel(slots, slots.map(slotKey).join("|"));
   const byName = new Map(players.map((p) => [p.name, p]));
 
   // un sorteggio non confermato decade se cambia la scelta
@@ -113,14 +112,12 @@ export default function Sorteggio({ players }: { players: Candidate[] }) {
     if (spinning || pool.length === 0 || slots.length === 0) return;
     const p = Math.floor(Math.random() * pool.length);
     const s = Math.floor(Math.random() * slots.length);
-    const reduce = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    ).matches;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     setResult(null);
     setSpinning(true);
     await Promise.all([
-      playerTrack.run(p, reduce ? 0 : 2600),
-      slotTrack.run(s, reduce ? 0 : 3100),
+      playerReel.run(p, reduce ? 0 : 2600),
+      slotReel.run(s, reduce ? 0 : 3100),
     ]);
     setSpinning(false);
     setResult({ name: pool[p], slot: slots[s] });
@@ -132,6 +129,7 @@ export default function Sorteggio({ players }: { players: Candidate[] }) {
       ...t,
       [result.slot.side]: { ...t[result.slot.side], [result.slot.role]: result.name },
     }));
+    setLast(result.name);
     setResult(null);
   };
 
@@ -139,180 +137,169 @@ export default function Sorteggio({ players }: { players: Candidate[] }) {
     setTeams(emptyTeams());
     setSelected([]);
     setResult(null);
+    setLast(null);
   };
 
   const repeated = <T,>(items: T[]) =>
     Array.from({ length: REPEAT }, () => items).flat();
 
   return (
-    <>
-      <div className="pv-section-head" style={{ marginBottom: "0.8rem" }}>
-        <p className="pv-mono pv-status" aria-live="polite">
-          {selected.length} di {MAX} scelti
-        </p>
-        {(selected.length > 0 || assigned.size > 0) && (
-          <button
-            type="button"
-            className="pv-btn pv-btn--ghost"
-            onClick={reset}
-            disabled={spinning}
-          >
-            Azzera tutto
-          </button>
-        )}
-      </div>
+    <div className="efm-draw">
+      <div className="efm-reels-col" style={{ display: "grid", gap: "1rem" }}>
+        <section className="efm-card efm-panel" aria-label="Giocatori da sorteggiare">
+          <div className="efm-panel__head">
+            <h2 className="efm-h3">
+              Giocatori{" "}
+              <span className="efm-muted efm-num" aria-live="polite">
+                · {selected.length} di {MAX}
+              </span>
+            </h2>
+            {(selected.length > 0 || assigned.size > 0) && (
+              <button
+                type="button"
+                className="efm-btn efm-btn--secondary"
+                onClick={reset}
+                disabled={spinning}
+              >
+                <LuRotateCcw aria-hidden /> Azzera tutto
+              </button>
+            )}
+          </div>
+          <div className="efm-picks">
+            {players.map((p) => {
+              const on = selected.includes(p.name);
+              const used = assigned.has(p.name);
+              const full = !on && selected.length >= MAX;
+              return (
+                <button
+                  key={p.name}
+                  type="button"
+                  className={"efm-pick" + (used ? " is-used" : "")}
+                  aria-pressed={on}
+                  disabled={spinning || used || full}
+                  onClick={() => toggle(p.name)}
+                  title={used ? "Già in squadra" : undefined}
+                >
+                  <Avatar player={p} size={32} />
+                  <span>{p.name}</span>
+                  {on && <LuCheck className="efm-pick__check" aria-hidden />}
+                </button>
+              );
+            })}
+          </div>
+        </section>
 
-      <div className="pv-strip pv-strip--sheet" role="group" aria-label="Giocatori da sorteggiare">
-        {players.map((p) => {
-          const on = selected.includes(p.name);
-          const used = assigned.has(p.name);
-          const full = !on && selected.length >= MAX;
-          return (
-            <button
-              key={p.name}
-              type="button"
-              className="pv-shot pv-pick"
-              aria-pressed={on}
-              disabled={spinning || used || full}
-              onClick={() => toggle(p.name)}
-            >
-              <span className="pv-shot__img" style={{ display: "block" }}>
-                {p.src ? (
-                  <img src={p.src} alt="" loading="lazy" width={300} height={400} />
+        <section className="efm-card efm-panel" aria-label="Rullo">
+          <div className="efm-reels" aria-hidden>
+            <div className="efm-reel">
+              <div className="efm-reel__track" ref={playerReel.ref}>
+                {pool.length === 0 ? (
+                  <div className="efm-reel__empty">Nessuno in gioco</div>
                 ) : (
-                  <span className="pv-shot__blank" aria-hidden>
-                    {p.name.slice(0, 2)}
-                  </span>
-                )}
-              </span>
-              {on && <Ring />}
-              <span className="pv-shot__edge">
-                <i>{used ? "In squadra" : on ? "Scelto" : ""}</i>
-                <b>{p.name}</b>
-              </span>
-            </button>
-          );
-        })}
-      </div>
-
-      <div className="pv-projector pv-section">
-        <div>
-          <h2 className="pv-display pv-h2" style={{ marginBottom: "1.2rem" }}>
-            Proiezione
-          </h2>
-          <div className="pv-gate" aria-hidden>
-            <div className="pv-gate__track" ref={playerTrack.ref}>
-              {pool.length === 0 ? (
-                <div className="pv-shot" style={{ margin: "0 auto" }}>
-                  <div className="pv-shot__img">
-                    <div className="pv-shot__blank">?</div>
-                  </div>
-                </div>
-              ) : (
-                repeated(pool).map((name, i) => {
-                  const c = byName.get(name);
-                  return (
-                    <div className="pv-shot" key={i}>
-                      <div className="pv-shot__img">
-                        {c?.src ? (
-                          <img src={c.src} alt="" width={300} height={400} />
-                        ) : (
-                          <div className="pv-shot__blank">{name.slice(0, 2)}</div>
-                        )}
-                      </div>
-                      <span className="pv-shot__edge">
-                        <b>{name}</b>
-                      </span>
+                  repeated(pool).map((name, i) => (
+                    <div className="efm-reel__item" key={i}>
+                      <Avatar player={byName.get(name)} size={56} />
+                      <b>{name}</b>
                     </div>
-                  );
-                })
-              )}
+                  ))
+                )}
+              </div>
+              {pool.length > 0 && <div className="efm-reel__marker" />}
             </div>
-            <div className="pv-gate__window" />
-          </div>
-          <div className="pv-gate pv-gate--slots" aria-hidden>
-            <div className="pv-gate__track" ref={slotTrack.ref}>
-              {repeated(slots).map((s, i) => (
-                <div className={"pv-slot pv-slot--" + s.side} key={i}>
-                  {ROLE_LABEL[s.role]}
-                  <small>{SIDE_LABEL[s.side]}</small>
-                </div>
-              ))}
+            <div className="efm-reel efm-reel--slots">
+              <div className="efm-reel__track" ref={slotReel.ref}>
+                {repeated(slots).map((s, i) => (
+                  <div
+                    className={`efm-reel__item efm-reel__item--slot efm-reel__item--${s.side}`}
+                    key={i}
+                  >
+                    <img src={`/img/roles/${s.role}.png`} alt="" width={20} height={20} />
+                    {ROLE_LABEL[s.role]}
+                  </div>
+                ))}
+              </div>
+              {slots.length > 0 && <div className="efm-reel__marker" />}
             </div>
-            <div className="pv-gate__window" />
           </div>
 
-          <div className="pv-verdict" aria-live="polite">
+          <div className="efm-verdict" aria-live="polite">
             {result ? (
               <>
-                <p className="pv-verdict__text">
-                  <em>{result.name}</em>
-                  <br />
-                  {ROLE_LABEL[result.slot.role]} · {SIDE_LABEL[result.slot.side]}
+                <p className="efm-verdict__result">
+                  <strong>{result.name}</strong>
+                  <span>
+                    {ROLE_LABEL[result.slot.role]} · Squadra{" "}
+                    {SIDE_LABEL[result.slot.side]}
+                  </span>
                 </p>
-                <div className="pv-verdict__actions">
-                  <button type="button" className="pv-btn pv-btn--big" onClick={confirm}>
-                    Conferma
+                <div className="efm-verdict__actions">
+                  <button type="button" className="efm-btn efm-btn--primary" onClick={confirm}>
+                    <LuCheck aria-hidden /> Conferma
                   </button>
-                  <button type="button" className="pv-btn pv-btn--ghost" onClick={spin}>
-                    Rifai
+                  <button type="button" className="efm-btn efm-btn--secondary" onClick={spin}>
+                    Rigira
                   </button>
                 </div>
               </>
             ) : done ? (
               <>
-                <p className="pv-verdict__text">Squadre fatte</p>
-                <button type="button" className="pv-btn pv-btn--big" onClick={reset}>
+                <p className="efm-verdict__result">
+                  <strong>Squadre fatte</strong>
+                </p>
+                <button type="button" className="efm-btn efm-btn--primary" onClick={reset}>
                   Nuovo sorteggio
                 </button>
               </>
             ) : (
               <>
-                <p className="pv-status" style={{ margin: 0, maxWidth: "36ch" }}>
+                <p>
                   {pool.length === 0
-                    ? "Scegli almeno un giocatore dal provino qui sopra."
+                    ? "Scegli almeno un giocatore qui sopra."
                     : spinning
-                    ? "La pellicola scorre…"
-                    : `${pool.length} in pellicola, ${slots.length} posti liberi.`}
+                    ? "Il rullo gira…"
+                    : `${pool.length} in gioco, ${slots.length} posti liberi.`}
                 </p>
                 <button
                   type="button"
-                  className="pv-btn pv-btn--big"
+                  className="efm-btn efm-btn--primary efm-btn--big"
                   onClick={spin}
                   disabled={spinning || pool.length === 0 || slots.length === 0}
                 >
-                  Proietta
+                  <LuShuffle aria-hidden /> Gira
                 </button>
               </>
             )}
           </div>
-        </div>
+        </section>
+      </div>
 
-        <div className="pv-teams">
-          {(["blue", "red"] as Side[]).map((side) => (
-            <div className="pv-team" key={side}>
-              <h3 className="pv-h3">
-                <span className={"pv-side pv-side--" + side}>
-                  Squadra {SIDE_LABEL[side]}
-                </span>
-              </h3>
-              <ol>
-                {ROLES.map((role) => (
-                  <li key={role}>
-                    <img src={`/img/roles/${role}.png`} alt="" width={26} height={26} />
-                    <span className="pv-mono">{ROLE_LABEL[role]}</span>
-                    {teams[side][role] ? (
-                      <span className="pv-marker">{teams[side][role]}</span>
+      <div className="efm-lineup">
+        {(["blue", "red"] as Side[]).map((side) => (
+          <section
+            className={`efm-card efm-lineup__team efm-lineup__team--${side}`}
+            key={side}
+            aria-label={`Squadra ${SIDE_LABEL[side]}`}
+          >
+            <h3 className="efm-h3">Squadra {SIDE_LABEL[side]}</h3>
+            <ol>
+              {ROLES.map((role) => {
+                const name = teams[side][role];
+                return (
+                  <li key={role} className={name && name === last ? "is-new" : undefined}>
+                    <img src={`/img/roles/${role}.png`} alt="" width={20} height={20} />
+                    <span className="efm-label">{ROLE_LABEL[role]}</span>
+                    {name ? (
+                      <strong>{name}</strong>
                     ) : (
-                      <span className="pv-mono is-empty">libero</span>
+                      <strong className="is-empty">Libero</strong>
                     )}
                   </li>
-                ))}
-              </ol>
-            </div>
-          ))}
-        </div>
+                );
+              })}
+            </ol>
+          </section>
+        ))}
       </div>
-    </>
+    </div>
   );
 }

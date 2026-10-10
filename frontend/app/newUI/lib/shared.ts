@@ -18,3 +18,15 @@ export const STATUS_LABEL: Record<number, string> = {
   1: "Esperto partecipante",
   2: "Nuova recluta",
 };
+
+// Il volto ritagliato dal fotogramma (public/img/avatars), per chi ce l'ha
+export const avatarSrc = (player: { name: string; hasFrame: boolean }) =>
+  player.hasFrame
+    ? "/img/avatars/" + encodeURIComponent(player.name) + ".jpg"
+    : null;
+
+// Il fotogramma del video di presentazione, per chi ce l'ha
+export const frameSrc = (player: { name: string; hasFrame: boolean }) =>
+  player.hasFrame
+    ? "/img/screenshots/frame_" + encodeURIComponent(player.name) + ".jpg"
+    : null;
